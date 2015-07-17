@@ -86,6 +86,18 @@ var CSemVerPlayground;
                     this.currentPage = pageNumber;
                     this.generateItems();
                 };
+                BrowseCtrl.prototype.getNormalizedVersion = function (v) {
+                    return v.toString(CSemVerPlayground.ReleaseTagVersion.Format.Normalized);
+                };
+                BrowseCtrl.prototype.getSemVerVersion = function (v) {
+                    return v.toString(CSemVerPlayground.ReleaseTagVersion.Format.SemVerWithMarker);
+                };
+                BrowseCtrl.prototype.getNugetVersion = function (v) {
+                    return v.toString(CSemVerPlayground.ReleaseTagVersion.Format.NugetPackageV2);
+                };
+                BrowseCtrl.prototype.getDottedOrderedVersion = function (v) {
+                    return v.toString(CSemVerPlayground.ReleaseTagVersion.Format.DottedOrderedVersion);
+                };
                 return BrowseCtrl;
             })();
             Browse.BrowseCtrl = BrowseCtrl;

@@ -35,5 +35,21 @@
 
             this.generateItems();
         }
+
+        public getNormalizedVersion(v: ReleaseTagVersion.ReleaseTagVersion) : string {
+            return v.toString(ReleaseTagVersion.Format.Normalized);
+        }
+
+        public getSemVerVersion(v: ReleaseTagVersion.ReleaseTagVersion): string {
+            return v.toString(ReleaseTagVersion.Format.SemVerWithMarker);
+        }
+
+        public getNugetVersion(v: ReleaseTagVersion.ReleaseTagVersion): string {
+            return v.toString(ReleaseTagVersion.Format.NugetPackageV2);
+        }
+
+        public getDottedOrderedVersion(v: ReleaseTagVersion.ReleaseTagVersion): string {
+            return v.toString(ReleaseTagVersion.Format.DottedOrderedVersion);
+        }
     }
 }  
