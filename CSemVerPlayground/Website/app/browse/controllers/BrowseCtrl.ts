@@ -13,13 +13,13 @@
         public goToVersionNumberInput: number;
         public goToVersionTagInput: string;
 
-        constructor(private $scope: IBrowseScope) {
+        constructor(private $scope: IBrowseScope, private $modal: ng.ui.bootstrap.IModalService) {
             this.generateItems();
         }
 
         public generateItems() {
             this.items = new Array<ReleaseTagVersion.ReleaseTagVersion>();
-
+            
             var maxNumber = this.currentPage * this.itemsPerPage;
             var minNumber = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + 1;
 
@@ -29,15 +29,44 @@
             }
         }
 
-        public goToVersionNumber() {
-            var pageNumber = Math.ceil(this.goToVersionNumberInput / this.itemsPerPage);
-            if (pageNumber < 1) pageNumber = 1;
-            this.currentPage = pageNumber;
+        public error(title: string, content: string) {
+            var modalInstance = this.$modal.open({
+                templateUrl: '/app/modals/views/alertModal.tpl.html',
+                controller: 'AlertModalCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    title: function () {
+                        return title;
+                    },
+                    content: function () {
+                        return content;
+                    }
+                }
+            });
+        }
 
-            var v = ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(this.goToVersionNumberInput));
-            this.goToVersionTagInput = v.toString();
+        public isVersionNumberValid(): boolean {
+            var n = this.goToVersionNumberInput;
 
-            this.generateItems();
+            return !isNaN(n) && n > 1 && n <= 13000100000000000000;
+        }
+
+        public goToVersionNumber(sync = true) {
+            if (!this.isVersionNumberValid()) {
+                this.error("Error", "Version number must be a numeric defined between 1 and 13000100000000000000.");
+            }
+            else {
+                var pageNumber = Math.ceil(this.goToVersionNumberInput / this.itemsPerPage);
+                if (pageNumber < 1) pageNumber = 1;
+                this.currentPage = pageNumber;
+
+                if (sync) {
+                    var v = ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(this.goToVersionNumberInput));
+                    this.goToVersionTagInput = v.toString();
+                }
+
+                this.generateItems();
+            }
         }
 
         public goToVersionTag() {
@@ -45,10 +74,10 @@
             
             if (!v.parseErrorMessage) {
                 this.goToVersionNumberInput = +v.orderedVersion.toFixed();
-                this.goToVersionNumber();
+                this.goToVersionNumber(false);
             }
             else {
-                console.log(v);
+                this.error("Error", v.parseErrorMessage);
             }
         }
 

@@ -3,7 +3,7 @@ var CSemVerPlayground;
 (function (CSemVerPlayground) {
     var Website;
     (function (Website) {
-        var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Home', 'CSemVerPlayground.Website.Browse']);
+        var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Home', 'CSemVerPlayground.Website.Browse', 'CSemVerPlayground.Website.Modals']);
         app.controller(CSemVerPlayground.Website);
         app.config(function ($routeProvider, $locationProvider) {
             // Home
@@ -61,8 +61,9 @@ var CSemVerPlayground;
         var Browse;
         (function (Browse) {
             var BrowseCtrl = (function () {
-                function BrowseCtrl($scope) {
+                function BrowseCtrl($scope, $modal) {
                     this.$scope = $scope;
+                    this.$modal = $modal;
                     this.totalItems = 13000100000000000000;
                     this.currentPage = 1;
                     this.maxSize = 10;
@@ -79,23 +80,50 @@ var CSemVerPlayground;
                         this.items.push(v);
                     }
                 };
-                BrowseCtrl.prototype.goToVersionNumber = function () {
-                    var pageNumber = Math.ceil(this.goToVersionNumberInput / this.itemsPerPage);
-                    if (pageNumber < 1)
-                        pageNumber = 1;
-                    this.currentPage = pageNumber;
-                    var v = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(this.goToVersionNumberInput));
-                    this.goToVersionTagInput = v.toString();
-                    this.generateItems();
+                BrowseCtrl.prototype.error = function (title, content) {
+                    var modalInstance = this.$modal.open({
+                        templateUrl: '/app/modals/views/alertModal.tpl.html',
+                        controller: 'AlertModalCtrl',
+                        controllerAs: 'ctrl',
+                        resolve: {
+                            title: function () {
+                                return title;
+                            },
+                            content: function () {
+                                return content;
+                            }
+                        }
+                    });
+                };
+                BrowseCtrl.prototype.isVersionNumberValid = function () {
+                    var n = this.goToVersionNumberInput;
+                    return !isNaN(n) && n > 1 && n <= 13000100000000000000;
+                };
+                BrowseCtrl.prototype.goToVersionNumber = function (sync) {
+                    if (sync === void 0) { sync = true; }
+                    if (!this.isVersionNumberValid()) {
+                        this.error("Error", "Version number must be a numeric defined between 1 and 13000100000000000000.");
+                    }
+                    else {
+                        var pageNumber = Math.ceil(this.goToVersionNumberInput / this.itemsPerPage);
+                        if (pageNumber < 1)
+                            pageNumber = 1;
+                        this.currentPage = pageNumber;
+                        if (sync) {
+                            var v = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(this.goToVersionNumberInput));
+                            this.goToVersionTagInput = v.toString();
+                        }
+                        this.generateItems();
+                    }
                 };
                 BrowseCtrl.prototype.goToVersionTag = function () {
                     var v = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.tryParse(this.goToVersionTagInput, true);
                     if (!v.parseErrorMessage) {
                         this.goToVersionNumberInput = +v.orderedVersion.toFixed();
-                        this.goToVersionNumber();
+                        this.goToVersionNumber(false);
                     }
                     else {
-                        console.log(v);
+                        this.error("Error", v.parseErrorMessage);
                     }
                 };
                 BrowseCtrl.prototype.getNormalizedVersion = function (v) {
@@ -138,9 +166,42 @@ var CSemVerPlayground;
     (function (Website) {
         var Home;
         (function (Home) {
-            var app = angular.module('CSemVerPlayground.Website.Home', ['ui.bootstrap', 'ngRoute']);
+            var app = angular.module('CSemVerPlayground.Website.Home', ['ui.bootstrap', 'ngRoute', 'CSemVerPlayground.Website.Modals']);
             app.controller(CSemVerPlayground.Website.Home);
         })(Home = Website.Home || (Website.Home = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var Modals;
+        (function (Modals) {
+            var AlertModalCtrl = (function () {
+                function AlertModalCtrl($scope, title, content, $modalInstance) {
+                    this.$scope = $scope;
+                    this.title = title;
+                    this.content = content;
+                    this.$modalInstance = $modalInstance;
+                }
+                AlertModalCtrl.prototype.close = function () {
+                    this.$modalInstance.close();
+                };
+                return AlertModalCtrl;
+            })();
+            Modals.AlertModalCtrl = AlertModalCtrl;
+        })(Modals = Website.Modals || (Website.Modals = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var Modals;
+        (function (Modals) {
+            var app = angular.module('CSemVerPlayground.Website.Modals', ['ui.bootstrap']);
+            app.controller(CSemVerPlayground.Website.Modals);
+        })(Modals = Website.Modals || (Website.Modals = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
 //# sourceMappingURL=CSemVerPlayground.Website.js.map

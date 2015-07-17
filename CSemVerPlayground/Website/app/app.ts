@@ -1,7 +1,7 @@
 ﻿/// <reference path="../libs/angularjs/angular.d.ts" />
 
 module CSemVerPlayground.Website {
-    var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Home', 'CSemVerPlayground.Website.Browse']);
+    var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Home', 'CSemVerPlayground.Website.Browse', 'CSemVerPlayground.Website.Modals']);
 
     app.controller(CSemVerPlayground.Website);
 

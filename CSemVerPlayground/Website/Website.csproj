@@ -20,6 +20,7 @@
   <ItemGroup>
     <Content Include="app\browse\views\browse.tpl.html" />
     <Content Include="app\home\views\home.tpl.html" />
+    <Content Include="app\modals\views\alertModal.tpl.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="index.html" />
     <Content Include="libs\angularjs\angular-animate.min.js" />
@@ -784,6 +785,7 @@
     <Content Include="libs\linqjs\linq.min.js" />
     <Content Include="libs\ReleaseTagVersion\CSemVerPlayground.ReleaseTagVersion.js" />
     <Content Include="libs\ui-bootstrap\ui-bootstrap-tpls-0.13.0.min.js" />
+    <Content Include="styles\app.css" />
     <Content Include="styles\bootstrap\bootstrap-theme.css" />
     <Content Include="styles\bootstrap\bootstrap-theme.min.css" />
     <Content Include="styles\bootstrap\bootstrap.css" />
@@ -797,6 +799,8 @@
     <TypeScriptCompile Include="app\browse\controllers\BrowseCtrl.ts" />
     <TypeScriptCompile Include="app\home\controllers\HomeCtrl.ts" />
     <TypeScriptCompile Include="app\home\Home.ts" />
+    <TypeScriptCompile Include="app\modals\controllers\AlertModalCtrl.ts" />
+    <TypeScriptCompile Include="app\modals\Modals.ts" />
     <TypeScriptCompile Include="libs\angularjs\angular-animate.d.ts" />
     <TypeScriptCompile Include="libs\angularjs\angular-route.d.ts" />
     <TypeScriptCompile Include="libs\angularjs\angular-sanitize.d.ts" />
