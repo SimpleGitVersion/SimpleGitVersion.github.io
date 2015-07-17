@@ -545,7 +545,7 @@
 
             switch (f) {
                 case Format.NugetPackageV2: {
-                    var marker = this.isMarkedInvalid ? this.marker : null;
+                    var marker = this.isMarkedInvalid ? this.marker : "";
 
                     if (this.isPreRelease) {
                         if (this.isPreReleaseFix) {
@@ -564,7 +564,7 @@
 
                 case Format.SemVer:
                 case Format.SemVerWithMarker: {
-                    var marker = f == Format.SemVerWithMarker ? this.marker : null;
+                    var marker = f == Format.SemVerWithMarker ? this.marker : "";
 
                     if (this.isPreRelease) {
                         if (this.isPreReleaseFix) {

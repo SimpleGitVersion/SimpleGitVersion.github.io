@@ -685,7 +685,7 @@ var CSemVerPlayground;
                 var prName = usePreReleaseNameFromTag ? this.preReleaseNameFromTag : this.preReleaseName;
                 switch (f) {
                     case ReleaseTagVersion_1.Format.NugetPackageV2: {
-                        var marker = this.isMarkedInvalid ? this.marker : null;
+                        var marker = this.isMarkedInvalid ? this.marker : "";
                         if (this.isPreRelease) {
                             if (this.isPreReleaseFix) {
                                 return this.major + "." + this.minor + "." + this.patch + "-" + prName + "-" + this.preReleaseNumber + "-" + this.preReleaseFix + marker;
@@ -699,7 +699,7 @@ var CSemVerPlayground;
                     }
                     case ReleaseTagVersion_1.Format.SemVer:
                     case ReleaseTagVersion_1.Format.SemVerWithMarker: {
-                        var marker = f == ReleaseTagVersion_1.Format.SemVerWithMarker ? this.marker : null;
+                        var marker = f == ReleaseTagVersion_1.Format.SemVerWithMarker ? this.marker : "";
                         if (this.isPreRelease) {
                             if (this.isPreReleaseFix) {
                                 return this.major + "." + this.minor + "." + this.patch + "-" + prName + "." + this.preReleaseNumber + "." + this.preReleaseFix + marker;
