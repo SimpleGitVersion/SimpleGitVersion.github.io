@@ -17,10 +17,10 @@
                 </div>
                 <div class="col-md-4">
                     <div class="input-group">
-                        <span class="input-group-addon">Version name</span>
-                        <input type="text" class="form-control" placeholder="e.g. v1.0.0-alpha">
+                        <span class="input-group-addon">Version tag</span>
+                        <input type="text" class="form-control" ng-model="ctrl.goToVersionTagInput" placeholder="e.g. v1.0.0-alpha">
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Go</button>
+                            <button class="btn btn-default" type="button" ng-click="ctrl.goToVersionTag()">Go</button>
                         </span>
                     </div>
                 </div>

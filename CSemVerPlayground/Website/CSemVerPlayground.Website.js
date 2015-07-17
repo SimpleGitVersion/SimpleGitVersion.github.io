@@ -86,6 +86,16 @@ var CSemVerPlayground;
                     this.currentPage = pageNumber;
                     this.generateItems();
                 };
+                BrowseCtrl.prototype.goToVersionTag = function () {
+                    var v = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.tryParse(this.goToVersionTagInput, true);
+                    if (!v.parseErrorMessage) {
+                        this.goToVersionNumberInput = +v.orderedVersion.toFixed();
+                        this.goToVersionNumber();
+                    }
+                    else {
+                        console.log(v);
+                    }
+                };
                 BrowseCtrl.prototype.getNormalizedVersion = function (v) {
                     return v.toString(CSemVerPlayground.ReleaseTagVersion.Format.Normalized);
                 };

@@ -11,6 +11,7 @@
         public itemsPerPageOptions = [10, 25, 50, 100];
         public items: Array<ReleaseTagVersion.ReleaseTagVersion>;
         public goToVersionNumberInput: number;
+        public goToVersionTagInput: string;
 
         constructor(private $scope: IBrowseScope) {
             this.generateItems();
@@ -34,6 +35,18 @@
             this.currentPage = pageNumber;
 
             this.generateItems();
+        }
+
+        public goToVersionTag() {
+            var v = ReleaseTagVersion.ReleaseTagVersion.tryParse(this.goToVersionTagInput, true);
+            
+            if (!v.parseErrorMessage) {
+                this.goToVersionNumberInput = +v.orderedVersion.toFixed();
+                this.goToVersionNumber();
+            }
+            else {
+                console.log(v);
+            }
         }
 
         public getNormalizedVersion(v: ReleaseTagVersion.ReleaseTagVersion) : string {
