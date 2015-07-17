@@ -34,6 +34,9 @@
             if (pageNumber < 1) pageNumber = 1;
             this.currentPage = pageNumber;
 
+            var v = ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(this.goToVersionNumberInput));
+            this.goToVersionTagInput = v.toString();
+
             this.generateItems();
         }
 
