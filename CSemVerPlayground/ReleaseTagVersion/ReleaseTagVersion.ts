@@ -114,7 +114,7 @@
             return this.preReleaseFix > 0;
         }
 
-        public marker: string;
+        public marker = "";
 
         public get isValid(): boolean {
             return this.preReleaseNameFromTag != null;

@@ -100,6 +100,7 @@ var CSemVerPlayground;
     (function (ReleaseTagVersion_1) {
         var ReleaseTagVersion = (function () {
             function ReleaseTagVersion() {
+                this.marker = "";
             }
             // ========== Static constructors ==========
             ReleaseTagVersion.fromVersionParts = function (tag, major, minor, patch, preReleaseName, preReleaseNameIdx, preReleaseNumber, preReleaseFix, kind) {
