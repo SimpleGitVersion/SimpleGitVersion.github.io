@@ -1,0 +1,52 @@
+﻿<div class="container-fluid">
+    <div class="page-header">
+        <h1>Browse 130 001.10<sup>14</sup> versions</h1>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-addon">Version number</span>
+                        <input type="text" class="form-control" placeholder="e.g. 130001000000001">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Version name</span>
+                        <input type="text" class="form-control" placeholder="e.g. v1.0.0-alpha">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go</button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon2">Items per page</span>
+                        <select class="form-control" ng-model="ctrl.itemsPerPage" ng-options="i for i in ctrl.itemsPerPageOptions" ng-change="ctrl.generateItems()"></select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <table class="table table-striped">
+            <tr>
+                <th>Tag</th>
+                <th>Version number</th>
+            </tr>
+
+            <tr ng-repeat="i in ctrl.items">
+                <td>{{ i.toString() }}</td>
+                <td>{{ i.orderedVersion.toFixed() }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <pagination items-per-page="ctrl.itemsPerPage" total-items="ctrl.totalItems" ng-model="ctrl.currentPage" max-size="ctrl.maxSize" ng-change="ctrl.generateItems()" class="pagination" boundary-links="true"></pagination>
+</div>

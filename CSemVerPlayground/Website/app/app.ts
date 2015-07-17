@@ -1,7 +1,7 @@
 ﻿/// <reference path="../libs/angularjs/angular.d.ts" />
 
 module CSemVerPlayground.Website {
-    var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Home']);
+    var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Home', 'CSemVerPlayground.Website.Browse']);
 
     app.controller(CSemVerPlayground.Website);
 
@@ -10,7 +10,18 @@ module CSemVerPlayground.Website {
         $routeProvider.when('/', {
             templateUrl: '/app/home/views/home.tpl.html',
             title: 'Home',
-            controller: 'HomeCtrl'
+            controller: 'HomeCtrl',
+            controllerAs: 'ctrl',
+            name: 'Home'
+        });
+
+        // Browse
+        $routeProvider.when('/browse', {
+            templateUrl: '/app/browse/views/browse.tpl.html',
+            title: 'Browse',
+            controller: 'BrowseCtrl',
+            controllerAs: 'ctrl', 
+            name: 'Browse'
         });
 
         $routeProvider.otherwise({

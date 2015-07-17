@@ -4,6 +4,7 @@
     }
 
     export class AppCtrl {
+
         constructor(private $scope: IAppScope) {
 
         }
