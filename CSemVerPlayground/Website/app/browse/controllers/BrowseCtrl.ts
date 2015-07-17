@@ -10,6 +10,7 @@
         public itemsPerPage = 10;
         public itemsPerPageOptions = [10, 25, 50, 100];
         public items: Array<ReleaseTagVersion.ReleaseTagVersion>;
+        public goToVersionNumberInput: number;
 
         constructor(private $scope: IBrowseScope) {
             this.generateItems();
@@ -25,6 +26,14 @@
                 var v = ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(i));
                 this.items.push(v);
             }
+        }
+
+        public goToVersionNumber() {
+            var pageNumber = Math.ceil(this.goToVersionNumberInput / this.itemsPerPage);
+            if (pageNumber < 1) pageNumber = 1;
+            this.currentPage = pageNumber;
+
+            this.generateItems();
         }
     }
 }  

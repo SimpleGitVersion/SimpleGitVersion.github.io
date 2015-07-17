@@ -9,9 +9,9 @@
                 <div class="col-md-5">
                     <div class="input-group">
                         <span class="input-group-addon">Version number</span>
-                        <input type="text" class="form-control" placeholder="e.g. 130001000000001">
+                        <input type="number" step="1" ng-model="ctrl.goToVersionNumberInput" class="form-control" placeholder="e.g. 130001000000001">
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Go</button>
+                            <button class="btn btn-default" type="button" ng-click="ctrl.goToVersionNumber()">Go</button>
                         </span>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                 <th>Version number</th>
             </tr>
 
-            <tr ng-repeat="i in ctrl.items">
+            <tr ng-repeat="i in ctrl.items" ng-class="{ 'success' : +i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }">
                 <td>{{ i.toString() }}</td>
                 <td>{{ i.orderedVersion.toFixed() }}</td>
             </tr>

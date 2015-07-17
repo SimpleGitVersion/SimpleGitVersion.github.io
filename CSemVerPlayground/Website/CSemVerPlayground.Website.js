@@ -79,6 +79,13 @@ var CSemVerPlayground;
                         this.items.push(v);
                     }
                 };
+                BrowseCtrl.prototype.goToVersionNumber = function () {
+                    var pageNumber = Math.ceil(this.goToVersionNumberInput / this.itemsPerPage);
+                    if (pageNumber < 1)
+                        pageNumber = 1;
+                    this.currentPage = pageNumber;
+                    this.generateItems();
+                };
                 return BrowseCtrl;
             })();
             Browse.BrowseCtrl = BrowseCtrl;
