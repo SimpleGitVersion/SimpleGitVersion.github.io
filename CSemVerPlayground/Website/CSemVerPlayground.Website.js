@@ -400,7 +400,7 @@ var CSemVerPlayground;
     (function (Website) {
         var VersionYourMind;
         (function (VersionYourMind) {
-            var app = angular.module('CSemVerPlayground.Website.VersionYourMind', ['ui.bootstrap', 'ngRoute', 'ngAnimate', 'toaster', 'CSemVerPlayground.Website.Modals']);
+            var app = angular.module('CSemVerPlayground.Website.VersionYourMind', ['ui.bootstrap', 'ngRoute', 'toaster', 'CSemVerPlayground.Website.Modals']);
             app.controller(CSemVerPlayground.Website.VersionYourMind);
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
