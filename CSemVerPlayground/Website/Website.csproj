@@ -21,6 +21,9 @@
     <Content Include="app\browse\views\browse.tpl.html" />
     <Content Include="app\home\views\home.tpl.html" />
     <Content Include="app\modals\views\alertModal.tpl.html" />
+    <Content Include="app\versionYourMind\views\versionYourMind.tpl.html" />
+    <Content Include="app\versionYourMind\views\predecessorsGame.tpl.html" />
+    <Content Include="app\versionYourMind\views\successorsGame.tpl.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="index.html" />
     <Content Include="libs\angularjs\angular-animate.min.js" />
@@ -801,6 +804,10 @@
     <TypeScriptCompile Include="app\home\Home.ts" />
     <TypeScriptCompile Include="app\modals\controllers\AlertModalCtrl.ts" />
     <TypeScriptCompile Include="app\modals\Modals.ts" />
+    <TypeScriptCompile Include="app\versionYourMind\controllers\VersionYourMindCtrl.ts" />
+    <TypeScriptCompile Include="app\versionYourMind\controllers\PredecessorsGameCtrl.ts" />
+    <TypeScriptCompile Include="app\versionYourMind\controllers\SuccessorsGameCtrl.ts" />
+    <TypeScriptCompile Include="app\versionYourMind\VersionYourMind.ts" />
     <TypeScriptCompile Include="libs\angularjs\angular-animate.d.ts" />
     <TypeScriptCompile Include="libs\angularjs\angular-route.d.ts" />
     <TypeScriptCompile Include="libs\angularjs\angular-sanitize.d.ts" />
