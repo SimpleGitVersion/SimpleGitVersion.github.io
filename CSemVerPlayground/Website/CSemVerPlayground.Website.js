@@ -251,9 +251,128 @@ var CSemVerPlayground;
         var VersionYourMind;
         (function (VersionYourMind) {
             var SuccessorsGameCtrl = (function () {
-                function SuccessorsGameCtrl($scope) {
+                function SuccessorsGameCtrl($scope, $interval, toaster, $modal) {
                     this.$scope = $scope;
+                    this.$interval = $interval;
+                    this.toaster = toaster;
+                    this.$modal = $modal;
+                    this.millisecondsElapsed = 0;
+                    this.gameStarted = false;
                 }
+                SuccessorsGameCtrl.prototype.start = function () {
+                    if (this.timer != null)
+                        this.stopTimer();
+                    this.foundVersions = new Array();
+                    this.versionInput = null;
+                    this.millisecondsElapsed = 0;
+                    this.selectedVersion = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(this.getRandomNumber()));
+                    this.possibleVersions = this.selectedVersion.getDirectSuccessors();
+                    this.startTimer();
+                    this.gameStarted = true;
+                };
+                SuccessorsGameCtrl.prototype.startTimer = function () {
+                    var that = this;
+                    this.timer = this.$interval(function () {
+                        that.millisecondsElapsed += 100;
+                    }, 100);
+                };
+                SuccessorsGameCtrl.prototype.stopTimer = function () {
+                    this.$interval.cancel(this.timer);
+                };
+                SuccessorsGameCtrl.prototype.getRandomNumber = function () {
+                    var max = new Big(1300010000130001);
+                    var min = 1;
+                    var randomValue = max.times(Math.random()).plus(min);
+                    return Math.floor(+randomValue.toFixed());
+                };
+                Object.defineProperty(SuccessorsGameCtrl.prototype, "millisecondsCount", {
+                    get: function () {
+                        var s = Math.floor(this.millisecondsElapsed / 1000);
+                        var ms = this.millisecondsElapsed - (s * 1000);
+                        var digit1 = ms < 10 ? "0" : "";
+                        var digit2 = ms < 100 ? "0" : "";
+                        return digit1 + digit2 + ms;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(SuccessorsGameCtrl.prototype, "secondsCount", {
+                    get: function () {
+                        var s = Math.floor(this.millisecondsElapsed / 1000);
+                        var m = Math.floor(s / 60);
+                        s -= m * 60;
+                        var digit1 = s < 10 ? "0" : "";
+                        return digit1 + s;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(SuccessorsGameCtrl.prototype, "minutesCount", {
+                    get: function () {
+                        var s = Math.floor(this.millisecondsElapsed / 1000);
+                        var m = Math.floor(s / 60);
+                        var digit1 = m < 10 ? "0" : "";
+                        return digit1 + m;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                SuccessorsGameCtrl.prototype.win = function () {
+                    this.stopTimer();
+                    this.alert("You won!", "You found the " + this.possibleVersions.length + " possible versions in " + this.minutesCount + ":" + this.secondsCount + ":" + this.millisecondsCount + "!");
+                };
+                SuccessorsGameCtrl.prototype.alert = function (title, content) {
+                    var modalInstance = this.$modal.open({
+                        templateUrl: '/app/modals/views/alertModal.tpl.html',
+                        controller: 'AlertModalCtrl',
+                        controllerAs: 'ctrl',
+                        resolve: {
+                            title: function () {
+                                return title;
+                            },
+                            content: function () {
+                                return content;
+                            }
+                        }
+                    });
+                };
+                SuccessorsGameCtrl.prototype.submitVersion = function () {
+                    if (this.versionInput != null) {
+                        var v = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.tryParse(this.versionInput, true);
+                        if (!v.parseErrorMessage) {
+                            // Note : isDirectPredecessor() is buggy. We use the array of successors instead
+                            var successor = this.possibleVersions.filter(function (value, index, array) {
+                                return value.toString() == v.toString();
+                            });
+                            if (successor.length == 1) {
+                                var existing = this.foundVersions.filter(function (value, index, array) {
+                                    return value.toString() == v.toString();
+                                });
+                                if (existing.length == 0) {
+                                    this.versionInput = null;
+                                    this.foundVersions.push(v);
+                                    this.toaster.success("Success!", "New successor found");
+                                    this.win();
+                                    if (this.possibleVersions.length == this.foundVersions.length) {
+                                        this.win();
+                                    }
+                                }
+                                else {
+                                    this.toaster.warning("Alert!", v.toString() + " was already found");
+                                }
+                            }
+                            else {
+                                this.toaster.error("Error!", v.toString() + " is not a direct successor of " + this.selectedVersion.toString());
+                            }
+                        }
+                        else {
+                            this.toaster.error("Error!", v.parseErrorMessage);
+                        }
+                    }
+                    else {
+                        this.toaster.error("Error!", "Please enter a valid successor version");
+                    }
+                };
                 return SuccessorsGameCtrl;
             })();
             VersionYourMind.SuccessorsGameCtrl = SuccessorsGameCtrl;
@@ -282,7 +401,7 @@ var CSemVerPlayground;
     (function (Website) {
         var VersionYourMind;
         (function (VersionYourMind) {
-            var app = angular.module('CSemVerPlayground.Website.VersionYourMind', ['ui.bootstrap', 'ngRoute', 'CSemVerPlayground.Website.Modals']);
+            var app = angular.module('CSemVerPlayground.Website.VersionYourMind', ['ui.bootstrap', 'ngRoute', 'ngAnimate', 'toaster', 'CSemVerPlayground.Website.Modals']);
             app.controller(CSemVerPlayground.Website.VersionYourMind);
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));

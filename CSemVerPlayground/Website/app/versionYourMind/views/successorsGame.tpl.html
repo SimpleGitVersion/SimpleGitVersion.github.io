@@ -1,9 +1,53 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<div class="container">
+    <div class="page-header">
+        <h1>Successors game</h1>
+    </div>
 
-</body>
-</html>
+    <div class="alert alert-info" role="alert">        
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed faucibus turpis. Maecenas luctus nibh tellus, et tincidunt tellus auctor id. Aliquam elementum placerat convallis. Vivamus sagittis et justo vitae dictum. Sed rutrum velit eu purus tincidunt rhoncus. In porttitor tellus eget enim luctus, at egestas magna dignissim. Vestibulum et magna vulputate, mollis libero dapibus, pulvinar urna. Donec varius eget arcu non vestibulum. Vivamus hendrerit lectus ac metus tempus rutrum. Integer semper dolor sem, nec fermentum lacus porta at. Vestibulum tempus felis ante, nec ullamcorper libero sagittis at. Ut nec lectus sodales, ornare ligula ut, sodales nibh. Vestibulum tempus laoreet elementum. Phasellus pharetra magna fermentum lorem finibus, et ultricies felis dictum.
+        </p>
+    </div>
+
+    <div class="text-center">
+        <button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.start();" ng-show="!ctrl.gameStarted">Start the game</button>
+    </div>
+
+    <div id="game" ng-show="ctrl.gameStarted">
+        <div>
+            <h1 class="pull-left">Version: <span class="label label-primary">{{ ctrl.selectedVersion.toString() }}</span></h1>
+            <h1 class="pull-right"><span class="label label-default">{{ ctrl.minutesCount }}:{{ ctrl.secondsCount }}:{{ ctrl.millisecondsCount }}</span></h1>
+
+            <div style="clear: both;"></div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Successors found ({{ ctrl.foundVersions.length }}/{{ ctrl.possibleVersions.length }})</div>
+
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-show="ctrl.foundVersions.length == 0">No version found yet!</li>
+                        <li ng-repeat="v in ctrl.foundVersions" class="list-group-item">{{ v.toString() }}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Enter a successor: </div>
+                    <div class="panel-body">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="ctrl.versionInput" placeholder="e.g. v1.0.0-alpha">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="ctrl.submitVersion()">Submit</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
