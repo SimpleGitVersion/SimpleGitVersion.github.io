@@ -121,7 +121,7 @@
                             this.versionInput = null;
                             this.foundVersions.push(v);
 
-                            this.toaster.success("Success!", "New successor found"); this.win();
+                            this.toaster.success("Success!", "New successor found");
 
                             if (this.possibleVersions.length == this.foundVersions.length) {
                                 this.win();

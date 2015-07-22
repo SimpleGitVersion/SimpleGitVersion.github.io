@@ -352,7 +352,6 @@ var CSemVerPlayground;
                                     this.versionInput = null;
                                     this.foundVersions.push(v);
                                     this.toaster.success("Success!", "New successor found");
-                                    this.win();
                                     if (this.possibleVersions.length == this.foundVersions.length) {
                                         this.win();
                                     }
