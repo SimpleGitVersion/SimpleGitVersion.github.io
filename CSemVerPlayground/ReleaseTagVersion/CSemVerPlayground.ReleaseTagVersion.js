@@ -133,12 +133,12 @@ var CSemVerPlayground;
                     var preReleasePart = d.mod(this.mulPatch);
                     if (!preReleasePart.eq(0)) {
                         preReleasePart = preReleasePart.minus(1);
-                        v.preReleaseNameIdx = +preReleasePart.div(this.mulName).toFixed(0);
+                        v.preReleaseNameIdx = parseInt(preReleasePart.div(this.mulName).toFixed());
                         v.preReleaseNameFromTag = this.standardNames[v.preReleaseNameIdx];
                         preReleasePart = preReleasePart.minus(this.mulName.times(v.preReleaseNameIdx));
-                        v.preReleaseNumber = +preReleasePart.div(this.mulNum).toFixed(0);
+                        v.preReleaseNumber = parseInt(preReleasePart.div(this.mulNum).toFixed());
                         preReleasePart = preReleasePart.minus(this.mulNum.times(v.preReleaseNumber));
-                        v.preReleaseFix = +preReleasePart.toFixed(0);
+                        v.preReleaseFix = parseInt(preReleasePart.toFixed());
                         v.kind = ReleaseTagVersion_1.ReleaseTagKind.PreRelease;
                     }
                     else {
@@ -147,11 +147,11 @@ var CSemVerPlayground;
                         v.preReleaseNameFromTag = "";
                         v.kind = ReleaseTagVersion_1.ReleaseTagKind.Release;
                     }
-                    v.major = +d.div(this.mulMajor).toFixed(0);
+                    v.major = parseInt(d.div(this.mulMajor).toFixed());
                     d = d.minus(this.mulMajor.times(v.major));
-                    v.minor = +d.div(this.mulMinor).toFixed(0);
+                    v.minor = parseInt(d.div(this.mulMinor).toFixed());
                     d = d.minus(this.mulMinor.times(v.minor));
-                    v.patch = +d.div(this.mulPatch).toFixed(0);
+                    v.patch = parseInt(d.div(this.mulPatch).toFixed());
                 }
                 return v;
             };
