@@ -806,6 +806,7 @@
     <TypeScriptCompile Include="app\home\Home.ts" />
     <TypeScriptCompile Include="app\modals\controllers\AlertModalCtrl.ts" />
     <TypeScriptCompile Include="app\modals\Modals.ts" />
+    <TypeScriptCompile Include="app\versionYourMind\controllers\PredecessorsGameAnswer.ts" />
     <TypeScriptCompile Include="app\versionYourMind\controllers\VersionYourMindCtrl.ts" />
     <TypeScriptCompile Include="app\versionYourMind\controllers\PredecessorsGameCtrl.ts" />
     <TypeScriptCompile Include="app\versionYourMind\controllers\SuccessorsGameCtrl.ts" />
