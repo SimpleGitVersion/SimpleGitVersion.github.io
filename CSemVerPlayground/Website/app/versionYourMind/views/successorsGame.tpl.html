@@ -5,7 +5,7 @@
 
     <div class="alert alert-info" role="alert">        
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed faucibus turpis. Maecenas luctus nibh tellus, et tincidunt tellus auctor id. Aliquam elementum placerat convallis. Vivamus sagittis et justo vitae dictum. Sed rutrum velit eu purus tincidunt rhoncus. In porttitor tellus eget enim luctus, at egestas magna dignissim. Vestibulum et magna vulputate, mollis libero dapibus, pulvinar urna. Donec varius eget arcu non vestibulum. Vivamus hendrerit lectus ac metus tempus rutrum. Integer semper dolor sem, nec fermentum lacus porta at. Vestibulum tempus felis ante, nec ullamcorper libero sagittis at. Ut nec lectus sodales, ornare ligula ut, sodales nibh. Vestibulum tempus laoreet elementum. Phasellus pharetra magna fermentum lorem finibus, et ultricies felis dictum.
+            In this game, you have to found the direct successors of a random version.
         </p>
     </div>
 
@@ -15,7 +15,7 @@
 
     <div id="game" ng-show="ctrl.gameStarted">
         <div>
-            <h1 class="pull-left">Version: <span class="label label-primary">{{ ctrl.selectedVersion.toString() }}</span></h1>
+            <h1 class="pull-left"><span class="label label-primary">{{ ctrl.selectedVersion.toString() }}</span></h1>
             <h1 class="pull-right"><span class="label label-default">{{ ctrl.minutesCount }}:{{ ctrl.secondsCount }}:{{ ctrl.millisecondsCount }}</span></h1>
 
             <div style="clear: both;"></div>
