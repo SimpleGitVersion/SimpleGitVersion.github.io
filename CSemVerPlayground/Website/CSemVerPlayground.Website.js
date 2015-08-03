@@ -234,10 +234,130 @@ var CSemVerPlayground;
     (function (Website) {
         var VersionYourMind;
         (function (VersionYourMind) {
+            (function (PredecessorsGameAnswer) {
+                PredecessorsGameAnswer[PredecessorsGameAnswer["AB"] = 0] = "AB";
+                PredecessorsGameAnswer[PredecessorsGameAnswer["BA"] = 1] = "BA";
+                PredecessorsGameAnswer[PredecessorsGameAnswer["Neither"] = 2] = "Neither";
+            })(VersionYourMind.PredecessorsGameAnswer || (VersionYourMind.PredecessorsGameAnswer = {}));
+            var PredecessorsGameAnswer = VersionYourMind.PredecessorsGameAnswer;
+        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var VersionYourMind;
+        (function (VersionYourMind) {
             var PredecessorsGameCtrl = (function () {
-                function PredecessorsGameCtrl($scope) {
+                function PredecessorsGameCtrl($scope, toaster) {
                     this.$scope = $scope;
+                    this.toaster = toaster;
+                    this.gameStarted = false;
+                    this.totalQuestions = 0;
+                    this.wonQuestions = 0;
+                    this.answered = false;
                 }
+                Object.defineProperty(PredecessorsGameCtrl.prototype, "answerText", {
+                    get: function () {
+                        switch (this.answer) {
+                            case VersionYourMind.PredecessorsGameAnswer.AB:
+                                return "A is a direct predecessor of B";
+                            case VersionYourMind.PredecessorsGameAnswer.BA:
+                                return "B is a direct predecessor of A";
+                            case VersionYourMind.PredecessorsGameAnswer.Neither:
+                                return "Neither is a direct predecessor";
+                        }
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                PredecessorsGameCtrl.prototype.getButtonClass = function (btn) {
+                    if (this.answered) {
+                        if (btn == this.answer) {
+                            return "btn-success";
+                        }
+                        else {
+                            return "btn-danger";
+                        }
+                    }
+                    else {
+                        return "btn-primary";
+                    }
+                };
+                PredecessorsGameCtrl.prototype.start = function () {
+                    this.gameStarted = true;
+                    this.nextQuestion();
+                };
+                PredecessorsGameCtrl.prototype.nextQuestion = function () {
+                    this.totalQuestions++;
+                    this.answered = false;
+                    this.pickRandomVersions();
+                };
+                PredecessorsGameCtrl.prototype.winQuestion = function () {
+                    this.answered = true;
+                    this.toaster.success("Correct!", this.answerText);
+                    this.wonQuestions++;
+                };
+                PredecessorsGameCtrl.prototype.loseQuestion = function () {
+                    this.answered = true;
+                    this.toaster.error("Wrong!", this.answerText);
+                };
+                PredecessorsGameCtrl.prototype.chooseAB = function () {
+                    if (this.answer == VersionYourMind.PredecessorsGameAnswer.AB) {
+                        this.winQuestion();
+                    }
+                    else {
+                        this.loseQuestion();
+                    }
+                };
+                PredecessorsGameCtrl.prototype.chooseBA = function () {
+                    if (this.answer == VersionYourMind.PredecessorsGameAnswer.BA) {
+                        this.winQuestion();
+                    }
+                    else {
+                        this.loseQuestion();
+                    }
+                };
+                PredecessorsGameCtrl.prototype.chooseNeither = function () {
+                    if (this.answer == VersionYourMind.PredecessorsGameAnswer.Neither) {
+                        this.winQuestion();
+                    }
+                    else {
+                        this.loseQuestion();
+                    }
+                };
+                PredecessorsGameCtrl.prototype.pickRandomVersions = function () {
+                    var answer = this.getRandomNumber(0, 2);
+                    if (answer == VersionYourMind.PredecessorsGameAnswer.AB || answer == VersionYourMind.PredecessorsGameAnswer.BA) {
+                        var v1Number = this.getRandomNumber(1, 1300010000130001);
+                        var v1 = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(v1Number));
+                        var v1Successors = v1.getDirectSuccessors();
+                        var v2Number = this.getRandomNumber(0, v1Successors.length - 1);
+                        var v2 = v1Successors[v2Number];
+                        if (answer == VersionYourMind.PredecessorsGameAnswer.AB) {
+                            this.versionA = v1;
+                            this.versionB = v2;
+                        }
+                        else {
+                            this.versionA = v2;
+                            this.versionB = v1;
+                        }
+                    }
+                    else {
+                        var v1Number = this.getRandomNumber(1, 1300010000130001);
+                        var v2Number = this.getRandomNumber(1, 1300010000130001);
+                        this.versionA = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(v1Number));
+                        this.versionB = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(v2Number));
+                        if (this.versionA.isDirectPredecessor(this.versionB) || this.versionB.isDirectPredecessor(this.versionA)) {
+                            this.pickRandomVersions();
+                        }
+                    }
+                    this.answer = answer;
+                };
+                PredecessorsGameCtrl.prototype.getRandomNumber = function (min, max) {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                };
                 return PredecessorsGameCtrl;
             })();
             VersionYourMind.PredecessorsGameCtrl = PredecessorsGameCtrl;
