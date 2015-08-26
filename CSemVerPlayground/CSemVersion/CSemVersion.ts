@@ -372,10 +372,10 @@
         }
 
         // ========== ReleaseTagVersion.Parse.cs ==========
-        public static get noTagParseErrorMessage(): string { return "Not a release tag."; }
+        public static get noTagParseErrorMessage(): string { return "Not a valid tag."; }
 
         private static get regexStrict(): RegExp {
-            return /^v?(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-([a-z]+)(?:\.(0|[1-9][0-9]?)(?:\.([1-9][0-9]?))?)?)?(?:\+([a-z0-9\-\.]*)?)?$/i;
+            return /^v?(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-([a-z]+)(?:\.(0|[1-9][0-9]?)(?:\.([1-9][0-9]?))?)?)?(?:\+([0-9a-z-]+(?:\.[0-9a-z-]+)*))?$/i;
         }
 
         private static get regexApprox(): RegExp {
@@ -424,12 +424,7 @@
             }
 
             var kind = prNameIdx >= 0 ? ReleaseTagKind.PreRelease : ReleaseTagKind.Release;
-            var marker = "";
-
-            // TODO : check build metadata validity
-            if (sBuildMetaData.length == 0) {
-                return CSemVersion.fromFailedParsing(s, true, "Invalid build metadata");
-            }
+            var marker = sBuildMetaData;
 
             return CSemVersion.fromVersionParts(s, major, minor, patch, sPRName, prNameIdx, prNum, prFix, sBuildMetaData, kind);
         }
@@ -445,7 +440,7 @@
             if (buildMetaData != null && buildMetaData.length > 0) {
                 var mSuffix = this.regexApproxSuffix.exec(buildMetaData);
 
-                if (mSuffix == null || mSuffix.length == 0) return "Major.Minor.Patch must be followed by a '-' and a pre release name (ie. 'v1.0.2-alpha') and/or a '+invalid', '+valid' or '+published' build meta data.";
+                if (mSuffix == null || mSuffix.length == 0) return "Major.Minor.Patch must be followed by a '-' and a pre release name (ie. 'v1.0.2-alpha') and/or a build metadata.";
 
                 var prerelease = mSuffix[1];
                 var fragment = mSuffix[2];
@@ -477,11 +472,11 @@
                 }
 
                 if (fragment != null && fragment.length > 0) {
-                    // TODO : fragment = build metadata, check
+                    return "Invalid build metadata. Valid examples are: '+001', '+20130313144700', or '1.0.0-beta+exp.sha.5114f85'.";
                 }
             }
 
-            return "Invalid tag. Valid examples are: '1.0.0', '1.0.0-beta', '1.0.0-beta.5', '1.0.0-rc.5.12', '3.0.12+invalid' or 7.2.3-gamma+published";
+            return "Invalid tag. Valid examples are: '1.0.0', '1.0.0-beta', '1.0.0-beta.5', '1.0.0-rc.5.12', '3.0.12+001' or 7.2.3-gamma+published";
         }
 
         public static getPreReleaseNameIdx(preReleaseName: string): number {
@@ -503,7 +498,7 @@
 
             switch (f) {
                 case Format.NugetPackageV2: {
-                    var marker = this.marker;
+                    var marker = this.marker != "" ? "+" + this.marker : "";
 
                     if (this.isPreRelease) {
                         if (this.isPreReleaseFix) {
@@ -522,7 +517,7 @@
 
                 case Format.SemVer:
                 case Format.SemVerWithMarker: {
-                    var marker = f == Format.SemVerWithMarker ? this.marker : "";
+                    var marker = f == Format.SemVerWithMarker && this.marker != "" ? "+" + this.marker : "";
 
                     if (this.isPreRelease) {
                         if (this.isPreReleaseFix) {
@@ -541,20 +536,21 @@
 
                 default: {
                     Debug.assert(f == Format.Normalized);
+                    var marker = this.marker != "" ? "+" + this.marker : "";
 
                     if (this.isPreRelease) {
                         if (this.isPreReleaseFix) {
-                            return `v${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}.${this.preReleaseFix}${this.marker}`;
+                            return `v${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}.${this.preReleaseFix}${marker}`;
                         }
 
                         if (this.preReleaseNumber > 0) {
-                            return `v${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}${this.marker}`;
+                            return `v${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}${marker}`;
                         }
 
-                        return `v${this.major}.${this.minor}.${this.patch}-${prName}${this.marker}`;
+                        return `v${this.major}.${this.minor}.${this.patch}-${prName}${marker}`;
                     }
 
-                    return `v${this.major}.${this.minor}.${this.patch}${this.marker}`;
+                    return `v${this.major}.${this.minor}.${this.patch}${marker}`;
                 }
             }
         }
