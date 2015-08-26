@@ -1,4 +1,4 @@
-﻿module CSemVerPlayground.ReleaseTagVersion {
+﻿module CSemVerPlayground.CSemVersion {
     export class SOrderedVersion {
         public Number: BigJsLibrary.BigJS;
         public Major: number;

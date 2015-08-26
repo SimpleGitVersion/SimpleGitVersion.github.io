@@ -9,7 +9,7 @@
         public maxSize = 10;
         public itemsPerPage = 10;
         public itemsPerPageOptions = [10, 25, 50, 100];
-        public items: Array<ReleaseTagVersion.ReleaseTagVersion>;
+        public items: Array<CSemVersion.CSemVersion>;
         public goToVersionNumberInput: number;
         public goToVersionTagInput: string;
 
@@ -18,13 +18,13 @@
         }
 
         public generateItems() {
-            this.items = new Array<ReleaseTagVersion.ReleaseTagVersion>();
+            this.items = new Array<CSemVersion.CSemVersion>();
             
             var maxNumber = this.currentPage * this.itemsPerPage;
             var minNumber = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + 1;
 
             for (var i = minNumber; i <= maxNumber; i++) {
-                var v = ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(i));
+                var v = CSemVersion.CSemVersion.fromDecimal(new Big(i));
                 this.items.push(v);
             }
         }
@@ -61,7 +61,7 @@
                 this.currentPage = pageNumber;
 
                 if (sync) {
-                    var v = ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(this.goToVersionNumberInput));
+                    var v = CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                     this.goToVersionTagInput = v.toString();
                 }
 
@@ -70,7 +70,7 @@
         }
 
         public goToVersionTag() {
-            var v = ReleaseTagVersion.ReleaseTagVersion.tryParse(this.goToVersionTagInput, true);
+            var v = CSemVersion.CSemVersion.tryParse(this.goToVersionTagInput, true);
             
             if (!v.parseErrorMessage) {
                 this.goToVersionNumberInput = +v.orderedVersion.toFixed();
@@ -81,20 +81,20 @@
             }
         }
 
-        public getNormalizedVersion(v: ReleaseTagVersion.ReleaseTagVersion) : string {
-            return v.toString(ReleaseTagVersion.Format.Normalized);
+        public getNormalizedVersion(v: CSemVersion.CSemVersion) : string {
+            return v.toString(CSemVersion.Format.Normalized);
         }
 
-        public getSemVerVersion(v: ReleaseTagVersion.ReleaseTagVersion): string {
-            return v.toString(ReleaseTagVersion.Format.SemVerWithMarker);
+        public getSemVerVersion(v: CSemVersion.CSemVersion): string {
+            return v.toString(CSemVersion.Format.SemVerWithMarker);
         }
 
-        public getNugetVersion(v: ReleaseTagVersion.ReleaseTagVersion): string {
-            return v.toString(ReleaseTagVersion.Format.NugetPackageV2);
+        public getNugetVersion(v: CSemVersion.CSemVersion): string {
+            return v.toString(CSemVersion.Format.NugetPackageV2);
         }
 
-        public getDottedOrderedVersion(v: ReleaseTagVersion.ReleaseTagVersion): string {
-            return v.toString(ReleaseTagVersion.Format.DottedOrderedVersion);
+        public getDottedOrderedVersion(v: CSemVersion.CSemVersion): string {
+            return v.toString(CSemVersion.Format.DottedOrderedVersion);
         }
     }
 }  

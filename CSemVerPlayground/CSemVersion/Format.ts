@@ -1,4 +1,4 @@
-﻿module CSemVerPlayground.ReleaseTagVersion {
+﻿module CSemVerPlayground.CSemVersion {
     export enum Format {
         // Normalized format is 'v' + <see cref="SemVerWithMarker"/>.
         // This is the default.
@@ -15,7 +15,7 @@
         // The ordered version in dotted notation (1542.6548.777.8787) where each parts are between 0 and 65535.
         DottedOrderedVersion,
 
-        // NuGet version 2. If the <see cref="ReleaseTagVersion.IsMarkedInvalid"/> the "+invalid" build meta data is added.
+        // NuGet version 2. If the <see cref="CSemVersion.IsMarkedInvalid"/> the "+invalid" build meta data is added.
         NugetPackageV2,
 
         // NuGet format. Currently <see cref="NugetPackageV2"/>.

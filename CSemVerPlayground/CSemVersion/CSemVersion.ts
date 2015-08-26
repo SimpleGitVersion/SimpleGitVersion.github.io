@@ -1,8 +1,8 @@
-﻿module CSemVerPlayground.ReleaseTagVersion {
-    export class ReleaseTagVersion implements IEquatable<ReleaseTagVersion>, IComparable<ReleaseTagVersion> {
+﻿module CSemVerPlayground.CSemVersion {
+    export class CSemVersion implements IEquatable<CSemVersion>, IComparable<CSemVersion> {
         // ========== Static constructors ==========
-        public static fromVersionParts(tag: string, major: number, minor: number, patch: number, preReleaseName: string, preReleaseNameIdx: number, preReleaseNumber: number, preReleaseFix: number, kind: ReleaseTagKind): ReleaseTagVersion {
-            var v = new ReleaseTagVersion();
+        public static fromVersionParts(tag: string, major: number, minor: number, patch: number, preReleaseName: string, preReleaseNameIdx: number, preReleaseNumber: number, preReleaseFix: number, marker: string, kind: ReleaseTagKind): CSemVersion {
+            var v = new CSemVersion();
 
             v.major = major;
             v.minor = minor;
@@ -12,18 +12,17 @@
             v.preReleaseNumber = preReleaseNumber;
             v.preReleaseFix = preReleaseFix;
             v.kind = kind;
-            v.marker = ReleaseTagKindExtensions.toStringMarker(kind);
+            v.marker = marker != null ? marker : "";
             v.originalTagText = tag != null ? tag : v.toString();
 
             v.sOrderedVersion = new SOrderedVersion();
             v.sOrderedVersion.Number = this.computeOrderedVersion(major, minor, patch, preReleaseNameIdx, preReleaseNumber, preReleaseFix);
-            v.definitionStrength = v.computeDefinitionStrength();
 
             return v;
         }
 
-        public static fromDecimal(d: BigJsLibrary.BigJS): ReleaseTagVersion {
-            var v = new ReleaseTagVersion();
+        public static fromDecimal(d: BigJsLibrary.BigJS): CSemVersion {
+            var v = new CSemVersion();
 
             if (d.eq(0)) {
                 v.kind = ReleaseTagKind.None;
@@ -65,15 +64,14 @@
             return v;
         }
 
-        public static fromFailedParsing(tag: string, isMalformed: boolean, errorMessage: string): ReleaseTagVersion {
-            var v = new ReleaseTagVersion();
+        public static fromFailedParsing(tag: string, isMalformed: boolean, errorMessage: string): CSemVersion {
+            var v = new CSemVersion();
 
             v.originalTagText = tag;
             v.kind = ReleaseTagKind.None;
 
             if (isMalformed) {
                 v.kind = ReleaseTagKind.Malformed;
-                v.definitionStrength = 1;
             }
 
             v.parseErrorMessage = isMalformed ? `Tag '${tag}': ${errorMessage}` : errorMessage;
@@ -93,7 +91,7 @@
         public preReleaseNameFromTag: string;
 
         public get preReleaseName(): string {
-            return this.isPreRelease ? ReleaseTagVersion.standardNames[this.preReleaseNameIdx] : "";
+            return this.isPreRelease ? CSemVersion.standardNames[this.preReleaseNameIdx] : "";
         }
 
         public get isPreRelease(): boolean {
@@ -103,7 +101,7 @@
         public preReleaseNameIdx: number;
 
         public get isPreReleaseNameStandard(): boolean {
-            return this.isPreRelease && (this.preReleaseNameIdx != ReleaseTagVersion.maxPreReleaseNameIdx - 1 || this.preReleaseNameFromTag.toLowerCase() == ReleaseTagVersion.standardNames[ReleaseTagVersion.maxPreReleaseNameIdx - 1]);
+            return this.isPreRelease && (this.preReleaseNameIdx != CSemVersion.maxPreReleaseNameIdx - 1 || this.preReleaseNameFromTag.toLowerCase() == CSemVersion.standardNames[CSemVersion.maxPreReleaseNameIdx - 1]);
         }
 
         public preReleaseNumber: number;
@@ -120,24 +118,6 @@
             return this.preReleaseNameFromTag != null;
         }
 
-        public get isMarked(): boolean {
-            return ReleaseTagKindExtensions.isMarked(this.kind);
-        }
-
-        public get isMarkedValid(): boolean {
-            return ReleaseTagKindExtensions.isMarkedValid(this.kind);
-        }
-
-        public get isMarkedPublished(): boolean {
-            return ReleaseTagKindExtensions.isMarkedPublished(this.kind);
-        }
-
-        public get isMarkedInvalid(): boolean {
-            return ReleaseTagKindExtensions.isMarkedInvalid(this.kind);
-        }
-
-        public definitionStrength: number;
-
         public kind: ReleaseTagKind;
 
         public get isMalformed(): boolean {
@@ -148,93 +128,84 @@
 
         public originalTagText: string;
 
-        public markValid(): ReleaseTagVersion {
-            if (!this.isValid) throw new Error("InvalidOperationException: isn't valid");
-            return this.isMarkedValid ? this : ReleaseTagVersion.fromVersionParts(null, this.major, this.minor, this.patch, this.preReleaseName, this.preReleaseNameIdx, this.preReleaseNumber, this.preReleaseFix, ReleaseTagKindExtensions.clearMarker(this.kind) | ReleaseTagKind.MarkedValid);
-        }
-
-        public markInvalid(): ReleaseTagVersion {
-            return this.isMarkedInvalid ? this : ReleaseTagVersion.fromVersionParts(null, this.major, this.minor, this.patch, this.preReleaseName, this.preReleaseNameIdx, this.preReleaseNumber, this.preReleaseFix, ReleaseTagKindExtensions.clearMarker(this.kind) | ReleaseTagKind.MarkedInvalid);
-        }
-
-        public getDirectSuccessors(closest: boolean = false): Array<ReleaseTagVersion> {
-            var successors = new Array<ReleaseTagVersion>();
+        public getDirectSuccessors(closest: boolean = false): Array<CSemVersion> {
+            var successors = new Array<CSemVersion>();
 
             if (this.isValid) {
                 if (this.isPreRelease) {
                     var nextFix = this.preReleaseFix + 1;
-                    if (nextFix <= ReleaseTagVersion.maxPreReleaseFix) {
-                        successors.push(ReleaseTagVersion.fromVersionParts(null, this.major, this.minor, this.patch, this.preReleaseName, this.preReleaseNameIdx, this.preReleaseNumber, nextFix, ReleaseTagKind.PreRelease));
+                    if (nextFix <= CSemVersion.maxPreReleaseFix) {
+                        successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, this.patch, this.preReleaseName, this.preReleaseNameIdx, this.preReleaseNumber, nextFix, null, ReleaseTagKind.PreRelease));
                     }
 
                     var nextPrereleaseNumber = this.preReleaseNumber + 1;
-                    if (nextPrereleaseNumber <= ReleaseTagVersion.maxPreReleaseNumber) {
-                        successors.push(ReleaseTagVersion.fromVersionParts(null, this.major, this.minor, this.patch, this.preReleaseName, this.preReleaseNameIdx, nextPrereleaseNumber, 0, ReleaseTagKind.PreRelease));
+                    if (nextPrereleaseNumber <= CSemVersion.maxPreReleaseNumber) {
+                        successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, this.patch, this.preReleaseName, this.preReleaseNameIdx, nextPrereleaseNumber, 0, null, ReleaseTagKind.PreRelease));
                     }
 
                     var nextPrereleaseNameIdx = this.preReleaseNameIdx + 1;
-                    if (nextPrereleaseNameIdx <= ReleaseTagVersion.maxPreReleaseNameIdx) {
-                        successors.push(ReleaseTagVersion.fromVersionParts(null, this.major, this.minor, this.patch, ReleaseTagVersion.standardNames[nextPrereleaseNameIdx], nextPrereleaseNameIdx, 0, 0, ReleaseTagKind.PreRelease));
+                    if (nextPrereleaseNameIdx <= CSemVersion.maxPreReleaseNameIdx) {
+                        successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, this.patch, CSemVersion.standardNames[nextPrereleaseNameIdx], nextPrereleaseNameIdx, 0, 0, null, ReleaseTagKind.PreRelease));
 
                         if (!closest) {
-                            while (++nextPrereleaseNameIdx <= ReleaseTagVersion.maxPreReleaseNameIdx) {
-                                successors.push(ReleaseTagVersion.fromVersionParts(null, this.major, this.minor, this.patch, ReleaseTagVersion.standardNames[nextPrereleaseNameIdx], nextPrereleaseNameIdx, 0, 0, ReleaseTagKind.PreRelease));
+                            while (++nextPrereleaseNameIdx <= CSemVersion.maxPreReleaseNameIdx) {
+                                successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, this.patch, CSemVersion.standardNames[nextPrereleaseNameIdx], nextPrereleaseNameIdx, 0, 0, null, ReleaseTagKind.PreRelease));
                             }
                         }
                     }
 
-                    successors.push(ReleaseTagVersion.fromVersionParts(null, this.major, this.minor, this.patch, "", -1, 0, 0, ReleaseTagKind.Release));
+                    successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, this.patch, "", -1, 0, 0, null, ReleaseTagKind.Release));
                 }
                 else {
                     var nextPatch = this.patch + 1;
-                    if (nextPatch <= ReleaseTagVersion.maxPatch) {
-                        successors.push(ReleaseTagVersion.fromVersionParts(null, this.major, this.minor, nextPatch, "alpha", 0, 0, 0, ReleaseTagKind.PreRelease));
+                    if (nextPatch <= CSemVersion.maxPatch) {
+                        successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, nextPatch, "alpha", 0, 0, 0, null, ReleaseTagKind.PreRelease));
 
                         if (!closest) {
-                            for (var i = 1; i <= ReleaseTagVersion.maxPreReleaseNameIdx; ++i) {
-                                successors.push(ReleaseTagVersion.fromVersionParts(null, this.major, this.minor, nextPatch, ReleaseTagVersion.standardNames[i], i, 0, 0, ReleaseTagKind.PreRelease));
+                            for (var i = 1; i <= CSemVersion.maxPreReleaseNameIdx; ++i) {
+                                successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, nextPatch, CSemVersion.standardNames[i], i, 0, 0, null, ReleaseTagKind.PreRelease));
                             }
                         }
 
-                        successors.push(ReleaseTagVersion.fromVersionParts(null, this.major, this.minor, nextPatch, "", -1, 0, 0, ReleaseTagKind.Release));
+                        successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, nextPatch, "", -1, 0, 0, null, ReleaseTagKind.Release));
                     }
                 }
 
                 var nextMinor = this.minor + 1;
-                if (nextMinor <= ReleaseTagVersion.maxMinor) {
-                    successors.push(ReleaseTagVersion.fromVersionParts(null, this.major, nextMinor, 0, "alpha", 0, 0, 0, ReleaseTagKind.PreRelease));
+                if (nextMinor <= CSemVersion.maxMinor) {
+                    successors.push(CSemVersion.fromVersionParts(null, this.major, nextMinor, 0, "alpha", 0, 0, 0, null, ReleaseTagKind.PreRelease));
 
                     if (!closest) {
-                        for (var i = 1; i <= ReleaseTagVersion.maxPreReleaseNameIdx; ++i) {
-                            successors.push(ReleaseTagVersion.fromVersionParts(null, this.major, nextMinor, 0, ReleaseTagVersion.standardNames[i], i, 0, 0, ReleaseTagKind.PreRelease));
+                        for (var i = 1; i <= CSemVersion.maxPreReleaseNameIdx; ++i) {
+                            successors.push(CSemVersion.fromVersionParts(null, this.major, nextMinor, 0, CSemVersion.standardNames[i], i, 0, 0, null, ReleaseTagKind.PreRelease));
                         }
                     }
 
-                    successors.push(ReleaseTagVersion.fromVersionParts(null, this.major, nextMinor, 0, "", -1, 0, 0, ReleaseTagKind.Release));
+                    successors.push(CSemVersion.fromVersionParts(null, this.major, nextMinor, 0, "", -1, 0, 0, null, ReleaseTagKind.Release));
                 }
 
                 var nextMajor = this.major + 1;
-                if (nextMajor <= ReleaseTagVersion.maxMajor) {
-                    successors.push(ReleaseTagVersion.fromVersionParts(null, nextMajor, 0, 0, "alpha", 0, 0, 0, ReleaseTagKind.PreRelease));
+                if (nextMajor <= CSemVersion.maxMajor) {
+                    successors.push(CSemVersion.fromVersionParts(null, nextMajor, 0, 0, "alpha", 0, 0, 0, null, ReleaseTagKind.PreRelease));
 
                     if (!closest) {
-                        for (var i = 1; i <= ReleaseTagVersion.maxPreReleaseNameIdx; ++i) {
-                            successors.push(ReleaseTagVersion.fromVersionParts(null, nextMajor, 0, 0, ReleaseTagVersion.standardNames[i], i, 0, 0, ReleaseTagKind.PreRelease));
+                        for (var i = 1; i <= CSemVersion.maxPreReleaseNameIdx; ++i) {
+                            successors.push(CSemVersion.fromVersionParts(null, nextMajor, 0, 0, CSemVersion.standardNames[i], i, 0, 0, null, ReleaseTagKind.PreRelease));
                         }
                     }
 
-                    successors.push(ReleaseTagVersion.fromVersionParts(null, nextMajor, 0, 0, "", -1, 0, 0, ReleaseTagKind.Release));
+                    successors.push(CSemVersion.fromVersionParts(null, nextMajor, 0, 0, "", -1, 0, 0, null, ReleaseTagKind.Release));
                 }
             }
 
             return successors;
         }
 
-        public isDirectPredecessor(previous: ReleaseTagVersion): boolean {
+        public isDirectPredecessor(previous: CSemVersion): boolean {
             if (!this.isValid) return false;
 
             var num = this.sOrderedVersion.Number;
-            if (previous == null) return ReleaseTagVersion.firstPossibleVersions.indexOf(this) > -1;
+            if (previous == null) return CSemVersion.firstPossibleVersions.indexOf(this) > -1;
             if (previous.sOrderedVersion.Number.gte(num)) return false;
             if (previous.sOrderedVersion.Number.eq(num.minus(1))) return true;
 
@@ -327,21 +298,21 @@
             return this.standardNames;
         }
 
-        public static get veryFirstVersion(): ReleaseTagVersion {
-            return ReleaseTagVersion.fromDecimal(new Big(1));
+        public static get veryFirstVersion(): CSemVersion {
+            return CSemVersion.fromDecimal(new Big(1));
         }
 
-        public static get firstPossibleVersions(): Array<ReleaseTagVersion> {
-            return ReleaseTagVersion.buildFirstPossibleVersions();
+        public static get firstPossibleVersions(): Array<CSemVersion> {
+            return CSemVersion.buildFirstPossibleVersions();
         }
 
-        private static buildFirstPossibleVersions(): Array<ReleaseTagVersion> {
-            var versions = new Array<ReleaseTagVersion>();
+        private static buildFirstPossibleVersions(): Array<CSemVersion> {
+            var versions = new Array<CSemVersion>();
             var v = new Big(1);
             var i = 0;
 
             while (i < 3 * 14) {
-                versions[i++] = ReleaseTagVersion.fromDecimal(v);
+                versions[i++] = CSemVersion.fromDecimal(v);
 
                 if ((i % 28) == 0) v = v.plus(this.mulMajor).minus(this.mulMinor).minus(this.mulPatch).plus(1);
                 else if ((i % 14) == 0) v = v.plus(this.mulMinor).minus(this.mulPatch).plus(1);
@@ -363,21 +334,10 @@
                 v = v.plus(preReleaseFix);
             }
 
-            Debug.assert(ReleaseTagVersion.fromDecimal(v).orderedVersion == v);
+            Debug.assert(CSemVersion.fromDecimal(v).orderedVersion == v);
             Debug.assert(preReleaseNameIdx >= 0 == (!v.mod(this.mulPatch).eq(0)));
 
             return v;
-        }
-
-        public computeDefinitionStrength(): number {
-            var d = 3;
-
-            if (this.isPreRelease && !this.isPreReleaseNameStandard) d -= 1;
-            if (this.isMarked) d += 2;
-            if (this.isMarkedPublished) d += 2;
-            if (this.isMarkedInvalid) d += 4;
-
-            return d;
         }
 
         public get orderedVersion(): BigJsLibrary.BigJS {
@@ -400,12 +360,12 @@
             return this.sOrderedVersion.Revision;
         }
 
-        public equals(other: ReleaseTagVersion): boolean {
+        public equals(other: CSemVersion): boolean {
             if (other == null) return false;
             return this.sOrderedVersion.Number == other.sOrderedVersion.Number;
         }
 
-        public compareTo(other: ReleaseTagVersion): number {
+        public compareTo(other: CSemVersion): number {
             if (other == null) return 1;
             
             return this.sOrderedVersion.Number.cmp(other.sOrderedVersion.Number);
@@ -415,14 +375,14 @@
         public static get noTagParseErrorMessage(): string { return "Not a release tag."; }
 
         private static get regexStrict(): RegExp {
-            return /^v?(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-([a-z]+)(?:\.(0|[1-9][0-9]?)(?:\.([1-9][0-9]?))?)?)?(?:\+(Valid|Invalid|Published)?)?$/i;
+            return /^v?(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-([a-z]+)(?:\.(0|[1-9][0-9]?)(?:\.([1-9][0-9]?))?)?)?(?:\+([a-z0-9\-\.]*)?)?$/i;
         }
 
         private static get regexApprox(): RegExp {
             return /^(?:v|V)?(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:\.(0|[1-9][0-9]*))?([^\n]*)?$/;
         }
 
-        public static tryParse(s: string, analyseInvalidTag: boolean = false): ReleaseTagVersion {
+        public static tryParse(s: string, analyseInvalidTag: boolean = false): CSemVersion {
             if (s == null) throw new Error("ArgumentNullException");
 
             var m = this.regexStrict.exec(s);
@@ -431,9 +391,9 @@
                 if (analyseInvalidTag) {
                     m = this.regexApprox.exec(s);
 
-                    if (m != null && m.length) return ReleaseTagVersion.fromFailedParsing(s, true, this.syntaxErrorHelper(s, m));
+                    if (m != null && m.length) return CSemVersion.fromFailedParsing(s, true, this.syntaxErrorHelper(s, m));
                 }
-                return ReleaseTagVersion.fromFailedParsing(s, false, this.noTagParseErrorMessage);
+                return CSemVersion.fromFailedParsing(s, false, this.noTagParseErrorMessage);
             }
 
             var sMajor = m[1];
@@ -444,9 +404,9 @@
             var minor = parseInt(sMinor);
             var patch = parseInt(sPatch);
 
-            if (major == NaN || major > this.maxMajor) return ReleaseTagVersion.fromFailedParsing(s, true, `Incorrect Major version. Must not be greater than ${this.maxMajor}.`);
-            if (minor == NaN || minor > this.maxMinor) return ReleaseTagVersion.fromFailedParsing(s, true, `Incorrect Minor version. Must not be greater than ${this.maxMinor}.`);
-            if (patch == NaN || patch > this.maxPatch) return ReleaseTagVersion.fromFailedParsing(s, true, `Incorrect Patch version. Must not be greater than ${this.maxPatch}.`);
+            if (major == NaN || major > this.maxMajor) return CSemVersion.fromFailedParsing(s, true, `Incorrect Major version. Must not be greater than ${this.maxMajor}.`);
+            if (minor == NaN || minor > this.maxMinor) return CSemVersion.fromFailedParsing(s, true, `Incorrect Minor version. Must not be greater than ${this.maxMinor}.`);
+            if (patch == NaN || patch > this.maxPatch) return CSemVersion.fromFailedParsing(s, true, `Incorrect Patch version. Must not be greater than ${this.maxPatch}.`);
 
             var sPRName = m[4];
             var sPRNum = m[5];
@@ -460,18 +420,18 @@
             if (prNameIdx >= 0) {
                 if (sPRFix != null && sPRFix.length > 0) prFix = parseInt(sPRFix);
                 if (sPRNum != null && sPRNum.length > 0) prNum = parseInt(sPRNum);
-                if (prFix == 0 && prNum == 0 && (sPRNum != null && sPRNum.length > 0)) return ReleaseTagVersion.fromFailedParsing(s, true, `Incorrect '.0' Release Number version. 0 can appear only to fix the first pre release (ie. '.0.F' where F is between 1 and ${this.maxPreReleaseFix}).`);
+                if (prFix == 0 && prNum == 0 && (sPRNum != null && sPRNum.length > 0)) return CSemVersion.fromFailedParsing(s, true, `Incorrect '.0' Release Number version. 0 can appear only to fix the first pre release (ie. '.0.F' where F is between 1 and ${this.maxPreReleaseFix}).`);
             }
 
             var kind = prNameIdx >= 0 ? ReleaseTagKind.PreRelease : ReleaseTagKind.Release;
+            var marker = "";
 
-            if (sBuildMetaData != null && sBuildMetaData.length > 0) {
-                if (sBuildMetaData[0] == "i" || sBuildMetaData[0] == "I") kind |= ReleaseTagKind.MarkedInvalid;
-                else if (sBuildMetaData[0] == 'v' || sBuildMetaData[0] == 'V') kind |= ReleaseTagKind.MarkedValid;
-                else kind |= ReleaseTagKind.MarkedPublished;
+            // TODO : check build metadata validity
+            if (sBuildMetaData.length == 0) {
+                return CSemVersion.fromFailedParsing(s, true, "Invalid build metadata");
             }
 
-            return ReleaseTagVersion.fromVersionParts(s, major, minor, patch, sPRName, prNameIdx, prNum, prFix, kind);
+            return CSemVersion.fromVersionParts(s, major, minor, patch, sPRName, prNameIdx, prNum, prFix, sBuildMetaData, kind);
         }
 
         private static get regexApproxSuffix(): RegExp {
@@ -517,9 +477,7 @@
                 }
 
                 if (fragment != null && fragment.length > 0) {
-                    if (fragment.toLowerCase() != "invalid" && fragment.toLowerCase() != "valid" && fragment.toLowerCase() != "published") {
-                        return "Invalid build meta data: can only be '+valid' or '+published', '+invalid'.";
-                    }
+                    // TODO : fragment = build metadata, check
                 }
             }
 
@@ -545,7 +503,7 @@
 
             switch (f) {
                 case Format.NugetPackageV2: {
-                    var marker = this.isMarkedInvalid ? this.marker : "";
+                    var marker = this.marker;
 
                     if (this.isPreRelease) {
                         if (this.isPreReleaseFix) {

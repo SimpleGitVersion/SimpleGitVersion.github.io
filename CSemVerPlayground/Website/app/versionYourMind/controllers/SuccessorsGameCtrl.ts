@@ -8,10 +8,10 @@
         private timer: ng.IPromise<any>;
 
         public gameStarted = false;
-        public selectedVersion: ReleaseTagVersion.ReleaseTagVersion;
+        public selectedVersion: CSemVersion.CSemVersion;
         public versionInput: string;
-        public foundVersions: Array<ReleaseTagVersion.ReleaseTagVersion>;
-        public possibleVersions: Array<ReleaseTagVersion.ReleaseTagVersion>;
+        public foundVersions: Array<CSemVersion.CSemVersion>;
+        public possibleVersions: Array<CSemVersion.CSemVersion>;
 
         constructor(private $scope: ISuccessorsGameScope, private $interval: ng.IIntervalService, private toaster: ngtoaster.IToasterService, private $modal: ng.ui.bootstrap.IModalService) {
 
@@ -23,7 +23,7 @@
             this.foundVersions = new Array();
             this.versionInput = null;
             this.millisecondsElapsed = 0;
-            this.selectedVersion = ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(this.getRandomNumber()));
+            this.selectedVersion = CSemVersion.CSemVersion.fromDecimal(new Big(this.getRandomNumber()));
             this.possibleVersions = this.selectedVersion.getDirectSuccessors();
 
             this.startTimer();
@@ -104,7 +104,7 @@
 
         public submitVersion() {
             if (this.versionInput != null) {
-                var v = ReleaseTagVersion.ReleaseTagVersion.tryParse(this.versionInput, true);
+                var v = CSemVersion.CSemVersion.tryParse(this.versionInput, true);
 
                 if (!v.parseErrorMessage) {
                     // Note : isDirectPredecessor() is buggy. We use the array of successors instead

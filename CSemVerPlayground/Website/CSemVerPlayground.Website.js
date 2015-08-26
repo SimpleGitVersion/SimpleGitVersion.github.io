@@ -100,7 +100,7 @@ var CSemVerPlayground;
                     var maxNumber = this.currentPage * this.itemsPerPage;
                     var minNumber = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + 1;
                     for (var i = minNumber; i <= maxNumber; i++) {
-                        var v = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(i));
+                        var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(i));
                         this.items.push(v);
                     }
                 };
@@ -134,14 +134,14 @@ var CSemVerPlayground;
                             pageNumber = 1;
                         this.currentPage = pageNumber;
                         if (sync) {
-                            var v = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(this.goToVersionNumberInput));
+                            var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                             this.goToVersionTagInput = v.toString();
                         }
                         this.generateItems();
                     }
                 };
                 BrowseCtrl.prototype.goToVersionTag = function () {
-                    var v = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.tryParse(this.goToVersionTagInput, true);
+                    var v = CSemVerPlayground.CSemVersion.CSemVersion.tryParse(this.goToVersionTagInput, true);
                     if (!v.parseErrorMessage) {
                         this.goToVersionNumberInput = +v.orderedVersion.toFixed();
                         this.goToVersionNumber(false);
@@ -151,16 +151,16 @@ var CSemVerPlayground;
                     }
                 };
                 BrowseCtrl.prototype.getNormalizedVersion = function (v) {
-                    return v.toString(CSemVerPlayground.ReleaseTagVersion.Format.Normalized);
+                    return v.toString(CSemVerPlayground.CSemVersion.Format.Normalized);
                 };
                 BrowseCtrl.prototype.getSemVerVersion = function (v) {
-                    return v.toString(CSemVerPlayground.ReleaseTagVersion.Format.SemVerWithMarker);
+                    return v.toString(CSemVerPlayground.CSemVersion.Format.SemVerWithMarker);
                 };
                 BrowseCtrl.prototype.getNugetVersion = function (v) {
-                    return v.toString(CSemVerPlayground.ReleaseTagVersion.Format.NugetPackageV2);
+                    return v.toString(CSemVerPlayground.CSemVersion.Format.NugetPackageV2);
                 };
                 BrowseCtrl.prototype.getDottedOrderedVersion = function (v) {
-                    return v.toString(CSemVerPlayground.ReleaseTagVersion.Format.DottedOrderedVersion);
+                    return v.toString(CSemVerPlayground.CSemVersion.Format.DottedOrderedVersion);
                 };
                 return BrowseCtrl;
             })();
@@ -240,6 +240,22 @@ var CSemVerPlayground;
                 PredecessorsGameAnswer[PredecessorsGameAnswer["Neither"] = 2] = "Neither";
             })(VersionYourMind.PredecessorsGameAnswer || (VersionYourMind.PredecessorsGameAnswer = {}));
             var PredecessorsGameAnswer = VersionYourMind.PredecessorsGameAnswer;
+        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var VersionYourMind;
+        (function (VersionYourMind) {
+            var VersionYourMindCtrl = (function () {
+                function VersionYourMindCtrl($scope) {
+                    this.$scope = $scope;
+                }
+                return VersionYourMindCtrl;
+            })();
+            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
@@ -331,7 +347,7 @@ var CSemVerPlayground;
                     var answer = this.getRandomNumber(0, 2);
                     if (answer == VersionYourMind.PredecessorsGameAnswer.AB || answer == VersionYourMind.PredecessorsGameAnswer.BA) {
                         var v1Number = this.getRandomNumber(1, 1300010000130001);
-                        var v1 = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(v1Number));
+                        var v1 = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(v1Number));
                         var v1Successors = v1.getDirectSuccessors();
                         var v2Number = this.getRandomNumber(0, v1Successors.length - 1);
                         var v2 = v1Successors[v2Number];
@@ -347,8 +363,8 @@ var CSemVerPlayground;
                     else {
                         var v1Number = this.getRandomNumber(1, 1300010000130001);
                         var v2Number = this.getRandomNumber(1, 1300010000130001);
-                        this.versionA = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(v1Number));
-                        this.versionB = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(v2Number));
+                        this.versionA = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(v1Number));
+                        this.versionB = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(v2Number));
                         if (this.versionA.isDirectPredecessor(this.versionB) || this.versionB.isDirectPredecessor(this.versionA)) {
                             this.pickRandomVersions();
                         }
@@ -385,7 +401,7 @@ var CSemVerPlayground;
                     this.foundVersions = new Array();
                     this.versionInput = null;
                     this.millisecondsElapsed = 0;
-                    this.selectedVersion = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(this.getRandomNumber()));
+                    this.selectedVersion = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(this.getRandomNumber()));
                     this.possibleVersions = this.selectedVersion.getDirectSuccessors();
                     this.startTimer();
                     this.gameStarted = true;
@@ -458,7 +474,7 @@ var CSemVerPlayground;
                 };
                 SuccessorsGameCtrl.prototype.submitVersion = function () {
                     if (this.versionInput != null) {
-                        var v = CSemVerPlayground.ReleaseTagVersion.ReleaseTagVersion.tryParse(this.versionInput, true);
+                        var v = CSemVerPlayground.CSemVersion.CSemVersion.tryParse(this.versionInput, true);
                         if (!v.parseErrorMessage) {
                             // Note : isDirectPredecessor() is buggy. We use the array of successors instead
                             var successor = this.possibleVersions.filter(function (value, index, array) {
@@ -495,22 +511,6 @@ var CSemVerPlayground;
                 return SuccessorsGameCtrl;
             })();
             VersionYourMind.SuccessorsGameCtrl = SuccessorsGameCtrl;
-        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var VersionYourMind;
-        (function (VersionYourMind) {
-            var VersionYourMindCtrl = (function () {
-                function VersionYourMindCtrl($scope) {
-                    this.$scope = $scope;
-                }
-                return VersionYourMindCtrl;
-            })();
-            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));

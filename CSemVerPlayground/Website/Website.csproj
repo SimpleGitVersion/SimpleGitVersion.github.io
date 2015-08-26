@@ -785,7 +785,7 @@
     <Content Include="libs\bootstrap\bootstrap.min.js" />
     <Content Include="libs\jquery\jquery-2.1.4.min.js" />
     <Content Include="libs\linqjs\linq.min.js" />
-    <Content Include="libs\ReleaseTagVersion\CSemVerPlayground.ReleaseTagVersion.js" />
+    <Content Include="libs\CSemVersion\CSemVerPlayground.CSemVersion.js" />
     <Content Include="libs\toaster\toaster.min.js" />
     <Content Include="libs\ui-bootstrap\ui-bootstrap-tpls-0.13.0.min.js" />
     <Content Include="styles\app.css" />
@@ -818,12 +818,12 @@
     <TypeScriptCompile Include="libs\bigjs\big.js.d.ts" />
     <TypeScriptCompile Include="libs\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="libs\linqjs\linq.d.ts" />
-    <TypeScriptCompile Include="libs\ReleaseTagVersion\CSemVerPlayground.ReleaseTagVersion.d.ts" />
+    <TypeScriptCompile Include="libs\CSemVersion\CSemVerPlayground.CSemVersion.d.ts" />
     <TypeScriptCompile Include="libs\toaster\angularjs-toaster.d.ts" />
     <TypeScriptCompile Include="libs\ui-bootstrap\angular-ui-bootstrap.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="libs\ReleaseTagVersion\CSemVerPlayground.ReleaseTagVersion.js.map" />
+    <Content Include="libs\CSemVersion\CSemVerPlayground.CSemVersion.js.map" />
     <Content Include="styles\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="styles\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="styles\fonts\glyphicons-halflings-regular.woff" />

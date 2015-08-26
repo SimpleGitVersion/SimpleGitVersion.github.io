@@ -3,7 +3,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <ProjectGuid>{392E44BD-3AE9-4E7C-B282-ED2AAE7668A6}</ProjectGuid>
+    <ProjectGuid>{8783B219-D3E4-408D-9728-C657ECF3EE7B}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <OutputPath>bin</OutputPath>
@@ -16,20 +16,22 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="index.html" />
-    <Content Include="libs\big.min.js" />
-    <Content Include="libs\CSemVerPlayground.ReleaseTagVersion.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="Debug.ts" />
+    <TypeScriptCompile Include="Format.ts" />
+    <TypeScriptCompile Include="IComparable.ts" />
+    <TypeScriptCompile Include="IEquatable.ts" />
     <TypeScriptCompile Include="libs\big.js.d.ts" />
-    <TypeScriptCompile Include="libs\CSemVerPlayground.ReleaseTagVersion.d.ts" />
+    <TypeScriptCompile Include="CSemVersion.ts" />
+    <TypeScriptCompile Include="ReleaseTagKind.ts" />
+    <TypeScriptCompile Include="SOrderedVersion.ts" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="libs\CSemVerPlayground.ReleaseTagVersion.js.map" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -37,12 +39,11 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <RootNamespace>ReleaseTagVersion.Demo</RootNamespace>
+    <RootNamespace>CSemVersion</RootNamespace>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets')" />
@@ -52,9 +53,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>59621</DevelopmentServerPort>
+          <DevelopmentServerPort>20636</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:59621/</IISUrl>
+          <IISUrl>http://localhost:20636/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -68,8 +69,8 @@
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptOutFile>CSemVerPlayground.ReleaseTagVersion.Demo.js</TypeScriptOutFile>
-    <TypeScriptOutDir>CSemVerPlayground.ReleaseTagVersion.Demo.js</TypeScriptOutDir>
+    <TypeScriptOutDir>CSemVerPlayground.CSemVersion.js</TypeScriptOutDir>
+    <TypeScriptOutFile>CSemVerPlayground.CSemVersion.js</TypeScriptOutFile>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">

@@ -7,8 +7,8 @@
         private answer: PredecessorsGameAnswer;
 
         public gameStarted = false;
-        public versionA: ReleaseTagVersion.ReleaseTagVersion;
-        public versionB: ReleaseTagVersion.ReleaseTagVersion;
+        public versionA: CSemVersion.CSemVersion;
+        public versionB: CSemVersion.CSemVersion;
         public totalQuestions = 0;
         public wonQuestions = 0;
         public answered = false;
@@ -96,7 +96,7 @@
 
             if (answer == PredecessorsGameAnswer.AB || answer == PredecessorsGameAnswer.BA) {
                 var v1Number = this.getRandomNumber(1, 1300010000130001);
-                var v1 = ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(v1Number));
+                var v1 = CSemVersion.CSemVersion.fromDecimal(new Big(v1Number));
                 var v1Successors = v1.getDirectSuccessors();
 
                 var v2Number = this.getRandomNumber(0, v1Successors.length - 1);
@@ -115,8 +115,8 @@
                 var v1Number = this.getRandomNumber(1, 1300010000130001);
                 var v2Number = this.getRandomNumber(1, 1300010000130001);
 
-                this.versionA = ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(v1Number));
-                this.versionB = ReleaseTagVersion.ReleaseTagVersion.fromDecimal(new Big(v2Number));
+                this.versionA = CSemVersion.CSemVersion.fromDecimal(new Big(v1Number));
+                this.versionB = CSemVersion.CSemVersion.fromDecimal(new Big(v2Number));
 
                 if (this.versionA.isDirectPredecessor(this.versionB) || this.versionB.isDirectPredecessor(this.versionA) ) {
                     this.pickRandomVersions();

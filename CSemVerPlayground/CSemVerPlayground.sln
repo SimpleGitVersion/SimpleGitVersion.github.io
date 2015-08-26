@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReleaseTagVersion", "ReleaseTagVersion\ReleaseTagVersion.csproj", "{8783B219-D3E4-408D-9728-C657ECF3EE7B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSemVersion", "CSemVersion\CSemVersion.csproj", "{8783B219-D3E4-408D-9728-C657ECF3EE7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReleaseTagVersion.Demo", "ReleaseTagVersion.Demo\ReleaseTagVersion.Demo.csproj", "{392E44BD-3AE9-4E7C-B282-ED2AAE7668A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSemVersion.Demo", "CSemVersion.Demo\CSemVersion.Demo.csproj", "{392E44BD-3AE9-4E7C-B282-ED2AAE7668A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Website\Website.csproj", "{E8E95155-48AC-40AF-97D6-9F365D7F8388}"
 EndProject
