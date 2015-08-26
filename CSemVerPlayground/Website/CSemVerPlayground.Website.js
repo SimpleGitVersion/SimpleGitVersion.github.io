@@ -121,7 +121,7 @@ var CSemVerPlayground;
                 };
                 BrowseCtrl.prototype.isVersionNumberValid = function () {
                     var n = this.goToVersionNumberInput;
-                    return !isNaN(n) && n > 1 && n <= 13000100000000000000;
+                    return !isNaN(n) && n >= 1 && n <= 13000100000000000000;
                 };
                 BrowseCtrl.prototype.goToVersionNumber = function (sync) {
                     if (sync === void 0) { sync = true; }
@@ -240,22 +240,6 @@ var CSemVerPlayground;
                 PredecessorsGameAnswer[PredecessorsGameAnswer["Neither"] = 2] = "Neither";
             })(VersionYourMind.PredecessorsGameAnswer || (VersionYourMind.PredecessorsGameAnswer = {}));
             var PredecessorsGameAnswer = VersionYourMind.PredecessorsGameAnswer;
-        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var VersionYourMind;
-        (function (VersionYourMind) {
-            var VersionYourMindCtrl = (function () {
-                function VersionYourMindCtrl($scope) {
-                    this.$scope = $scope;
-                }
-                return VersionYourMindCtrl;
-            })();
-            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
@@ -511,6 +495,22 @@ var CSemVerPlayground;
                 return SuccessorsGameCtrl;
             })();
             VersionYourMind.SuccessorsGameCtrl = SuccessorsGameCtrl;
+        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var VersionYourMind;
+        (function (VersionYourMind) {
+            var VersionYourMindCtrl = (function () {
+                function VersionYourMindCtrl($scope) {
+                    this.$scope = $scope;
+                }
+                return VersionYourMindCtrl;
+            })();
+            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));

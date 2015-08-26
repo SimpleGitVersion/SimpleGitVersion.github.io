@@ -48,7 +48,7 @@
         public isVersionNumberValid(): boolean {
             var n = this.goToVersionNumberInput;
 
-            return !isNaN(n) && n > 1 && n <= 13000100000000000000;
+            return !isNaN(n) && n >= 1 && n <= 13000100000000000000;
         }
 
         public goToVersionNumber(sync = true) {
