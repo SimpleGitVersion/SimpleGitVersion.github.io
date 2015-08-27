@@ -35,11 +35,26 @@
         from 1 (v0.0.0-alpha) to 13000100000000000000 (v99999.99999.9999).
     </p>
 
-    <h2>Rationales</h2>
+    <h2>Rationales &amp; examples</h2>
     <p>
         First, CSemVer defines a <a href="https://en.wikipedia.org/wiki/Total_order">totally ordered</a> set of versions. 
         This is used to generate version names that guaranty a correct application of precedence rules.
     </p> 
+    <p>
+        For example, the <a href="http://nuget.org">NuGet</a> packaging system in its V2 version (2015) do not 
+        follow Semantic Versioning (the 'special name' - the prerelease part - is simply ordered lexicographically).
+    </p>
+    <table>
+        <thead><tr><td>CSemVer</td><td>NuGet V2</td><td>Ordered Version</td><td>Description</td></tr></thead>
+        <tr><td>v0.0.0-alpha</td><td>0.0.0-alpha</td><td>1</td><td>The very first possible version is a prerelease.</td></tr>
+        <tr><td>v0.0.0-alpha.1</td><td>0.0.0-alpha-01</td><td>1</td><td rowspan="2">These are numbered prerelease. There can be 99 numbered prereleases.</td></tr>
+        <tr><td>v0.0.0-alpha.2</td><td>0.0.0-alpha-02</td><td>1</td></tr>
+        <tr><td>v0.0.0-alpha.0.1</td><td>0.0.0-alpha-00-01</td><td>1</td><td>Oups! There was a bug in the very first alpha and someone needs a fix.</td></tr>
+        <tr><td>v1.0.0</td><td>1.0.0</td><td>1</td><td>The first official version.</td></tr>
+        <tr><td>v1.0.1</td><td>1.0.1</td><td>1</td><td>A fix to the first official version: it contains only bug fixes, no breaking changes.</td></tr>
+        <tr><td>v1.1.0</td><td>1.1.0</td><td>1</td><td>Introduction of new features but no breaking changes.</td></tr>
+        <tr><td>v2.0.0-rc</td><td>2.0.0-rc</td><td>1</td><td>Preparing the next major version.</td></tr>
+    </table>
     <p>
         Second, CSemVer makes possible to really control the versions that are published. The valid successors (according to Semantic Versioning rules) of
         any version can be computed (there can be up to 42 successors to a version) and, respectively, one can decide whether a version is a valid predecessor
