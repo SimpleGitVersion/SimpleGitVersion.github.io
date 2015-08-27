@@ -1,0 +1,43 @@
+﻿<div class="container">
+    <div class="page-header">
+        <h1>Predecessors game</h1>
+    </div>
+
+    <div class="alert alert-info" role="alert">
+        <p>
+            In this game, you have two random versions A and B. You have to choose if A is a direct predecessor of B, B is a direct predecessor of A, or neither.
+        </p>
+    </div>
+
+    <div class="text-center">
+        <button type="button" class="btn btn-primary btn-lg" ng-click="ctrl.start();" ng-show="!ctrl.gameStarted">Start the game</button>
+    </div>
+
+    <div id="game" ng-show="ctrl.gameStarted">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="pull-left">Question {{ctrl.totalQuestions}}</div>
+                <div class="pull-right">Won: {{ctrl.wonQuestions}}/{{ctrl.totalQuestions}}</div>
+                <div style="clear: both;"></div>
+            </div>
+            <div class="panel-body">
+                <h1 class="pull-left"><span class="label label-default">A</span> <span class="label label-primary">{{ ctrl.versionA.toString() }}</span></h1>
+                <h1 class="pull-right"><span class="label label-default">B</span> <span class="label label-primary">{{ ctrl.versionB.toString() }}</span></h1>
+
+                <div style="clear: both;"></div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-4"><button type="button" class="btn btn-lg btn-block" ng-class="ctrl.getButtonClass(0)" ng-click="ctrl.chooseAB()" ng-disabled="ctrl.answered">A is a direct predecessor of B</button></div>
+                    <div class="col-md-4"><button type="button" class="btn btn-lg btn-block" ng-class="ctrl.getButtonClass(1)" ng-click="ctrl.chooseBA()" ng-disabled="ctrl.answered">B is a direct predecessor of A</button></div>
+                    <div class="col-md-4"><button type="button" class="btn btn-lg btn-block" ng-class="ctrl.getButtonClass(2)" ng-click="ctrl.chooseNeither()" ng-disabled="ctrl.answered">Neither</button></div>
+                </div> 
+
+                <br />
+
+                <button type="button" class="btn btn-primary btn-lg btn-block" ng-show="ctrl.answered" ng-click="ctrl.nextQuestion()">Next question <span class="glyphicon glyphicon-chevron-right"></span></button>
+            </div>
+        </div>
+    </div>
+</div>

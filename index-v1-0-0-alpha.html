@@ -1,0 +1,76 @@
+﻿<!doctype html>
+<html lang="en" dir="ltr">
+ <head>
+  <meta charset="utf-8">
+  <title>CSemVer - Constrained Semantic Versioning 1.0.0-alpha</title>
+  <meta name="author" content="Invenietis">
+  <link rel="stylesheet" href="css/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+</head>
+ <body>
+
+ <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-304133-4', 'auto');
+  ga('send', 'pageview');
+</script>
+
+   <ol class="nav lang">
+     <li><a href="/">english</a> [en]</li>
+     <li><a lang="fr" rel="alternate" hreflang="fr" href="/lang/fr">fran&ccedil;ais</a> [fr]</li>
+   </ol>
+   
+   <h1>Constrained Semantic Versioning v1.0.0-alpha</h1>
+
+<h2>Summary</h2>
+<p class="note">
+    This version is deprecated. v1.0.0-beta removes 'pi' from the prerelease name so that the initial can be used ('pi' conflicted with 'prerelease').
+    <br/>
+    It is replaced by 'chi': <span class="verpart">PrereleaseName</span> must now be alpha, beta, chi, delta, epsilon, gamma, iota, kappa, lambda, mu, omicron, prerelease, rc.
+</p>
+<p>
+CSemVer is an operational subset of SemVer (http://semver.org) that is defined around one strong idea: 
+CSemVer versions are totally ordered, each version corresponds to a unique 64 bits unsigned integer ranging 
+from 1 (v0.0.0-alpha) to 13000100000000000000 (v99999.99999.9999).
+</p>
+
+<h2>Specification</h2>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in <a href="http://tools.ietf.org/html/rfc2119">RFC 2119</a>.</p>
+
+CSemVer versions follow Semantic Versioning rules and adds some constraints:
+<ol>
+<li>
+<p>Syntax of a CSemVer MUST be:</p>
+<p>[v|V]<span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch</span>[-<span class="verpart">PreReleaseName</span>[.<span class="verpart">PreReleaseNumber</span>[.<span class="verpart">PreReleaseFix</span>]]][+<span class="verpart">BuildMetaData</span>]</p>
+</li>
+<li><p>CSemVer versions MAY be prefixed with a 'v' or 'V' (GitHub convention). This is the only extension that is not supported by SemVer.</p></li>
+<li><p>The <span class="verpart">Major</span> part MUST be defined between 0 and 99999.</p></li>
+<li><p>The <span class="verpart">Minor</span> part MUST be defined between 0 and 99999.</p></li>
+<li><p>The <span class="verpart">Patch</span> part MUST be defined between 0 and 9999.</p></li>
+<li><p>The <span class="verpart">PrereleaseName</span> MAY be denoted by appending a hyphen and a name that MUST be one of the 13 values of the following list (ordered from 0 to 12): 
+alpha, beta, delta, epsilon, gamma, iota, kappa, lambda, mu, omicron, pi, prerelease, rc.</p>
+<p>Any other name not listed in this set MUST be either mapped to/considered as "prerelease" OR considered syntactically invalid.<p>
+</li>
+<li>The <span class="verpart">PrereleaseNumber</span> MAY be denoted by appending a dot and a number that MUST be defined between 0 and 99.</p></li>
+<li>The <span class="verpart">PrereleaseFix</span> MAY be denoted by appending a dot and a number that MUST be defined between 1 and 99.</p></li>
+<li>The <span class="verpart">PrereleaseNumber</span> 0 MUST appear only when a <span class="verpart">PrereleaseFix</span> is specified to denote a fix of a first prerelease (v4.3.2-rc.0.2 is the second fix of v4.3.2-rc).</p></li>
+</ol>
+
+<h2>About</h2>
+
+<p>The Constrained Semantic Versioning specification is authored by <a href="http://invenietis.com">Invenietis</a>.</p>
+
+<p>If you'd like to leave feedback, please <a href="https://github.com/SimpleGitVersion/SimpleGitVersion.github.io/issues">open an issue on
+GitHub</a>.</p>
+
+<h2>License</h2>
+
+<p><a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons - CC BY 3.0</a></p>
+
+ </body>
+</html>

@@ -30,6 +30,8 @@ p { margin: 0 0 1em; }
 
 .verpart { font-weight: bold }
 
+p.note { border: solid; border-color: gray; padding: 1em;}
+
 /* Nav */
 
 ol.nav {
