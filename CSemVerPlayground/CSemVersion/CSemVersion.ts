@@ -1,7 +1,7 @@
 ﻿module CSemVerPlayground.CSemVersion {
     export class CSemVersion implements IEquatable<CSemVersion>, IComparable<CSemVersion> {
         // ========== Static constructors ==========
-        public static fromVersionParts(tag: string, major: number, minor: number, patch: number, preReleaseName: string, preReleaseNameIdx: number, preReleaseNumber: number, preReleaseFix: number, marker: string, kind: ReleaseTagKind): CSemVersion {
+        private static fromVersionParts(tag: string, major: number, minor: number, patch: number, preReleaseName: string, preReleaseNameIdx: number, preReleaseNumber: number, preReleaseFix: number, marker: string, kind: ReleaseTagKind): CSemVersion {
             var v = new CSemVersion();
 
             v.major = major;
@@ -16,6 +16,44 @@
             v.originalTagText = tag != null ? tag : v.toString();
 
             v.sOrderedVersion = new SOrderedVersion(this.computeOrderedVersion(major, minor, patch, preReleaseNameIdx, preReleaseNumber, preReleaseFix));
+            return v;
+        }
+
+        private static fromFileVersionParts(major: number, minor: number, build: number, revision: number): CSemVersion {
+            var mul = new Big(65536);
+            var total = new Big(major);
+            var m = new Big(minor);
+            var b = new Big(build);
+            var r = new Big(revision);
+
+            total = total.times(mul.pow(3));
+            total = total.plus(m.times(mul.pow(2)));
+            total = total.plus(b.times(mul));
+            total = total.plus(r);
+
+            return CSemVersion.fromDecimal(total);
+        }
+
+        private static fromFailedParsing(input: string, isMalformed: boolean, errorMessage: string, isFileVersion = false): CSemVersion {
+            var v = new CSemVersion();
+
+            var parsingType = "File version";
+
+            if (!isFileVersion) {
+                v.originalTagText = input;
+                parsingType = "Tag";
+            }
+
+            v.kind = ReleaseTagKind.None;
+
+            if (isMalformed) {
+                v.kind = ReleaseTagKind.Malformed;
+            }
+
+            v.parseErrorMessage = isMalformed ? `${parsingType} '${input}': ${errorMessage}` : errorMessage;
+            v.preReleaseNameIdx = -1;
+            v.preReleaseFix = 0;
+
             return v;
         }
 
@@ -57,23 +95,6 @@
 
                 v.patch = parseInt(d.div(this.mulPatch).toFixed());
             }
-
-            return v;
-        }
-
-        public static fromFailedParsing(tag: string, isMalformed: boolean, errorMessage: string): CSemVersion {
-            var v = new CSemVersion();
-
-            v.originalTagText = tag;
-            v.kind = ReleaseTagKind.None;
-
-            if (isMalformed) {
-                v.kind = ReleaseTagKind.Malformed;
-            }
-
-            v.parseErrorMessage = isMalformed ? `Tag '${tag}': ${errorMessage}` : errorMessage;
-            v.preReleaseNameIdx = -1;
-            v.preReleaseFix = 0;
 
             return v;
         }
@@ -255,6 +276,8 @@
 
         public static get maxPreReleaseFix(): number { return 99; }
 
+        public static get maxFileVersionPart(): number { return 65535; }
+
         private static get standardNames(): string[] {
             return ["alpha", "beta", "delta", "epsilon", "gamma", "iota", "kappa", "lambda", "mu", "omicron", "pi", "prerelease", "rc"];
         }
@@ -370,6 +393,39 @@
 
         // ========== ReleaseTagVersion.Parse.cs ==========
         public static get noTagParseErrorMessage(): string { return "Not a valid tag."; }
+        public static get noFileVersionParseErrorMessage(): string { return "Not a valid file version."; }
+
+        public static tryParseFileVersion(s: string): CSemVersion {
+            if (s == null || s.length == 0) {
+                return CSemVersion.fromFailedParsing(s, false, this.noFileVersionParseErrorMessage);
+            }
+
+            var parts = this.regexStrictFileVersion.exec(s);
+
+            if (parts == null || !parts.length) {
+                return CSemVersion.fromFailedParsing(s, false, this.noFileVersionParseErrorMessage, true);
+            }
+
+            var major = parseInt(parts[1]);
+            var minor = parseInt(parts[2]);
+            var build = parseInt(parts[3]);
+            var revision = parseInt(parts[4]);
+
+            if (major == NaN || major < 0 || major > this.maxFileVersionPart) return CSemVersion.fromFailedParsing(s, true, `Incorrect Major version. Must not be negative or greater than ${this.maxFileVersionPart}.`, true);
+            if (minor == NaN || minor < 0 || minor > this.maxFileVersionPart) return CSemVersion.fromFailedParsing(s, true, `Incorrect Minor version. Must not be negative or greater than ${this.maxFileVersionPart}.`, true);
+            if (build == NaN || build < 0 || build > this.maxFileVersionPart) return CSemVersion.fromFailedParsing(s, true, `Incorrect Build version. Must not be negative or greater than ${this.maxFileVersionPart}.`, true);
+            if (revision == NaN || revision < 0 || revision > this.maxFileVersionPart) return CSemVersion.fromFailedParsing(s, true, `Incorrect Revision version. Must not be negative or greater than ${this.maxFileVersionPart}.`, true);
+
+            if (major == 0 && minor == 0 && build == 0 && revision == 0) {
+                return CSemVersion.fromFailedParsing(s, false, this.noFileVersionParseErrorMessage, true);
+            }
+
+            return CSemVersion.fromFileVersionParts(major, minor, build, revision);
+        }
+
+        private static get regexStrictFileVersion() : RegExp {
+            return /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/i;
+        }
 
         private static get regexStrict(): RegExp {
             return /^v?(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-([a-z]+)(?:\.(0|[1-9][0-9]?)(?:\.([1-9][0-9]?))?)?)?(?:\+([0-9a-z-]+(?:\.[0-9a-z-]+)*))?$/i;

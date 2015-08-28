@@ -65,6 +65,35 @@ var CSemVerPlayground;
                 v.sOrderedVersion = new CSemVersion_1.SOrderedVersion(this.computeOrderedVersion(major, minor, patch, preReleaseNameIdx, preReleaseNumber, preReleaseFix));
                 return v;
             };
+            CSemVersion.fromFileVersionParts = function (major, minor, build, revision) {
+                var mul = new Big(65536);
+                var total = new Big(major);
+                var m = new Big(minor);
+                var b = new Big(build);
+                var r = new Big(revision);
+                total = total.times(mul.pow(3));
+                total = total.plus(m.times(mul.pow(2)));
+                total = total.plus(b.times(mul));
+                total = total.plus(r);
+                return CSemVersion.fromDecimal(total);
+            };
+            CSemVersion.fromFailedParsing = function (input, isMalformed, errorMessage, isFileVersion) {
+                if (isFileVersion === void 0) { isFileVersion = false; }
+                var v = new CSemVersion();
+                var parsingType = "File version";
+                if (!isFileVersion) {
+                    v.originalTagText = input;
+                    parsingType = "Tag";
+                }
+                v.kind = CSemVersion_1.ReleaseTagKind.None;
+                if (isMalformed) {
+                    v.kind = CSemVersion_1.ReleaseTagKind.Malformed;
+                }
+                v.parseErrorMessage = isMalformed ? parsingType + " '" + input + "': " + errorMessage : errorMessage;
+                v.preReleaseNameIdx = -1;
+                v.preReleaseFix = 0;
+                return v;
+            };
             CSemVersion.fromDecimal = function (d) {
                 var v = new CSemVersion();
                 if (d.eq(0)) {
@@ -97,18 +126,6 @@ var CSemVerPlayground;
                     d = d.minus(this.mulMinor.times(v.minor));
                     v.patch = parseInt(d.div(this.mulPatch).toFixed());
                 }
-                return v;
-            };
-            CSemVersion.fromFailedParsing = function (tag, isMalformed, errorMessage) {
-                var v = new CSemVersion();
-                v.originalTagText = tag;
-                v.kind = CSemVersion_1.ReleaseTagKind.None;
-                if (isMalformed) {
-                    v.kind = CSemVersion_1.ReleaseTagKind.Malformed;
-                }
-                v.parseErrorMessage = isMalformed ? "Tag '" + tag + "': " + errorMessage : errorMessage;
-                v.preReleaseNameIdx = -1;
-                v.preReleaseFix = 0;
                 return v;
             };
             Object.defineProperty(CSemVersion.prototype, "preReleaseName", {
@@ -281,6 +298,11 @@ var CSemVerPlayground;
                 enumerable: true,
                 configurable: true
             });
+            Object.defineProperty(CSemVersion, "maxFileVersionPart", {
+                get: function () { return 65535; },
+                enumerable: true,
+                configurable: true
+            });
             Object.defineProperty(CSemVersion, "standardNames", {
                 get: function () {
                     return ["alpha", "beta", "delta", "epsilon", "gamma", "iota", "kappa", "lambda", "mu", "omicron", "pi", "prerelease", "rc"];
@@ -445,6 +467,43 @@ var CSemVerPlayground;
             Object.defineProperty(CSemVersion, "noTagParseErrorMessage", {
                 // ========== ReleaseTagVersion.Parse.cs ==========
                 get: function () { return "Not a valid tag."; },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(CSemVersion, "noFileVersionParseErrorMessage", {
+                get: function () { return "Not a valid file version."; },
+                enumerable: true,
+                configurable: true
+            });
+            CSemVersion.tryParseFileVersion = function (s) {
+                if (s == null || s.length == 0) {
+                    return CSemVersion.fromFailedParsing(s, false, this.noFileVersionParseErrorMessage);
+                }
+                var parts = this.regexStrictFileVersion.exec(s);
+                if (parts == null || !parts.length) {
+                    return CSemVersion.fromFailedParsing(s, false, this.noFileVersionParseErrorMessage, true);
+                }
+                var major = parseInt(parts[1]);
+                var minor = parseInt(parts[2]);
+                var build = parseInt(parts[3]);
+                var revision = parseInt(parts[4]);
+                if (major == NaN || major < 0 || major > this.maxFileVersionPart)
+                    return CSemVersion.fromFailedParsing(s, true, "Incorrect Major version. Must not be negative or greater than " + this.maxFileVersionPart + ".", true);
+                if (minor == NaN || minor < 0 || minor > this.maxFileVersionPart)
+                    return CSemVersion.fromFailedParsing(s, true, "Incorrect Minor version. Must not be negative or greater than " + this.maxFileVersionPart + ".", true);
+                if (build == NaN || build < 0 || build > this.maxFileVersionPart)
+                    return CSemVersion.fromFailedParsing(s, true, "Incorrect Build version. Must not be negative or greater than " + this.maxFileVersionPart + ".", true);
+                if (revision == NaN || revision < 0 || revision > this.maxFileVersionPart)
+                    return CSemVersion.fromFailedParsing(s, true, "Incorrect Revision version. Must not be negative or greater than " + this.maxFileVersionPart + ".", true);
+                if (major == 0 && minor == 0 && build == 0 && revision == 0) {
+                    return CSemVersion.fromFailedParsing(s, false, this.noFileVersionParseErrorMessage, true);
+                }
+                return CSemVersion.fromFileVersionParts(major, minor, build, revision);
+            };
+            Object.defineProperty(CSemVersion, "regexStrictFileVersion", {
+                get: function () {
+                    return /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/i;
+                },
                 enumerable: true,
                 configurable: true
             });
