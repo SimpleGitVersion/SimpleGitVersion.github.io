@@ -1,72 +1,110 @@
 ﻿<!doctype html>
 <html lang="en" dir="ltr">
- <head>
-  <meta charset="utf-8">
-  <title>CSemVer - Constrained Semantic Versioning 1.0.0-alpha</title>
-  <meta name="author" content="Invenietis">
-  <link rel="stylesheet" href="css/main.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+<head>
+    <meta charset="utf-8">
+    <title>CSemVer - Constrained Semantic Versioning 1.0.0-alpha</title>
+    <meta name="author" content="Invenietis">
+    <link rel="stylesheet" href="css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
 </head>
- <body>
+<body>
 
- <script>
+    <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-304133-4', 'auto');
   ga('send', 'pageview');
-</script>
+    </script>
 
-   <ol class="nav lang">
-     <li><a href="/">english</a> [en]</li>
-     <li><a lang="fr" rel="alternate" hreflang="fr" href="/lang/fr">fran&ccedil;ais</a> [fr]</li>
-   </ol>
-   
-   <h1>Constrained Semantic Versioning v1.0.0-alpha</h1>
+    <ol class="nav lang">
+        <li><a href="/">english</a> [en]</li>
+        <li><a lang="fr" rel="alternate" hreflang="fr" href="/lang/fr">fran&ccedil;ais</a> [fr]</li>
+        <li>previous version: <a href="index-v1-0-0-alpha.html">v1.0.0-alpha</a>
+        </li>
+    </ol>
 
-<h2>Summary</h2>
+    <h1>Constrained Semantic Versioning v1.0.0-beta</h1>
 
-<p>
-CSemVer is an operational subset of SemVer (http://semver.org) that is defined around one strong idea: 
-CSemVer versions are totally ordered, each version corresponds to a unique 64 bits unsigned integer ranging 
-from 1 (v0.0.0-alpha) to 13000100000000000000 (v99999.99999.9999).
-</p>
+    <h2>Summary</h2>
 
-<h2>Specification</h2>
-<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
-interpreted as described in <a href="http://tools.ietf.org/html/rfc2119">RFC 2119</a>.</p>
+    <p>
+        CSemVer is an operational subset of Semantic Versioning 2.0.0 (<a href="http://semver.org">http://semver.org</a>) that is defined around one strong idea:
+        CSemVer versions are totally ordered, each version corresponds to a unique 64 bits unsigned integer ranging
+        from 1 (v0.0.0-alpha) to 13000100000000000000 (v99999.99999.9999).
+    </p>
 
-CSemVer versions follow Semantic Versioning rules and adds some constraints:
-<ol>
-<li>
-<p>Syntax of a CSemVer MUST be:</p>
-<p>[v|V]<span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch</span>[-<span class="verpart">PreReleaseName</span>[.<span class="verpart">PreReleaseNumber</span>[.<span class="verpart">PreReleaseFix</span>]]][+<span class="verpart">BuildMetaData</span>]</p>
-</li>
-<li><p>CSemVer versions MAY be prefixed with a 'v' or 'V' (GitHub convention). This is the only extension that is not supported by SemVer.</p></li>
-<li><p>The <span class="verpart">Major</span> part MUST be defined between 0 and 99999.</p></li>
-<li><p>The <span class="verpart">Minor</span> part MUST be defined between 0 and 99999.</p></li>
-<li><p>The <span class="verpart">Patch</span> part MUST be defined between 0 and 9999.</p></li>
-<li><p>The <span class="verpart">PrereleaseName</span> MAY be denoted by appending a hyphen and a name that MUST be one of the 13 values of the following list (ordered from 0 to 12): 
-alpha, beta, delta, epsilon, gamma, iota, kappa, lambda, mu, omicron, pi, prerelease, rc.</p>
-<p>Any other name not listed in this set MUST be either mapped to/considered as "prerelease" OR considered syntactically invalid.<p>
-</li>
-<li>The <span class="verpart">PrereleaseNumber</span> MAY be denoted by appending a dot and a number that MUST be defined between 0 and 99.</p></li>
-<li>The <span class="verpart">PrereleaseFix</span> MAY be denoted by appending a dot and a number that MUST be defined between 1 and 99.</p></li>
-<li>The <span class="verpart">PrereleaseNumber</span> 0 MUST appear only when a <span class="verpart">PrereleaseFix</span> is specified to denote a fix of a first prerelease (v4.3.2-rc.0.2 is the second fix of v4.3.2-rc).</p></li>
-</ol>
+    <h2>Rationales &amp; examples</h2>
+    <p>
+        First, CSemVer defines a <a href="https://en.wikipedia.org/wiki/Total_order">totally ordered</a> set of versions. 
+        This is used to generate version names that guaranty a correct application of precedence rules.
+    </p> 
+    <p>
+        For example, the <a href="http://nuget.org">NuGet</a> packaging system in its V2 version (2015) do not 
+        follow Semantic Versioning (the 'special name' - the prerelease part - is simply ordered lexicographically).
+    </p>
+    <table>
+        <thead><tr><td>CSemVer</td><td>NuGet V2</td><td>Ordered Version</td><td>Description</td></tr></thead>
+        <tr><td>v0.0.0-alpha</td><td>0.0.0-alpha</td><td>1</td><td>The very first possible version is a prerelease.</td></tr>
+        <tr><td>v0.0.0-alpha.1</td><td>0.0.0-alpha-01</td><td>1</td><td rowspan="2">These are numbered prerelease. There can be 99 numbered prereleases.</td></tr>
+        <tr><td>v0.0.0-alpha.2</td><td>0.0.0-alpha-02</td><td>1</td></tr>
+        <tr><td>v0.0.0-alpha.0.1</td><td>0.0.0-alpha-00-01</td><td>1</td><td>Oups! There was a bug in the very first alpha and someone needs a fix.</td></tr>
+        <tr><td>v1.0.0</td><td>1.0.0</td><td>1</td><td>The first official version.</td></tr>
+        <tr><td>v1.0.1</td><td>1.0.1</td><td>1</td><td>A fix to the first official version: it contains only bug fixes, no breaking changes.</td></tr>
+        <tr><td>v1.1.0</td><td>1.1.0</td><td>1</td><td>Introduction of new features but no breaking changes.</td></tr>
+        <tr><td>v2.0.0-rc</td><td>2.0.0-rc</td><td>1</td><td>Preparing the next major version.</td></tr>
+    </table>
+    <p>
+        Second, CSemVer makes possible to really control the versions that are published. The valid successors (according to Semantic Versioning rules) of
+        any version can be computed (there can be up to 43 successors to a version) and, respectively, one can decide whether a version is a valid predecessor
+        of any other version.
+    </p>
 
-<h2>About</h2>
+    <h2>Specification</h2>
+    <p>
+        The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+        "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+        interpreted as described in <a href="http://tools.ietf.org/html/rfc2119">RFC 2119</a>.
+    </p>
+    <ol>
+        <li>
+            <p>CSemVer versions follow Semantic Versioning 2.0.0 rules but adds some constraints to them.</p>
+        </li>
+        <li>
+            <p>Syntax of a CSemVer MUST be:</p>
+            <p>[v|V]<span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch</span>[-<span class="verpart">PreReleaseName</span>[.<span class="verpart">PreReleaseNumber</span>[.<span class="verpart">PreReleaseFix</span>]]][+<span class="verpart">BuildMetaData</span>]</p>
+        </li>
+        <li><p>CSemVer versions MAY be prefixed with a 'v' or 'V' (GitHub convention). This is the only extension that is not supported by SemVer.</p></li>
+        <li><p>The <span class="verpart">Major</span> part MUST be defined between 0 and 99999.</p></li>
+        <li><p>The <span class="verpart">Minor</span> part MUST be defined between 0 and 99999.</p></li>
+        <li><p>The <span class="verpart">Patch</span> part MUST be defined between 0 and 9999.</p></li>
+        <li>
+            <p>
+                The <span class="verpart">PrereleaseName</span> MAY be denoted by appending a hyphen and a name that MUST be one of the 13 values of the following list (ordered from 0 to 12):
+                alpha, beta, chi, delta, epsilon, gamma, iota, kappa, lambda, mu, omicron, prerelease, rc.
+            </p>
+            <p>
+                The <span class="verpart">PrereleaseName</span>' intial MAY be used as a short form: a, b, c, d, e, g, i, k, l, m, o, p, r.
+            </p>
+            <p>Any other name not listed in this set MUST be either mapped to/considered as "prerelease" OR considered syntactically invalid.<p>
+        </li>
+        <li>The <span class="verpart">PrereleaseNumber</span> MAY be denoted by appending a dot and a number that MUST be defined between 0 and 99.</p></li>
+        <li>The <span class="verpart">PrereleaseFix</span> MAY be denoted by appending a dot and a number that MUST be defined between 1 and 99.</p></li>
+        <li>The <span class="verpart">PrereleaseNumber</span> 0 MUST appear only when a <span class="verpart">PrereleaseFix</span> is specified to denote a fix of a first prerelease (v4.3.2-rc.0.2 is the second fix of v4.3.2-rc).</p></li>
+    </ol>
 
-<p>The Constrained Semantic Versioning specification is authored by <a href="http://invenietis.com">Invenietis</a>.</p>
+    <h2>About</h2>
 
-<p>If you'd like to leave feedback, please <a href="https://github.com/SimpleGitVersion/SimpleGitVersion.github.io/issues">open an issue on
-GitHub</a>.</p>
+    <p>The Constrained Semantic Versioning specification is authored by <a href="http://invenietis.com">Invenietis</a>.</p>
 
-<h2>License</h2>
+    <p>
+        If you'd like to leave feedback, please <a href="https://github.com/SimpleGitVersion/SimpleGitVersion.github.io/issues">open an issue on GitHub</a>.
+    </p>
 
-<p><a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons - CC BY 3.0</a></p>
+    <h2>License</h2>
 
- </body>
+    <p><a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons - CC BY 3.0</a></p>
+
+</body>
 </html>
