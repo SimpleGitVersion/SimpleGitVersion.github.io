@@ -1,49 +1,6 @@
 var CSemVerPlayground;
 (function (CSemVerPlayground) {
     var CSemVersion;
-    (function (CSemVersion) {
-        var Debug = (function () {
-            function Debug() {
-            }
-            Debug.assert = function (condition, error) {
-                if (!condition) {
-                    throw new Error(error);
-                }
-            };
-            return Debug;
-        })();
-        CSemVersion.Debug = Debug;
-    })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var CSemVersion;
-    (function (CSemVersion) {
-        (function (Format) {
-            // Normalized format is 'v' + <see cref="SemVerWithMarker"/>.
-            // This is the default.
-            Format[Format["Normalized"] = 0] = "Normalized";
-            // Semantic version format.
-            // The prerelease name is the standard one (ie. 'prerelease' for any unknown name) and there is no build meata data.
-            Format[Format["SemVer"] = 1] = "SemVer";
-            // Semantic version format.
-            // The prerelease name is the standard one (ie. 'prerelease' for any unknown name) plus build meata data (+valid, +published or +invalid).
-            Format[Format["SemVerWithMarker"] = 2] = "SemVerWithMarker";
-            // The ordered version in dotted notation (1542.6548.777.8787) where each parts are between 0 and 65535.
-            Format[Format["DottedOrderedVersion"] = 3] = "DottedOrderedVersion";
-            // NuGet version 2. If the <see cref="CSemVersion.IsMarkedInvalid"/> the "+invalid" build meta data is added.
-            Format[Format["NugetPackageV2"] = 4] = "NugetPackageV2";
-            // NuGet format. Currently <see cref="NugetPackageV2"/>.
-            Format[Format["NuGetPackage"] = 4] = "NuGetPackage";
-            // Default is <see cref="SemVerWithMarker"/>.
-            Format[Format["Default"] = 0] = "Default";
-        })(CSemVersion.Format || (CSemVersion.Format = {}));
-        var Format = CSemVersion.Format;
-    })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var CSemVersion;
     (function (CSemVersion_1) {
         var CSemVersion = (function () {
             function CSemVersion() {
@@ -305,7 +262,7 @@ var CSemVerPlayground;
             });
             Object.defineProperty(CSemVersion, "standardNames", {
                 get: function () {
-                    return ["alpha", "beta", "delta", "epsilon", "gamma", "iota", "kappa", "lambda", "mu", "omicron", "pi", "prerelease", "rc"];
+                    return ["alpha", "beta", "chi", "delta", "epsilon", "gamma", "iota", "kappa", "lambda", "mu", "omicron", "prerelease", "rc"];
                 },
                 enumerable: true,
                 configurable: true
@@ -675,6 +632,49 @@ var CSemVerPlayground;
             return CSemVersion;
         })();
         CSemVersion_1.CSemVersion = CSemVersion;
+    })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var CSemVersion;
+    (function (CSemVersion) {
+        var Debug = (function () {
+            function Debug() {
+            }
+            Debug.assert = function (condition, error) {
+                if (!condition) {
+                    throw new Error(error);
+                }
+            };
+            return Debug;
+        })();
+        CSemVersion.Debug = Debug;
+    })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var CSemVersion;
+    (function (CSemVersion) {
+        (function (Format) {
+            // Normalized format is 'v' + <see cref="SemVerWithMarker"/>.
+            // This is the default.
+            Format[Format["Normalized"] = 0] = "Normalized";
+            // Semantic version format.
+            // The prerelease name is the standard one (ie. 'prerelease' for any unknown name) and there is no build meata data.
+            Format[Format["SemVer"] = 1] = "SemVer";
+            // Semantic version format.
+            // The prerelease name is the standard one (ie. 'prerelease' for any unknown name) plus build meata data (+valid, +published or +invalid).
+            Format[Format["SemVerWithMarker"] = 2] = "SemVerWithMarker";
+            // The ordered version in dotted notation (1542.6548.777.8787) where each parts are between 0 and 65535.
+            Format[Format["DottedOrderedVersion"] = 3] = "DottedOrderedVersion";
+            // NuGet version 2. If the <see cref="CSemVersion.IsMarkedInvalid"/> the "+invalid" build meta data is added.
+            Format[Format["NugetPackageV2"] = 4] = "NugetPackageV2";
+            // NuGet format. Currently <see cref="NugetPackageV2"/>.
+            Format[Format["NuGetPackage"] = 4] = "NuGetPackage";
+            // Default is <see cref="SemVerWithMarker"/>.
+            Format[Format["Default"] = 0] = "Default";
+        })(CSemVersion.Format || (CSemVersion.Format = {}));
+        var Format = CSemVersion.Format;
     })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
 var CSemVerPlayground;

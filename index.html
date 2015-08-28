@@ -43,17 +43,21 @@
     <p>
         For example, the <a href="http://nuget.org">NuGet</a> packaging system in its V2 version (2015) do not 
         follow Semantic Versioning (the 'special name' - the prerelease part - is simply ordered lexicographically).
+        Moreover this 'special name' can not exceed 20 characters. The latter is the reason why the NuGet V2 package name 
+        uses only the initial of the prerelease name (in order to support CSemVer-CI).
     </p>
     <table>
         <thead><tr><td>CSemVer</td><td>NuGet V2</td><td>Ordered Version</td><td>Description</td></tr></thead>
-        <tr><td>v0.0.0-alpha</td><td>0.0.0-alpha</td><td>1</td><td>The very first possible version is a prerelease.</td></tr>
-        <tr><td>v0.0.0-alpha.1</td><td>0.0.0-alpha-01</td><td>1</td><td rowspan="2">These are numbered prerelease. There can be 99 numbered prereleases.</td></tr>
-        <tr><td>v0.0.0-alpha.2</td><td>0.0.0-alpha-02</td><td>1</td></tr>
-        <tr><td>v0.0.0-alpha.0.1</td><td>0.0.0-alpha-00-01</td><td>1</td><td>Oups! There was a bug in the very first alpha and someone needs a fix.</td></tr>
-        <tr><td>v1.0.0</td><td>1.0.0</td><td>1</td><td>The first official version.</td></tr>
-        <tr><td>v1.0.1</td><td>1.0.1</td><td>1</td><td>A fix to the first official version: it contains only bug fixes, no breaking changes.</td></tr>
-        <tr><td>v1.1.0</td><td>1.1.0</td><td>1</td><td>Introduction of new features but no breaking changes.</td></tr>
-        <tr><td>v2.0.0-rc</td><td>2.0.0-rc</td><td>1</td><td>Preparing the next major version.</td></tr>
+        <tbody>
+            <tr><td>v0.0.0-alpha</td><td>0.0.0-a</td><td>1</td><td>The very first possible version is a prerelease.</td></tr>
+            <tr><td>v0.0.0-alpha.1</td><td>0.0.0-a01</td><td>1</td><td rowspan="2">These are numbered prerelease. There can be 99 numbered prereleases.</td></tr>
+            <tr><td>v0.0.0-alpha.2</td><td>0.0.0-a02</td><td>1</td></tr>
+            <tr><td>v0.0.0-alpha.0.1</td><td>0.0.0-a00-01</td><td>1</td><td>Oops! There was a bug in the very first alpha and someone, for any reason, needs a fix.</td></tr>
+            <tr><td>v1.0.0</td><td>1.0.0</td><td>1</td><td>The first official version.</td></tr>
+            <tr><td>v1.0.1</td><td>1.0.1</td><td>1</td><td>A fix to the first official version: it contains only bug fixes, no breaking changes.</td></tr>
+            <tr><td>v1.1.0</td><td>1.1.0</td><td>1</td><td>Introduction of new features but no breaking changes.</td></tr>
+            <tr><td>v2.0.0-rc</td><td>2.0.0-r</td><td>1</td><td>Preparing the next major version.</td></tr>
+        </tbody>
     </table>
     <p>
         Second, CSemVer makes possible to really control the versions that are published. The valid successors (according to Semantic Versioning rules) of
@@ -85,7 +89,7 @@
                 alpha, beta, chi, delta, epsilon, gamma, iota, kappa, lambda, mu, omicron, prerelease, rc.
             </p>
             <p>
-                The <span class="verpart">PrereleaseName</span>' intial MAY be used as a short form: a, b, c, d, e, g, i, k, l, m, o, p, r.
+                The <span class="verpart">PrereleaseName</span>'s intial MAY be used as a short form: a, b, c, d, e, g, i, k, l, m, o, p, r.
             </p>
             <p>Any other name not listed in this set MUST be either mapped to/considered as "prerelease" OR considered syntactically invalid.<p>
         </li>

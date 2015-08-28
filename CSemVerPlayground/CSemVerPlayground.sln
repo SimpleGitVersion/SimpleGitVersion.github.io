@@ -9,6 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSemVersion.Demo", "CSemVer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Website\Website.csproj", "{E8E95155-48AC-40AF-97D6-9F365D7F8388}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "csemver.org", "csemver.org", "{5411B540-66FE-47A6-9E57-3831AAE5FC5F}"
+	ProjectSection(SolutionItems) = preProject
+		..\index-v1-0-0-alpha.html = ..\index-v1-0-0-alpha.html
+		..\index.html = ..\index.html
+		..\css\main.css = ..\css\main.css
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

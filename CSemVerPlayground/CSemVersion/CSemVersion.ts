@@ -279,7 +279,7 @@
         public static get maxFileVersionPart(): number { return 65535; }
 
         private static get standardNames(): string[] {
-            return ["alpha", "beta", "delta", "epsilon", "gamma", "iota", "kappa", "lambda", "mu", "omicron", "pi", "prerelease", "rc"];
+            return ["alpha", "beta", "chi", "delta", "epsilon", "gamma", "iota", "kappa", "lambda", "mu", "omicron", "prerelease", "rc"];
         }
 
         public static get mulNum(): BigJsLibrary.BigJS {
