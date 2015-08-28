@@ -12,6 +12,7 @@
         public items: Array<CSemVersion.CSemVersion>;
         public goToVersionNumberInput: number;
         public goToVersionTagInput: string;
+        public goToFileVersionInput: string;
 
         constructor(private $scope: IBrowseScope, private $modal: ng.ui.bootstrap.IModalService) {
             this.generateItems();
@@ -51,7 +52,7 @@
             return !isNaN(n) && n >= 1 && n <= 13000100000000000000;
         }
 
-        public goToVersionNumber(sync = true) {
+        public goToVersionNumber() {
             if (!this.isVersionNumberValid()) {
                 this.error("Error", "Version number must be a numeric defined between 1 and 13000100000000000000.");
             }
@@ -60,11 +61,10 @@
                 if (pageNumber < 1) pageNumber = 1;
                 this.currentPage = pageNumber;
 
-                if (sync) {
-                    var v = CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
-                    this.goToVersionTagInput = v.toString();
-                }
-
+                var v = CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
+                this.goToVersionTagInput = v.toString();
+                this.goToFileVersionInput = this.getDottedOrderedVersion(v);
+                
                 this.generateItems();
             }
         }
@@ -74,7 +74,19 @@
             
             if (!v.parseErrorMessage) {
                 this.goToVersionNumberInput = +v.orderedVersion.toFixed();
-                this.goToVersionNumber(false);
+                this.goToVersionNumber();
+            }
+            else {
+                this.error("Error", v.parseErrorMessage);
+            }
+        }
+
+        public goToFileVersion() {
+            var v = CSemVersion.CSemVersion.tryParseFileVersion(this.goToFileVersionInput);
+
+            if (!v.parseErrorMessage) {
+                this.goToVersionNumberInput = +v.orderedVersion.toFixed();
+                this.goToVersionNumber();
             }
             else {
                 this.error("Error", v.parseErrorMessage);

@@ -123,8 +123,7 @@ var CSemVerPlayground;
                     var n = this.goToVersionNumberInput;
                     return !isNaN(n) && n >= 1 && n <= 13000100000000000000;
                 };
-                BrowseCtrl.prototype.goToVersionNumber = function (sync) {
-                    if (sync === void 0) { sync = true; }
+                BrowseCtrl.prototype.goToVersionNumber = function () {
                     if (!this.isVersionNumberValid()) {
                         this.error("Error", "Version number must be a numeric defined between 1 and 13000100000000000000.");
                     }
@@ -133,10 +132,9 @@ var CSemVerPlayground;
                         if (pageNumber < 1)
                             pageNumber = 1;
                         this.currentPage = pageNumber;
-                        if (sync) {
-                            var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
-                            this.goToVersionTagInput = v.toString();
-                        }
+                        var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
+                        this.goToVersionTagInput = v.toString();
+                        this.goToFileVersionInput = this.getDottedOrderedVersion(v);
                         this.generateItems();
                     }
                 };
@@ -144,7 +142,17 @@ var CSemVerPlayground;
                     var v = CSemVerPlayground.CSemVersion.CSemVersion.tryParse(this.goToVersionTagInput, true);
                     if (!v.parseErrorMessage) {
                         this.goToVersionNumberInput = +v.orderedVersion.toFixed();
-                        this.goToVersionNumber(false);
+                        this.goToVersionNumber();
+                    }
+                    else {
+                        this.error("Error", v.parseErrorMessage);
+                    }
+                };
+                BrowseCtrl.prototype.goToFileVersion = function () {
+                    var v = CSemVerPlayground.CSemVersion.CSemVersion.tryParseFileVersion(this.goToFileVersionInput);
+                    if (!v.parseErrorMessage) {
+                        this.goToVersionNumberInput = +v.orderedVersion.toFixed();
+                        this.goToVersionNumber();
                     }
                     else {
                         this.error("Error", v.parseErrorMessage);
@@ -240,22 +248,6 @@ var CSemVerPlayground;
                 PredecessorsGameAnswer[PredecessorsGameAnswer["Neither"] = 2] = "Neither";
             })(VersionYourMind.PredecessorsGameAnswer || (VersionYourMind.PredecessorsGameAnswer = {}));
             var PredecessorsGameAnswer = VersionYourMind.PredecessorsGameAnswer;
-        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var VersionYourMind;
-        (function (VersionYourMind) {
-            var VersionYourMindCtrl = (function () {
-                function VersionYourMindCtrl($scope) {
-                    this.$scope = $scope;
-                }
-                return VersionYourMindCtrl;
-            })();
-            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
@@ -511,6 +503,22 @@ var CSemVerPlayground;
                 return SuccessorsGameCtrl;
             })();
             VersionYourMind.SuccessorsGameCtrl = SuccessorsGameCtrl;
+        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var VersionYourMind;
+        (function (VersionYourMind) {
+            var VersionYourMindCtrl = (function () {
+                function VersionYourMindCtrl($scope) {
+                    this.$scope = $scope;
+                }
+                return VersionYourMindCtrl;
+            })();
+            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
