@@ -15,9 +15,7 @@
             v.marker = marker != null ? marker : "";
             v.originalTagText = tag != null ? tag : v.toString();
 
-            v.sOrderedVersion = new SOrderedVersion();
-            v.sOrderedVersion.Number = this.computeOrderedVersion(major, minor, patch, preReleaseNameIdx, preReleaseNumber, preReleaseFix);
-
+            v.sOrderedVersion = new SOrderedVersion(this.computeOrderedVersion(major, minor, patch, preReleaseNameIdx, preReleaseNumber, preReleaseFix));
             return v;
         }
 
@@ -30,8 +28,7 @@
                 v.preReleaseNameIdx = -1;
             }
             else {
-                v.sOrderedVersion = new SOrderedVersion();
-                v.sOrderedVersion.Number = d;
+                v.sOrderedVersion = new SOrderedVersion(d);
 
                 var preReleasePart = d.mod(this.mulPatch);
 

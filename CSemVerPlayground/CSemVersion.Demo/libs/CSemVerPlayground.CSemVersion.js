@@ -62,8 +62,7 @@ var CSemVerPlayground;
                 v.kind = kind;
                 v.marker = marker != null ? marker : "";
                 v.originalTagText = tag != null ? tag : v.toString();
-                v.sOrderedVersion = new CSemVersion_1.SOrderedVersion();
-                v.sOrderedVersion.Number = this.computeOrderedVersion(major, minor, patch, preReleaseNameIdx, preReleaseNumber, preReleaseFix);
+                v.sOrderedVersion = new CSemVersion_1.SOrderedVersion(this.computeOrderedVersion(major, minor, patch, preReleaseNameIdx, preReleaseNumber, preReleaseFix));
                 return v;
             };
             CSemVersion.fromDecimal = function (d) {
@@ -74,8 +73,7 @@ var CSemVerPlayground;
                     v.preReleaseNameIdx = -1;
                 }
                 else {
-                    v.sOrderedVersion = new CSemVersion_1.SOrderedVersion();
-                    v.sOrderedVersion.Number = d;
+                    v.sOrderedVersion = new CSemVersion_1.SOrderedVersion(d);
                     var preReleasePart = d.mod(this.mulPatch);
                     if (!preReleasePart.eq(0)) {
                         preReleasePart = preReleasePart.minus(1);
@@ -642,8 +640,56 @@ var CSemVerPlayground;
     var CSemVersion;
     (function (CSemVersion) {
         var SOrderedVersion = (function () {
-            function SOrderedVersion() {
+            function SOrderedVersion(n) {
+                this.Number = n;
             }
+            Object.defineProperty(SOrderedVersion.prototype, "Number", {
+                get: function () {
+                    return this.number;
+                },
+                set: function (n) {
+                    this.number = n;
+                    if (this.number != null) {
+                        this.revision = parseInt(this.number.mod(65536).toFixed());
+                        var rest = this.number.minus(this.revision).div(65536);
+                        this.build = parseInt(rest.mod(65536).toFixed());
+                        rest = rest.minus(this.build).div(65536);
+                        this.minor = parseInt(rest.mod(65536).toFixed());
+                        rest = rest.minus(this.minor).div(65536);
+                        this.major = parseInt(rest.mod(65536).toFixed());
+                    }
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(SOrderedVersion.prototype, "Major", {
+                get: function () {
+                    return this.major;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(SOrderedVersion.prototype, "Minor", {
+                get: function () {
+                    return this.minor;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(SOrderedVersion.prototype, "Build", {
+                get: function () {
+                    return this.build;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(SOrderedVersion.prototype, "Revision", {
+                get: function () {
+                    return this.revision;
+                },
+                enumerable: true,
+                configurable: true
+            });
             return SOrderedVersion;
         })();
         CSemVersion.SOrderedVersion = SOrderedVersion;

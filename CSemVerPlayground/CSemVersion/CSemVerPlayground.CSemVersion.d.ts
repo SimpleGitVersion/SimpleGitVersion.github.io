@@ -96,6 +96,12 @@ declare module CSemVerPlayground.CSemVersion {
 }
 declare module CSemVerPlayground.CSemVersion {
     class SOrderedVersion {
+        private number;
+        private major;
+        private minor;
+        private build;
+        private revision;
+        constructor(n: BigJsLibrary.BigJS);
         Number: BigJsLibrary.BigJS;
         Major: number;
         Minor: number;
