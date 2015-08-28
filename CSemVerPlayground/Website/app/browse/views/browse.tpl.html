@@ -54,7 +54,7 @@
                 <th>File version</th>
             </tr>
 
-            <tr ng-repeat="i in ctrl.items" ng-class="{ 'success' : +i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }">
+            <tr ng-repeat="i in ctrl.items" ng-class="{ 'success' : i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }">
                 <td>{{ i.orderedVersion.toFixed() }}</td>
                 <td>{{ ctrl.getNormalizedVersion(i) }}</td>
                 <td>{{ ctrl.getSemVerVersion(i) }}</td>
@@ -63,6 +63,4 @@
             </tr>
         </table>
     </div>
-
-    <pagination items-per-page="ctrl.itemsPerPage" total-items="ctrl.totalItems" ng-model="ctrl.currentPage" max-size="ctrl.maxSize" ng-change="ctrl.generateItems()" class="pagination" boundary-links="false"></pagination>
 </div>

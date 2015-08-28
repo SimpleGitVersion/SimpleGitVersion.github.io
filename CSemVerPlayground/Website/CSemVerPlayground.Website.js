@@ -89,7 +89,7 @@ var CSemVerPlayground;
                     this.$scope = $scope;
                     this.$modal = $modal;
                     this.totalItems = 13000100000000000000;
-                    this.currentPage = 1;
+                    this.currentPage = "1";
                     this.maxSize = 10;
                     this.itemsPerPage = 10;
                     this.itemsPerPageOptions = [10, 25, 50, 100];
@@ -97,12 +97,12 @@ var CSemVerPlayground;
                 }
                 BrowseCtrl.prototype.generateItems = function () {
                     this.items = new Array();
-                    var maxNumber = this.currentPage * this.itemsPerPage;
-                    var minNumber = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + 1;
-                    for (var i = minNumber; i <= maxNumber; i++) {
-                        var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(i));
-                        this.items.push(v);
-                    }
+                    //var maxNumber = this.currentPage * this.itemsPerPage;
+                    //var minNumber = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + 1;
+                    //for (var i = minNumber; i <= maxNumber; i++) {
+                    //    var v = CSemVersion.CSemVersion.fromDecimal(new Big(i));
+                    //    this.items.push(v);
+                    //}
                 };
                 BrowseCtrl.prototype.error = function (title, content) {
                     var modalInstance = this.$modal.open({
@@ -120,18 +120,18 @@ var CSemVerPlayground;
                     });
                 };
                 BrowseCtrl.prototype.isVersionNumberValid = function () {
-                    var n = this.goToVersionNumberInput;
-                    return !isNaN(n) && n >= 1 && n <= 13000100000000000000;
+                    var n = new Big(this.goToVersionNumberInput);
+                    return n.gte(1) && n.lte("13000100000000000000");
                 };
                 BrowseCtrl.prototype.goToVersionNumber = function () {
                     if (!this.isVersionNumberValid()) {
                         this.error("Error", "Version number must be a numeric defined between 1 and 13000100000000000000.");
                     }
                     else {
-                        var pageNumber = Math.ceil(this.goToVersionNumberInput / this.itemsPerPage);
-                        if (pageNumber < 1)
-                            pageNumber = 1;
-                        this.currentPage = pageNumber;
+                        var pageNumber = new Big(this.goToVersionNumberInput).div(this.itemsPerPage);
+                        if (pageNumber.lt(1))
+                            pageNumber = new Big(1);
+                        this.currentPage = pageNumber.toString();
                         var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                         this.goToVersionTagInput = v.toString();
                         this.goToFileVersionInput = this.getDottedOrderedVersion(v);
@@ -141,7 +141,7 @@ var CSemVerPlayground;
                 BrowseCtrl.prototype.goToVersionTag = function () {
                     var v = CSemVerPlayground.CSemVersion.CSemVersion.tryParse(this.goToVersionTagInput, true);
                     if (!v.parseErrorMessage) {
-                        this.goToVersionNumberInput = +v.orderedVersion.toFixed();
+                        this.goToVersionNumberInput = v.orderedVersion.toFixed();
                         this.goToVersionNumber();
                     }
                     else {
@@ -151,7 +151,7 @@ var CSemVerPlayground;
                 BrowseCtrl.prototype.goToFileVersion = function () {
                     var v = CSemVerPlayground.CSemVersion.CSemVersion.tryParseFileVersion(this.goToFileVersionInput);
                     if (!v.parseErrorMessage) {
-                        this.goToVersionNumberInput = +v.orderedVersion.toFixed();
+                        this.goToVersionNumberInput = v.orderedVersion.toFixed();
                         this.goToVersionNumber();
                     }
                     else {

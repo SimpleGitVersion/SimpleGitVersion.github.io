@@ -5,12 +5,12 @@
 
     export class BrowseCtrl {
         public totalItems = 13000100000000000000;
-        public currentPage = 1;
+        public currentPage = "1";
         public maxSize = 10;
         public itemsPerPage = 10;
         public itemsPerPageOptions = [10, 25, 50, 100];
         public items: Array<CSemVersion.CSemVersion>;
-        public goToVersionNumberInput: number;
+        public goToVersionNumberInput: string;
         public goToVersionTagInput: string;
         public goToFileVersionInput: string;
 
@@ -21,13 +21,13 @@
         public generateItems() {
             this.items = new Array<CSemVersion.CSemVersion>();
             
-            var maxNumber = this.currentPage * this.itemsPerPage;
-            var minNumber = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + 1;
+            //var maxNumber = this.currentPage * this.itemsPerPage;
+            //var minNumber = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + 1;
 
-            for (var i = minNumber; i <= maxNumber; i++) {
-                var v = CSemVersion.CSemVersion.fromDecimal(new Big(i));
-                this.items.push(v);
-            }
+            //for (var i = minNumber; i <= maxNumber; i++) {
+            //    var v = CSemVersion.CSemVersion.fromDecimal(new Big(i));
+            //    this.items.push(v);
+            //}
         }
 
         public error(title: string, content: string) {
@@ -47,9 +47,9 @@
         }
 
         public isVersionNumberValid(): boolean {
-            var n = this.goToVersionNumberInput;
+            var n = new Big(this.goToVersionNumberInput);
 
-            return !isNaN(n) && n >= 1 && n <= 13000100000000000000;
+            return n.gte(1) && n.lte("13000100000000000000");
         }
 
         public goToVersionNumber() {
@@ -57,9 +57,9 @@
                 this.error("Error", "Version number must be a numeric defined between 1 and 13000100000000000000.");
             }
             else {
-                var pageNumber = Math.ceil(this.goToVersionNumberInput / this.itemsPerPage);
-                if (pageNumber < 1) pageNumber = 1;
-                this.currentPage = pageNumber;
+                var pageNumber = new Big(this.goToVersionNumberInput).div(this.itemsPerPage);
+                if (pageNumber.lt(1)) pageNumber = new Big(1);
+                this.currentPage = pageNumber.toString();
 
                 var v = CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                 this.goToVersionTagInput = v.toString();
@@ -73,7 +73,7 @@
             var v = CSemVersion.CSemVersion.tryParse(this.goToVersionTagInput, true);
             
             if (!v.parseErrorMessage) {
-                this.goToVersionNumberInput = +v.orderedVersion.toFixed();
+                this.goToVersionNumberInput = v.orderedVersion.toFixed();
                 this.goToVersionNumber();
             }
             else {
@@ -85,7 +85,7 @@
             var v = CSemVersion.CSemVersion.tryParseFileVersion(this.goToFileVersionInput);
 
             if (!v.parseErrorMessage) {
-                this.goToVersionNumberInput = +v.orderedVersion.toFixed();
+                this.goToVersionNumberInput = v.orderedVersion.toFixed();
                 this.goToVersionNumber();
             }
             else {
