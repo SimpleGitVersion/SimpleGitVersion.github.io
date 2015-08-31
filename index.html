@@ -185,9 +185,9 @@
     </p>
     </div>
     <p>
-        <b>3</b> - CI builds correspond to production that are not actual releases: the version has to be automatically created since no real version exist for them. 
+        <b>3</b> - CI builds correspond to productions that are not actual releases: the version has to be automatically created since no real version exist for them. 
         A CI build is defined by: a CIBuildName that identifies the source, the nature, or any other constant key of the build (this is usually the name of the 'branch' in a SCM) and a BuildIndex that is a number
-        or an identifier that gets bigger for each new build (it is usually a simple integer that is provided by the CI process, or a timestamp).
+        or an identifier that gets bigger for each new build (it is usually a simple integer that is provided by the CI process or a timestamp).
     </p>
     <p class="no-space-after">
         CSemVer-CI enables the support of CI buils into CSemVer versions with the guaranty of a valid precedence order (in order to secure deployments). 
@@ -206,8 +206,8 @@
             As its name states, this versionning mode relies on the last released. Such semantic versions have higher precedence than their base but lowest precedence than any successor of this base.
             Risk that a product issued from the CI pollutes any production is highly mitigated.
             <br/>
-            <b>This implements a "post release" feature</b> in Semantic Versionning 2.0.0 that, apparently, supports only a "pre release" feature: there is no 'magic', only a careful 
-            use of the precedence order rules (with the help of the double dash trick).
+            <b>This implements a "post release" feature</b> (see <a href="https://github.com/mojombo/semver/issues/200">this issue on github </a>) in Semantic Versionning 2.0.0 that, apparently, supports 
+            only a "pre release" feature: there is no 'magic', only a careful use of the precedence order rules (with the help of the double dash trick).
         </dd>
     </dl>
     <p></p>
@@ -232,7 +232,7 @@
                     <td>
                         This is the simplest one: by appending a dotted part, the CI version has a greater precedence than its base.
                         <br />
-                        Just like for all the following samples, we have: "Base Version" < "CI Version" < "Immediate successor"
+                        "Base Version" < "CI Version" < "Immediate successor" is guaranteed here and for the 3 other cases below.0
                     </td>
                 </tr>
                 <tr>
