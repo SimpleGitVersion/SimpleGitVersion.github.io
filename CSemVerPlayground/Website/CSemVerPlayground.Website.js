@@ -92,13 +92,13 @@ var CSemVerPlayground;
                     this.currentPage = new Big(1);
                     this.maxSize = 10;
                     this.itemsPerPageOptions = new Array();
-                    this.generateItems();
                     this.generateItemsPerPageOptions();
+                    this.generateItems();
                 }
                 BrowseCtrl.prototype.generateItemsPerPageOptions = function () {
                     var options = [10, 25, 50, 100];
                     for (var i = 0; i < options.length; i++) {
-                        var option = new Website.Models.SelectOption(options[i] + " items per page", i);
+                        var option = new Website.Models.SelectOption(options[i] + " items per page", options[i]);
                         this.itemsPerPageOptions.push(option);
                         if (i == 0)
                             this.itemsPerPage = option;
@@ -166,6 +166,22 @@ var CSemVerPlayground;
                     else {
                         this.error("Error", v.parseErrorMessage);
                     }
+                };
+                BrowseCtrl.prototype.goFirst = function () {
+                    this.goToVersionNumberInput = "1";
+                    this.goToVersionNumber();
+                };
+                BrowseCtrl.prototype.goLast = function () {
+                    this.goToVersionNumberInput = "13000100000000000000";
+                    this.goToVersionNumber();
+                };
+                BrowseCtrl.prototype.goPrevious = function () {
+                    this.currentPage = this.currentPage.minus(1);
+                    this.generateItems();
+                };
+                BrowseCtrl.prototype.goNext = function () {
+                    this.currentPage = this.currentPage.plus(1);
+                    this.generateItems();
                 };
                 BrowseCtrl.prototype.getNormalizedVersion = function (v) {
                     return v.toString(CSemVerPlayground.CSemVersion.Format.Normalized);
@@ -271,6 +287,22 @@ var CSemVerPlayground;
                 PredecessorsGameAnswer[PredecessorsGameAnswer["Neither"] = 2] = "Neither";
             })(VersionYourMind.PredecessorsGameAnswer || (VersionYourMind.PredecessorsGameAnswer = {}));
             var PredecessorsGameAnswer = VersionYourMind.PredecessorsGameAnswer;
+        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var VersionYourMind;
+        (function (VersionYourMind) {
+            var VersionYourMindCtrl = (function () {
+                function VersionYourMindCtrl($scope) {
+                    this.$scope = $scope;
+                }
+                return VersionYourMindCtrl;
+            })();
+            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
@@ -526,22 +558,6 @@ var CSemVerPlayground;
                 return SuccessorsGameCtrl;
             })();
             VersionYourMind.SuccessorsGameCtrl = SuccessorsGameCtrl;
-        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var VersionYourMind;
-        (function (VersionYourMind) {
-            var VersionYourMindCtrl = (function () {
-                function VersionYourMindCtrl($scope) {
-                    this.$scope = $scope;
-                }
-                return VersionYourMindCtrl;
-            })();
-            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));

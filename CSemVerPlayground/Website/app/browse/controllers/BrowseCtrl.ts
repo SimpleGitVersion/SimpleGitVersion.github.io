@@ -15,15 +15,15 @@
         public goToFileVersionInput: string;
 
         constructor(private $scope: IBrowseScope, private $modal: ng.ui.bootstrap.IModalService) {
-            this.generateItems();
             this.generateItemsPerPageOptions();
+            this.generateItems();
         }
 
         public generateItemsPerPageOptions() {
             var options = [10, 25, 50, 100];
 
             for (var i = 0; i < options.length; i++) {
-                var option = new Models.SelectOption<number>(options[i] + " items per page", i);
+                var option = new Models.SelectOption<number>(options[i] + " items per page", options[i]);
                 this.itemsPerPageOptions.push(option);
 
                 if (i == 0) this.itemsPerPage = option;
@@ -103,6 +103,26 @@
             else {
                 this.error("Error", v.parseErrorMessage);
             }
+        }
+
+        public goFirst() {
+            this.goToVersionNumberInput = "1";
+            this.goToVersionNumber();
+        }
+
+        public goLast() {
+            this.goToVersionNumberInput = "13000100000000000000";
+            this.goToVersionNumber();
+        }
+
+        public goPrevious() {
+            this.currentPage = this.currentPage.minus(1);
+            this.generateItems();
+        }
+
+        public goNext() {
+            this.currentPage = this.currentPage.plus(1);
+            this.generateItems();
         }
 
         public getNormalizedVersion(v: CSemVersion.CSemVersion) : string {
