@@ -9,7 +9,7 @@
                 <div class="col-md-3">
                     <div class="input-group">
                         <span class="input-group-addon">Version number</span>
-                        <input type="number" step="1" ng-model="ctrl.goToVersionNumberInput" class="form-control" placeholder="e.g. 130001000000001">
+                        <input type="text" ng-model="ctrl.goToVersionNumberInput" class="form-control" placeholder="e.g. 130001000000001">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="ctrl.goToVersionNumber()">Go</button>
                         </span>
@@ -36,10 +36,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon2">Items per page</span>
-                        <select class="form-control" ng-model="ctrl.itemsPerPage" ng-options="i for i in ctrl.itemsPerPageOptions" ng-change="ctrl.generateItems()"></select>
-                    </div>
+                    <select class="form-control" ng-model="ctrl.itemsPerPage" ng-options="i.description for i in ctrl.itemsPerPageOptions" ng-change="ctrl.generateItems()"></select>
                 </div>
             </div>
 
@@ -48,19 +45,29 @@
         <table class="table table-striped">
             <tr>
                 <th>Version number</th>
-                <th>Normalized version</th>
-                <th>SemVer version</th>
-                <th>Nuget package version</th>
+                <th>Version</th>
+                <th>Nuget V2</th>
                 <th>File version</th>
             </tr>
 
             <tr ng-repeat="i in ctrl.items" ng-class="{ 'success' : i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }">
                 <td>{{ i.orderedVersion.toFixed() }}</td>
                 <td>{{ ctrl.getNormalizedVersion(i) }}</td>
-                <td>{{ ctrl.getSemVerVersion(i) }}</td>
                 <td>{{ ctrl.getNugetVersion(i) }}</td>
                 <td>{{ ctrl.getDottedOrderedVersion(i) }}</td>
             </tr>
         </table>
     </div>
+
+    <div class="pull-left">
+        <button class="btn btn-default" type="button" ng-click="ctrl.goFirst()"><span class="glyphicon glyphicon-chevron-left"></span><span class="glyphicon glyphicon-chevron-left"></span></button>
+        <button class="btn btn-default" type="button" ng-click="ctrl.goPrevious()"><span class="glyphicon glyphicon-chevron-left"></span></button>
+    </div>
+
+    <div class="pull-right">
+        <button class="btn btn-default" type="button" ng-click="ctrl.goNext()"><span class="glyphicon glyphicon-chevron-right"></span></button>
+        <button class="btn btn-default" type="button" ng-click="ctrl.goLast()"><span class="glyphicon glyphicon-chevron-right"></span><span class="glyphicon glyphicon-chevron-right"></span></button>
+    </div>
+
+    <div style="clear: both;"></div>
 </div>

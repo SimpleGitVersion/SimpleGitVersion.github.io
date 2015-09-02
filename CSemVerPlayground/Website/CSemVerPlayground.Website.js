@@ -88,21 +88,30 @@ var CSemVerPlayground;
                 function BrowseCtrl($scope, $modal) {
                     this.$scope = $scope;
                     this.$modal = $modal;
-                    this.totalItems = 13000100000000000000;
-                    this.currentPage = "1";
+                    this.totalItems = new Big("13000100000000000000");
+                    this.currentPage = new Big(1);
                     this.maxSize = 10;
-                    this.itemsPerPage = 10;
-                    this.itemsPerPageOptions = [10, 25, 50, 100];
+                    this.itemsPerPageOptions = new Array();
                     this.generateItems();
+                    this.generateItemsPerPageOptions();
                 }
+                BrowseCtrl.prototype.generateItemsPerPageOptions = function () {
+                    var options = [10, 25, 50, 100];
+                    for (var i = 0; i < options.length; i++) {
+                        var option = new Website.Models.SelectOption(options[i] + " items per page", i);
+                        this.itemsPerPageOptions.push(option);
+                        if (i == 0)
+                            this.itemsPerPage = option;
+                    }
+                };
                 BrowseCtrl.prototype.generateItems = function () {
                     this.items = new Array();
-                    //var maxNumber = this.currentPage * this.itemsPerPage;
-                    //var minNumber = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + 1;
-                    //for (var i = minNumber; i <= maxNumber; i++) {
-                    //    var v = CSemVersion.CSemVersion.fromDecimal(new Big(i));
-                    //    this.items.push(v);
-                    //}
+                    var maxNumber = this.currentPage.times(this.itemsPerPage.value);
+                    var minNumber = this.currentPage.times(this.itemsPerPage.value).minus(this.itemsPerPage.value).plus(1);
+                    for (var i = minNumber; i.lte(maxNumber); i = i.plus(1)) {
+                        var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(i));
+                        this.items.push(v);
+                    }
                 };
                 BrowseCtrl.prototype.error = function (title, content) {
                     var modalInstance = this.$modal.open({
@@ -121,17 +130,17 @@ var CSemVerPlayground;
                 };
                 BrowseCtrl.prototype.isVersionNumberValid = function () {
                     var n = new Big(this.goToVersionNumberInput);
-                    return n.gte(1) && n.lte("13000100000000000000");
+                    return n.gte(1) && n.lte(this.totalItems);
                 };
                 BrowseCtrl.prototype.goToVersionNumber = function () {
                     if (!this.isVersionNumberValid()) {
                         this.error("Error", "Version number must be a numeric defined between 1 and 13000100000000000000.");
                     }
                     else {
-                        var pageNumber = new Big(this.goToVersionNumberInput).div(this.itemsPerPage);
+                        var pageNumber = new Big(this.goToVersionNumberInput).div(this.itemsPerPage.value);
                         if (pageNumber.lt(1))
                             pageNumber = new Big(1);
-                        this.currentPage = pageNumber.toString();
+                        this.currentPage = pageNumber;
                         var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                         this.goToVersionTagInput = v.toString();
                         this.goToFileVersionInput = this.getDottedOrderedVersion(v);
@@ -160,9 +169,6 @@ var CSemVerPlayground;
                 };
                 BrowseCtrl.prototype.getNormalizedVersion = function (v) {
                     return v.toString(CSemVerPlayground.CSemVersion.Format.Normalized);
-                };
-                BrowseCtrl.prototype.getSemVerVersion = function (v) {
-                    return v.toString(CSemVerPlayground.CSemVersion.Format.SemVerWithMarker);
                 };
                 BrowseCtrl.prototype.getNugetVersion = function (v) {
                     return v.toString(CSemVerPlayground.CSemVersion.Format.NugetPackageV2);
@@ -234,6 +240,23 @@ var CSemVerPlayground;
             var app = angular.module('CSemVerPlayground.Website.Modals', ['ui.bootstrap']);
             app.controller(CSemVerPlayground.Website.Modals);
         })(Modals = Website.Modals || (Website.Modals = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var Models;
+        (function (Models) {
+            var SelectOption = (function () {
+                function SelectOption(description, value) {
+                    this.description = description;
+                    this.value = value;
+                }
+                return SelectOption;
+            })();
+            Models.SelectOption = SelectOption;
+        })(Models = Website.Models || (Website.Models = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
 var CSemVerPlayground;

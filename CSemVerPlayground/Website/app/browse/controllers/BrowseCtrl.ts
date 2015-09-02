@@ -4,11 +4,11 @@
     }
 
     export class BrowseCtrl {
-        public totalItems = 13000100000000000000;
-        public currentPage = "1";
+        public totalItems = new Big("13000100000000000000");
+        public currentPage = new Big(1);
         public maxSize = 10;
-        public itemsPerPage = 10;
-        public itemsPerPageOptions = [10, 25, 50, 100];
+        public itemsPerPage: Models.SelectOption<number>;
+        public itemsPerPageOptions = new Array<Models.SelectOption<number>>();
         public items: Array<CSemVersion.CSemVersion>;
         public goToVersionNumberInput: string;
         public goToVersionTagInput: string;
@@ -16,18 +16,30 @@
 
         constructor(private $scope: IBrowseScope, private $modal: ng.ui.bootstrap.IModalService) {
             this.generateItems();
+            this.generateItemsPerPageOptions();
+        }
+
+        public generateItemsPerPageOptions() {
+            var options = [10, 25, 50, 100];
+
+            for (var i = 0; i < options.length; i++) {
+                var option = new Models.SelectOption<number>(options[i] + " items per page", i);
+                this.itemsPerPageOptions.push(option);
+
+                if (i == 0) this.itemsPerPage = option;
+            }
         }
 
         public generateItems() {
             this.items = new Array<CSemVersion.CSemVersion>();
             
-            //var maxNumber = this.currentPage * this.itemsPerPage;
-            //var minNumber = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + 1;
+            var maxNumber = this.currentPage.times(this.itemsPerPage.value);
+            var minNumber = this.currentPage.times(this.itemsPerPage.value).minus(this.itemsPerPage.value).plus(1);
 
-            //for (var i = minNumber; i <= maxNumber; i++) {
-            //    var v = CSemVersion.CSemVersion.fromDecimal(new Big(i));
-            //    this.items.push(v);
-            //}
+            for (var i = minNumber; i.lte(maxNumber); i = i.plus(1)) {
+                var v = CSemVersion.CSemVersion.fromDecimal(new Big(i));
+                this.items.push(v);
+            }
         }
 
         public error(title: string, content: string) {
@@ -49,7 +61,7 @@
         public isVersionNumberValid(): boolean {
             var n = new Big(this.goToVersionNumberInput);
 
-            return n.gte(1) && n.lte("13000100000000000000");
+            return n.gte(1) && n.lte(this.totalItems);
         }
 
         public goToVersionNumber() {
@@ -57,9 +69,9 @@
                 this.error("Error", "Version number must be a numeric defined between 1 and 13000100000000000000.");
             }
             else {
-                var pageNumber = new Big(this.goToVersionNumberInput).div(this.itemsPerPage);
+                var pageNumber = new Big(this.goToVersionNumberInput).div(this.itemsPerPage.value);
                 if (pageNumber.lt(1)) pageNumber = new Big(1);
-                this.currentPage = pageNumber.toString();
+                this.currentPage = pageNumber;
 
                 var v = CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                 this.goToVersionTagInput = v.toString();
@@ -95,10 +107,6 @@
 
         public getNormalizedVersion(v: CSemVersion.CSemVersion) : string {
             return v.toString(CSemVersion.Format.Normalized);
-        }
-
-        public getSemVerVersion(v: CSemVersion.CSemVersion): string {
-            return v.toString(CSemVersion.Format.SemVerWithMarker);
         }
 
         public getNugetVersion(v: CSemVersion.CSemVersion): string {
