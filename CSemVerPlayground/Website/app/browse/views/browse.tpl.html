@@ -7,32 +7,38 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-addon">Version number</span>
-                        <input type="text" ng-model="ctrl.goToVersionNumberInput" class="form-control" placeholder="e.g. 130001000000001">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" ng-click="ctrl.goToVersionNumber()">Go</button>
-                        </span>
-                    </div>
+                    <form ng-submit="ctrl.goToVersionNumber()">
+                        <div class="input-group">
+                            <span class="input-group-addon">Version number</span>
+                            <input type="text" ng-model="ctrl.goToVersionNumberInput" class="form-control" placeholder="e.g. 130001000000001">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">Go</button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
                 <div class="col-md-4">
-                    <div class="input-group">
-                        <span class="input-group-addon">Version tag</span>
-                        <input type="text" class="form-control" ng-model="ctrl.goToVersionTagInput" placeholder="e.g. v1.0.0-alpha">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" ng-click="ctrl.goToVersionTag()">Go</button>
-                        </span>
-                    </div>
+                    <form ng-submit="ctrl.goToVersionTag()">
+                        <div class="input-group">
+                            <span class="input-group-addon">Version tag</span>
+                            <input type="text" class="form-control" ng-model="ctrl.goToVersionTagInput" placeholder="e.g. v1.0.0-alpha">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">Go</button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-addon">File version</span>
-                        <input type="text" class="form-control" ng-model="ctrl.goToFileVersionInput" placeholder="e.g. 0.30268.14188.59905">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" ng-click="ctrl.goToFileVersion()">Go</button>
-                        </span>
-                    </div>
+                    <form ng-submit="ctrl.goToFileVersion()">
+                        <div class="input-group">
+                            <span class="input-group-addon">File version</span>
+                            <input type="text" class="form-control" ng-model="ctrl.goToFileVersionInput" placeholder="e.g. 0.30268.14188.59905">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">Go</button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="col-md-2">
