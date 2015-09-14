@@ -56,7 +56,7 @@
                 <th>File version</th>
             </tr>
 
-            <tr ng-repeat="i in ctrl.items" ng-class="{ 'success' : i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }">
+            <tr ng-repeat="i in ctrl.items" ng-class="{ 'success' : i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }" ng-click="ctrl.goToVersionNumberInput = i.orderedVersion.toFixed(); ctrl.goToVersionNumber()">
                 <td>{{ i.orderedVersion.toFixed() }}</td>
                 <td>{{ ctrl.getNormalizedVersion(i) }}</td>
                 <td>{{ ctrl.getNugetVersion(i) }}</td>
