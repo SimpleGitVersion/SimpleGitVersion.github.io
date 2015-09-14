@@ -94,8 +94,29 @@ var CSemVerPlayground;
                     this.maxSize = 10;
                     this.itemsPerPageOptions = new Array();
                     this.generateItemsPerPageOptions();
-                    this.generateItems();
+                    this.goToVersionNumberInput = "1";
+                    this.goToVersionNumber();
+                    this.onScroll();
                 }
+                BrowseCtrl.prototype.onScroll = function () {
+                    var _me = this;
+                    $('html').bind('mousewheel DOMMouseScroll', function (e) {
+                        var event = e.originalEvent;
+                        var delta = +event.wheelDelta || +event.detail;
+                        if (_me.isVersionNumberValid()) {
+                            var currentVersion = new Big(_me.goToVersionNumberInput);
+                            if (delta < 0)
+                                currentVersion = currentVersion.plus(1);
+                            if (delta > 0)
+                                currentVersion = currentVersion.minus(1);
+                            if (_me.isVersionNumberValid(currentVersion)) {
+                                _me.goToVersionNumberInput = currentVersion.toString();
+                                _me.goToVersionNumber();
+                            }
+                            _me.$scope.$apply();
+                        }
+                    });
+                };
                 BrowseCtrl.prototype.generateItemsPerPageOptions = function () {
                     var options = [10, 25, 50, 100];
                     for (var i = 0; i < options.length; i++) {
@@ -129,8 +150,10 @@ var CSemVerPlayground;
                         }
                     });
                 };
-                BrowseCtrl.prototype.isVersionNumberValid = function () {
+                BrowseCtrl.prototype.isVersionNumberValid = function (input) {
                     var n = new Big(this.goToVersionNumberInput);
+                    if (input)
+                        n = input;
                     return n.gte(1) && n.lte(this.totalItems);
                 };
                 BrowseCtrl.prototype.goToVersionNumber = function () {

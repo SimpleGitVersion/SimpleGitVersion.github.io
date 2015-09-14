@@ -17,7 +17,31 @@
 
         constructor(private $scope: IBrowseScope, private $modal: ng.ui.bootstrap.IModalService) {
             this.generateItemsPerPageOptions();
-            this.generateItems();
+            this.goToVersionNumberInput = "1";
+            this.goToVersionNumber();
+            this.onScroll();
+        }
+
+        private onScroll() {
+            var _me = this;
+
+            $('html').bind('mousewheel DOMMouseScroll', function (e) {
+                var event = <any> e.originalEvent;
+                var delta = +event.wheelDelta || +event.detail;
+                if (_me.isVersionNumberValid()) {
+                    var currentVersion = new Big(_me.goToVersionNumberInput);
+
+                    if (delta < 0) currentVersion = currentVersion.plus(1);
+                    if (delta > 0) currentVersion = currentVersion.minus(1);
+
+                    if (_me.isVersionNumberValid(currentVersion)) {
+                        _me.goToVersionNumberInput = currentVersion.toString();
+                        _me.goToVersionNumber();
+                    }
+
+                    _me.$scope.$apply();
+                }
+            });
         }
 
         public generateItemsPerPageOptions() {
@@ -59,8 +83,9 @@
             });
         }
 
-        public isVersionNumberValid(): boolean {
+        public isVersionNumberValid(input?: BigJsLibrary.BigJS): boolean {
             var n = new Big(this.goToVersionNumberInput);
+            if (input) n = input;
 
             return n.gte(1) && n.lte(this.totalItems);
         }
