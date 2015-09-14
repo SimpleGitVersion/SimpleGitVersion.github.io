@@ -60,13 +60,13 @@
     </div>
 
     <div class="pull-left">
-        <button class="btn btn-default" type="button" ng-click="ctrl.goFirst()"><span class="glyphicon glyphicon-chevron-left"></span><span class="glyphicon glyphicon-chevron-left"></span></button>
-        <button class="btn btn-default" type="button" ng-click="ctrl.goPrevious()"><span class="glyphicon glyphicon-chevron-left"></span></button>
+        <button class="btn btn-default" type="button" ng-disabled="!ctrl.canGoPrevious()" ng-click="ctrl.goFirst()"><span class="glyphicon glyphicon-chevron-left"></span><span class="glyphicon glyphicon-chevron-left"></span></button>
+        <button class="btn btn-default" type="button" ng-disabled="!ctrl.canGoPrevious()" ng-click="ctrl.goPrevious()"><span class="glyphicon glyphicon-chevron-left"></span></button>
     </div>
 
     <div class="pull-right">
-        <button class="btn btn-default" type="button" ng-click="ctrl.goNext()"><span class="glyphicon glyphicon-chevron-right"></span></button>
-        <button class="btn btn-default" type="button" ng-click="ctrl.goLast()"><span class="glyphicon glyphicon-chevron-right"></span><span class="glyphicon glyphicon-chevron-right"></span></button>
+        <button class="btn btn-default" type="button" ng-disabled="!ctrl.canGoNext()" ng-click="ctrl.goNext()"><span class="glyphicon glyphicon-chevron-right"></span></button>
+        <button class="btn btn-default" type="button" ng-disabled="!ctrl.canGoNext()" ng-click="ctrl.goLast()"><span class="glyphicon glyphicon-chevron-right"></span><span class="glyphicon glyphicon-chevron-right"></span></button>
     </div>
 
     <div style="clear: both;"></div>

@@ -6,6 +6,7 @@
     export class BrowseCtrl {
         public totalItems = new Big("13000100000000000000");
         public currentPage = new Big(1);
+        public maxPage = new Big("1300010000000000000");
         public maxSize = 10;
         public itemsPerPage: Models.SelectOption<number>;
         public itemsPerPageOptions = new Array<Models.SelectOption<number>>();
@@ -66,12 +67,12 @@
 
         public goToVersionNumber() {
             if (!this.isVersionNumberValid()) {
-                this.error("Error", "Version number must be a numeric defined between 1 and 13000100000000000000.");
+                this.error("Error", "Version number must be a numeric defined between 1 and " + this.totalItems.toString() + ".");
             }
             else {
                 var pageNumber = new Big(this.goToVersionNumberInput).div(this.itemsPerPage.value);
                 if (pageNumber.lt(1)) pageNumber = new Big(1);
-                this.currentPage = pageNumber;
+                this.currentPage = pageNumber.round(0, 3);
 
                 var v = CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                 this.goToVersionTagInput = v.toString();
@@ -111,13 +112,23 @@
         }
 
         public goLast() {
-            this.goToVersionNumberInput = "13000100000000000000";
+            this.goToVersionNumberInput = this.totalItems.toString();
             this.goToVersionNumber();
+        }
+
+        public canGoPrevious(): boolean {
+            if (this.currentPage.eq(1)) return false;
+            else return true;
         }
 
         public goPrevious() {
             this.currentPage = this.currentPage.minus(1);
             this.generateItems();
+        }
+
+        public canGoNext(): boolean {
+            if (this.currentPage.eq(this.maxPage)) return false;
+            else return true;
         }
 
         public goNext() {

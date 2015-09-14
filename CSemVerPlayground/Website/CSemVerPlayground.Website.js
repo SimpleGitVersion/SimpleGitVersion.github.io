@@ -90,6 +90,7 @@ var CSemVerPlayground;
                     this.$modal = $modal;
                     this.totalItems = new Big("13000100000000000000");
                     this.currentPage = new Big(1);
+                    this.maxPage = new Big("1300010000000000000");
                     this.maxSize = 10;
                     this.itemsPerPageOptions = new Array();
                     this.generateItemsPerPageOptions();
@@ -134,13 +135,13 @@ var CSemVerPlayground;
                 };
                 BrowseCtrl.prototype.goToVersionNumber = function () {
                     if (!this.isVersionNumberValid()) {
-                        this.error("Error", "Version number must be a numeric defined between 1 and 13000100000000000000.");
+                        this.error("Error", "Version number must be a numeric defined between 1 and " + this.totalItems.toString() + ".");
                     }
                     else {
                         var pageNumber = new Big(this.goToVersionNumberInput).div(this.itemsPerPage.value);
                         if (pageNumber.lt(1))
                             pageNumber = new Big(1);
-                        this.currentPage = pageNumber;
+                        this.currentPage = pageNumber.round(0, 3);
                         var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                         this.goToVersionTagInput = v.toString();
                         this.goToFileVersionInput = this.getDottedOrderedVersion(v);
@@ -172,12 +173,24 @@ var CSemVerPlayground;
                     this.goToVersionNumber();
                 };
                 BrowseCtrl.prototype.goLast = function () {
-                    this.goToVersionNumberInput = "13000100000000000000";
+                    this.goToVersionNumberInput = this.totalItems.toString();
                     this.goToVersionNumber();
+                };
+                BrowseCtrl.prototype.canGoPrevious = function () {
+                    if (this.currentPage.eq(1))
+                        return false;
+                    else
+                        return true;
                 };
                 BrowseCtrl.prototype.goPrevious = function () {
                     this.currentPage = this.currentPage.minus(1);
                     this.generateItems();
+                };
+                BrowseCtrl.prototype.canGoNext = function () {
+                    if (this.currentPage.eq(this.maxPage))
+                        return false;
+                    else
+                        return true;
                 };
                 BrowseCtrl.prototype.goNext = function () {
                     this.currentPage = this.currentPage.plus(1);
