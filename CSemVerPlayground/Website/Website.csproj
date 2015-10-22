@@ -10,7 +10,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TypeScriptToolsVersion>1.5</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.6</TypeScriptToolsVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -807,6 +807,7 @@
     <TypeScriptCompile Include="app\home\Home.ts" />
     <TypeScriptCompile Include="app\modals\controllers\AlertModalCtrl.ts" />
     <TypeScriptCompile Include="app\modals\Modals.ts" />
+    <TypeScriptCompile Include="app\models\SelectOption.ts" />
     <TypeScriptCompile Include="app\versionYourMind\controllers\PredecessorsGameAnswer.ts" />
     <TypeScriptCompile Include="app\versionYourMind\controllers\VersionYourMindCtrl.ts" />
     <TypeScriptCompile Include="app\versionYourMind\controllers\PredecessorsGameCtrl.ts" />
@@ -867,9 +868,17 @@
   </ProjectExtensions>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
-    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
     <TypeScriptOutFile>CSemVerPlayground.Website.js</TypeScriptOutFile>
     <TypeScriptOutDir>CSemVerPlayground.Website.js</TypeScriptOutDir>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>None</TypeScriptModuleKind>
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>

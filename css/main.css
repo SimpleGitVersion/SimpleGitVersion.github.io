@@ -32,6 +32,7 @@ p { margin: 0 0 1em; }
 
 p.note { border: solid; border-color: gray; padding: 1em;}
 p.no-space-after { margin-bottom: 0; }
+p.center { text-align:center; }
 
 /* Nav */
 

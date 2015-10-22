@@ -9,10 +9,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSemVersion.Demo", "CSemVer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Website\Website.csproj", "{E8E95155-48AC-40AF-97D6-9F365D7F8388}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "csemver.org", "csemver.org", "{5411B540-66FE-47A6-9E57-3831AAE5FC5F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSemver.org", "CSemver.org", "{9CD8F852-6BB3-4643-B13A-D84EF6696A63}"
 	ProjectSection(SolutionItems) = preProject
 		..\index-v1-0-0-alpha.html = ..\index-v1-0-0-alpha.html
+		..\index-v1-0-0-beta.html = ..\index-v1-0-0-beta.html
 		..\index.html = ..\index.html
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lang", "lang", "{B6DAD7CE-3EF3-4F00-BE5F-7E621B65460A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fr", "fr", "{44F8AAE8-75E3-4468-94CE-4E818FD08F9C}"
+	ProjectSection(SolutionItems) = preProject
+		..\lang\fr\index.html = ..\lang\fr\index.html
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "css", "css", "{7F5A2600-75FE-429F-994E-6AC2E1A76D24}"
+	ProjectSection(SolutionItems) = preProject
 		..\css\main.css = ..\css\main.css
 	EndProjectSection
 EndProject
@@ -37,5 +49,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B6DAD7CE-3EF3-4F00-BE5F-7E621B65460A} = {9CD8F852-6BB3-4643-B13A-D84EF6696A63}
+		{44F8AAE8-75E3-4468-94CE-4E818FD08F9C} = {B6DAD7CE-3EF3-4F00-BE5F-7E621B65460A}
+		{7F5A2600-75FE-429F-994E-6AC2E1A76D24} = {9CD8F852-6BB3-4643-B13A-D84EF6696A63}
 	EndGlobalSection
 EndGlobal
