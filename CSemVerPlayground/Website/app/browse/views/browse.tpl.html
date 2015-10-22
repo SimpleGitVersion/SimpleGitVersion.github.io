@@ -7,39 +7,42 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-addon">Version number</span>
-                        <input type="number" step="1" ng-model="ctrl.goToVersionNumberInput" class="form-control" placeholder="e.g. 130001000000001">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" ng-click="ctrl.goToVersionNumber()">Go</button>
-                        </span>
-                    </div>
+                    <form ng-submit="ctrl.goToVersionNumber()">
+                        <div class="input-group">
+                            <span class="input-group-addon">Version number</span>
+                            <input type="text" ng-model="ctrl.goToVersionNumberInput" class="form-control" placeholder="e.g. 130001000000001">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">Go</button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-addon">Version tag</span>
-                        <input type="text" class="form-control" ng-model="ctrl.goToVersionTagInput" placeholder="e.g. v1.0.0-alpha">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" ng-click="ctrl.goToVersionTag()">Go</button>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-addon">File version</span>
-                        <input type="text" class="form-control" ng-model="ctrl.goToFileVersionInput" placeholder="e.g. 0.30268.14188.59905">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" ng-click="ctrl.goToFileVersion()">Go</button>
-                        </span>
-                    </div>
+                <div class="col-md-4">
+                    <form ng-submit="ctrl.goToVersionTag()">
+                        <div class="input-group">
+                            <span class="input-group-addon">Version tag</span>
+                            <input type="text" class="form-control" ng-model="ctrl.goToVersionTagInput" placeholder="e.g. v1.0.0-alpha">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">Go</button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon2">Items per page</span>
-                        <select class="form-control" ng-model="ctrl.itemsPerPage" ng-options="i for i in ctrl.itemsPerPageOptions" ng-change="ctrl.generateItems()"></select>
-                    </div>
+                    <form ng-submit="ctrl.goToFileVersion()">
+                        <div class="input-group">
+                            <span class="input-group-addon">File version</span>
+                            <input type="text" class="form-control" ng-model="ctrl.goToFileVersionInput" placeholder="e.g. 0.30268.14188.59905">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">Go</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-2">
+                    <select class="form-control" ng-model="ctrl.itemsPerPage" ng-options="i.description for i in ctrl.itemsPerPageOptions" ng-change="ctrl.generateItems()"></select>
                 </div>
             </div>
 
@@ -48,21 +51,29 @@
         <table class="table table-striped">
             <tr>
                 <th>Version number</th>
-                <th>Normalized version</th>
-                <th>SemVer version</th>
-                <th>Nuget package version</th>
+                <th>Version</th>
+                <th>Nuget V2</th>
                 <th>File version</th>
             </tr>
 
-            <tr ng-repeat="i in ctrl.items" ng-class="{ 'success' : +i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }">
+            <tr ng-repeat="i in ctrl.items" ng-class="{ 'success' : i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }" ng-click="ctrl.goToVersionNumberInput = i.orderedVersion.toFixed(); ctrl.goToVersionNumber()">
                 <td>{{ i.orderedVersion.toFixed() }}</td>
                 <td>{{ ctrl.getNormalizedVersion(i) }}</td>
-                <td>{{ ctrl.getSemVerVersion(i) }}</td>
                 <td>{{ ctrl.getNugetVersion(i) }}</td>
                 <td>{{ ctrl.getDottedOrderedVersion(i) }}</td>
             </tr>
         </table>
     </div>
 
-    <pagination items-per-page="ctrl.itemsPerPage" total-items="ctrl.totalItems" ng-model="ctrl.currentPage" max-size="ctrl.maxSize" ng-change="ctrl.generateItems()" class="pagination" boundary-links="false"></pagination>
+    <div class="pull-left">
+        <button class="btn btn-default" type="button" ng-disabled="!ctrl.canGoPrevious()" ng-click="ctrl.goFirst()"><span class="glyphicon glyphicon-chevron-left"></span><span class="glyphicon glyphicon-chevron-left"></span></button>
+        <button class="btn btn-default" type="button" ng-disabled="!ctrl.canGoPrevious()" ng-click="ctrl.goPrevious()"><span class="glyphicon glyphicon-chevron-left"></span></button>
+    </div>
+
+    <div class="pull-right">
+        <button class="btn btn-default" type="button" ng-disabled="!ctrl.canGoNext()" ng-click="ctrl.goNext()"><span class="glyphicon glyphicon-chevron-right"></span></button>
+        <button class="btn btn-default" type="button" ng-disabled="!ctrl.canGoNext()" ng-click="ctrl.goLast()"><span class="glyphicon glyphicon-chevron-right"></span><span class="glyphicon glyphicon-chevron-right"></span></button>
+    </div>
+
+    <div style="clear: both;"></div>
 </div>

@@ -9,7 +9,7 @@ var CSemVerPlayground;
             // Home
             $routeProvider.when('/', {
                 templateUrl: '/app/home/views/home.tpl.html',
-                title: 'Home',
+                //title: 'Home',
                 controller: 'HomeCtrl',
                 controllerAs: 'ctrl',
                 name: 'Home'
@@ -17,7 +17,7 @@ var CSemVerPlayground;
             // Browse
             $routeProvider.when('/browse', {
                 templateUrl: '/app/browse/views/browse.tpl.html',
-                title: 'Browse',
+                //title: 'Browse',
                 controller: 'BrowseCtrl',
                 controllerAs: 'ctrl',
                 name: 'Browse'
@@ -25,7 +25,7 @@ var CSemVerPlayground;
             // VersionYourMind
             $routeProvider.when('/versionYourMind', {
                 templateUrl: '/app/versionYourMind/views/versionYourMind.tpl.html',
-                title: 'Version your mind',
+                //title: 'Version your mind',
                 controller: 'VersionYourMindCtrl',
                 controllerAs: 'ctrl',
                 name: 'VersionYourMind'
@@ -33,7 +33,7 @@ var CSemVerPlayground;
             // SuccessorsGame
             $routeProvider.when('/versionYourMind/successorsGame', {
                 templateUrl: '/app/versionYourMind/views/successorsGame.tpl.html',
-                title: 'Successors game',
+                //title: 'Successors game',
                 controller: 'SuccessorsGameCtrl',
                 controllerAs: 'ctrl',
                 name: 'SuccessorsGame'
@@ -41,7 +41,7 @@ var CSemVerPlayground;
             // PredecessorsGame
             $routeProvider.when('/versionYourMind/predecessorsGame', {
                 templateUrl: '/app/versionYourMind/views/predecessorsGame.tpl.html',
-                title: 'Predecessors game',
+                //title: 'Predecessors game',
                 controller: 'PredecessorsGameCtrl',
                 controllerAs: 'ctrl',
                 name: 'PredecessorsGame'
@@ -88,18 +88,49 @@ var CSemVerPlayground;
                 function BrowseCtrl($scope, $modal) {
                     this.$scope = $scope;
                     this.$modal = $modal;
-                    this.totalItems = 13000100000000000000;
-                    this.currentPage = 1;
+                    this.totalItems = new Big("13000100000000000000");
+                    this.currentPage = new Big(1);
+                    this.maxPage = new Big("1300010000000000000");
                     this.maxSize = 10;
-                    this.itemsPerPage = 10;
-                    this.itemsPerPageOptions = [10, 25, 50, 100];
-                    this.generateItems();
+                    this.itemsPerPageOptions = new Array();
+                    this.generateItemsPerPageOptions();
+                    this.goToVersionNumberInput = "1";
+                    this.goToVersionNumber();
+                    this.onScroll();
                 }
+                BrowseCtrl.prototype.onScroll = function () {
+                    var _me = this;
+                    $('html').bind('mousewheel DOMMouseScroll', function (e) {
+                        var event = e.originalEvent;
+                        var delta = +event.wheelDelta || +event.detail;
+                        if (_me.isVersionNumberValid()) {
+                            var currentVersion = new Big(_me.goToVersionNumberInput);
+                            if (delta < 0)
+                                currentVersion = currentVersion.plus(1);
+                            if (delta > 0)
+                                currentVersion = currentVersion.minus(1);
+                            if (_me.isVersionNumberValid(currentVersion)) {
+                                _me.goToVersionNumberInput = currentVersion.toString();
+                                _me.goToVersionNumber();
+                            }
+                            _me.$scope.$apply();
+                        }
+                    });
+                };
+                BrowseCtrl.prototype.generateItemsPerPageOptions = function () {
+                    var options = [10, 25, 50, 100];
+                    for (var i = 0; i < options.length; i++) {
+                        var option = new Website.Models.SelectOption(options[i] + " items per page", options[i]);
+                        this.itemsPerPageOptions.push(option);
+                        if (i == 0)
+                            this.itemsPerPage = option;
+                    }
+                };
                 BrowseCtrl.prototype.generateItems = function () {
                     this.items = new Array();
-                    var maxNumber = this.currentPage * this.itemsPerPage;
-                    var minNumber = ((this.currentPage * this.itemsPerPage) - this.itemsPerPage) + 1;
-                    for (var i = minNumber; i <= maxNumber; i++) {
+                    var maxNumber = this.currentPage.times(this.itemsPerPage.value);
+                    var minNumber = this.currentPage.times(this.itemsPerPage.value).minus(this.itemsPerPage.value).plus(1);
+                    for (var i = minNumber; i.lte(maxNumber); i = i.plus(1)) {
                         var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(i));
                         this.items.push(v);
                     }
@@ -119,19 +150,21 @@ var CSemVerPlayground;
                         }
                     });
                 };
-                BrowseCtrl.prototype.isVersionNumberValid = function () {
-                    var n = this.goToVersionNumberInput;
-                    return !isNaN(n) && n >= 1 && n <= 13000100000000000000;
+                BrowseCtrl.prototype.isVersionNumberValid = function (input) {
+                    var n = new Big(this.goToVersionNumberInput);
+                    if (input)
+                        n = input;
+                    return n.gte(1) && n.lte(this.totalItems);
                 };
                 BrowseCtrl.prototype.goToVersionNumber = function () {
                     if (!this.isVersionNumberValid()) {
-                        this.error("Error", "Version number must be a numeric defined between 1 and 13000100000000000000.");
+                        this.error("Error", "Version number must be a numeric defined between 1 and " + this.totalItems.toString() + ".");
                     }
                     else {
-                        var pageNumber = Math.ceil(this.goToVersionNumberInput / this.itemsPerPage);
-                        if (pageNumber < 1)
-                            pageNumber = 1;
-                        this.currentPage = pageNumber;
+                        var pageNumber = new Big(this.goToVersionNumberInput).div(this.itemsPerPage.value);
+                        if (pageNumber.lt(1))
+                            pageNumber = new Big(1);
+                        this.currentPage = pageNumber.round(0, 3);
                         var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                         this.goToVersionTagInput = v.toString();
                         this.goToFileVersionInput = this.getDottedOrderedVersion(v);
@@ -141,7 +174,7 @@ var CSemVerPlayground;
                 BrowseCtrl.prototype.goToVersionTag = function () {
                     var v = CSemVerPlayground.CSemVersion.CSemVersion.tryParse(this.goToVersionTagInput, true);
                     if (!v.parseErrorMessage) {
-                        this.goToVersionNumberInput = +v.orderedVersion.toFixed();
+                        this.goToVersionNumberInput = v.orderedVersion.toFixed();
                         this.goToVersionNumber();
                     }
                     else {
@@ -151,18 +184,43 @@ var CSemVerPlayground;
                 BrowseCtrl.prototype.goToFileVersion = function () {
                     var v = CSemVerPlayground.CSemVersion.CSemVersion.tryParseFileVersion(this.goToFileVersionInput);
                     if (!v.parseErrorMessage) {
-                        this.goToVersionNumberInput = +v.orderedVersion.toFixed();
+                        this.goToVersionNumberInput = v.orderedVersion.toFixed();
                         this.goToVersionNumber();
                     }
                     else {
                         this.error("Error", v.parseErrorMessage);
                     }
                 };
+                BrowseCtrl.prototype.goFirst = function () {
+                    this.goToVersionNumberInput = "1";
+                    this.goToVersionNumber();
+                };
+                BrowseCtrl.prototype.goLast = function () {
+                    this.goToVersionNumberInput = this.totalItems.toString();
+                    this.goToVersionNumber();
+                };
+                BrowseCtrl.prototype.canGoPrevious = function () {
+                    if (this.currentPage.eq(1))
+                        return false;
+                    else
+                        return true;
+                };
+                BrowseCtrl.prototype.goPrevious = function () {
+                    this.currentPage = this.currentPage.minus(1);
+                    this.generateItems();
+                };
+                BrowseCtrl.prototype.canGoNext = function () {
+                    if (this.currentPage.eq(this.maxPage))
+                        return false;
+                    else
+                        return true;
+                };
+                BrowseCtrl.prototype.goNext = function () {
+                    this.currentPage = this.currentPage.plus(1);
+                    this.generateItems();
+                };
                 BrowseCtrl.prototype.getNormalizedVersion = function (v) {
                     return v.toString(CSemVerPlayground.CSemVersion.Format.Normalized);
-                };
-                BrowseCtrl.prototype.getSemVerVersion = function (v) {
-                    return v.toString(CSemVerPlayground.CSemVersion.Format.SemVerWithMarker);
                 };
                 BrowseCtrl.prototype.getNugetVersion = function (v) {
                     return v.toString(CSemVerPlayground.CSemVersion.Format.NugetPackageV2);
@@ -240,6 +298,23 @@ var CSemVerPlayground;
 (function (CSemVerPlayground) {
     var Website;
     (function (Website) {
+        var Models;
+        (function (Models) {
+            var SelectOption = (function () {
+                function SelectOption(description, value) {
+                    this.description = description;
+                    this.value = value;
+                }
+                return SelectOption;
+            })();
+            Models.SelectOption = SelectOption;
+        })(Models = Website.Models || (Website.Models = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
         var VersionYourMind;
         (function (VersionYourMind) {
             (function (PredecessorsGameAnswer) {
@@ -248,6 +323,22 @@ var CSemVerPlayground;
                 PredecessorsGameAnswer[PredecessorsGameAnswer["Neither"] = 2] = "Neither";
             })(VersionYourMind.PredecessorsGameAnswer || (VersionYourMind.PredecessorsGameAnswer = {}));
             var PredecessorsGameAnswer = VersionYourMind.PredecessorsGameAnswer;
+        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var VersionYourMind;
+        (function (VersionYourMind) {
+            var VersionYourMindCtrl = (function () {
+                function VersionYourMindCtrl($scope) {
+                    this.$scope = $scope;
+                }
+                return VersionYourMindCtrl;
+            })();
+            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
@@ -503,22 +594,6 @@ var CSemVerPlayground;
                 return SuccessorsGameCtrl;
             })();
             VersionYourMind.SuccessorsGameCtrl = SuccessorsGameCtrl;
-        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var VersionYourMind;
-        (function (VersionYourMind) {
-            var VersionYourMindCtrl = (function () {
-                function VersionYourMindCtrl($scope) {
-                    this.$scope = $scope;
-                }
-                return VersionYourMindCtrl;
-            })();
-            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
