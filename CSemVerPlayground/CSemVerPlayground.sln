@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSemver.org", "CSemver.org", "{9CD8F852-6BB3-4643-B13A-D84EF6696A63}"
 	ProjectSection(SolutionItems) = preProject
 		..\index-v1-0-0-alpha.html = ..\index-v1-0-0-alpha.html
+		..\index-v1-0-0-beta-1.html = ..\index-v1-0-0-beta-1.html
 		..\index-v1-0-0-beta.html = ..\index-v1-0-0-beta.html
 		..\index.html = ..\index.html
 	EndProjectSection
