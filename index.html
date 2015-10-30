@@ -22,18 +22,18 @@
         <li><a href="#">english</a> [en]</li>
         <li><a lang="fr" rel="alternate" hreflang="fr" href="lang/fr/index.html">fran&ccedil;ais</a> [fr]</li>
         <li>
-            previous version:<a href="index-v1-0-0-beta.html">v1.0.0-beta</a>, <a href="index-v1-0-0-alpha.html">v1.0.0-alpha</a>
+            previous version: <a href="index-v1-0-0-beta-1.html">v1.0.0-beta.1</a>, <a href="index-v1-0-0-beta.html">v1.0.0-beta</a>, <a href="index-v1-0-0-alpha.html">v1.0.0-alpha</a>
         </li>
     </ol>
 
-    <h1>Constrained Semantic Versioning v1.0.0-beta.1</h1>
+    <h1>Constrained Semantic Versioning v1.0.0-rc</h1>
 
     <h2>Summary</h2>
 
     <p>
         <b>CSemVer</b> is an operational subset of Semantic Versioning 2.0.0 (<a href="http://semver.org">http://semver.org</a>) that is defined around one strong idea:
-        CSemVer versions are totally ordered, each version corresponds to a unique 64 bits unsigned integer ranging
-        from 1 (v0.0.0-alpha) to 13000100000000000000 (v99999.99999.9999).
+        CSemVer versions are totally ordered, each version corresponds to a unique 64 bits signed integer ranging
+        from 1 (v0.0.0-alpha) to 4000050000000000000 (v99999.49999.9999).
     </p>
     <p class="no-space-after">
         <b>CSemVer-CI</b> is an extension that supports CI builds. Its versions follow SemVer 2.0.0, but are not CSemVer compliant. CSemVer-CI defines 2 kind of CI versions:
@@ -64,7 +64,7 @@
                     <td class="num">1</td>
                     <td>
                         The very first possible version is the 0.0.0 alpha (this is a MainPrerelease). 
-                        There are 42 possible first versions (it can be 0.0.0, 0.1.0 and 1.0.0 with their 13 prereleases).
+                        There are 27 possible first versions (it can be 0.0.0, 0.1.0 and 1.0.0 with their 8 prereleases).
                     </td>
                 </tr>
                 <tr>
@@ -92,7 +92,7 @@
                 <tr>
                     <td class="version">v1.0.0</td>
                     <td class="version">1.0.0</td>
-                    <td class="num">130001000130001</td>
+                    <td class="num">40000500080001</td>
                     <td>
                         The first OfficialRelease is a MajorRelease.
                     </td>
@@ -100,7 +100,7 @@
                 <tr>
                     <td class="version">v1.0.1</td>
                     <td class="version">1.0.1</td>
-                    <td class="num">130001000260002</td>
+                    <td class="num">40000500160002</td>
                     <td>
                         A fix to the first official version: as a PatchRelease, it should contain only bug fixes, no breaking changes.
                     </td>
@@ -108,7 +108,7 @@
                 <tr>
                     <td class="version">v1.1.0</td>
                     <td class="version">1.1.0</td>
-                    <td class="num">130002300140001</td>
+                    <td class="num">40001300090001</td>
                     <td>
                         Introduction of new features but no breaking changes: welcome to the MinorRelease (that is an OfficialRelease).
                     </td>
@@ -116,7 +116,7 @@
                 <tr>
                     <td class="version">v2.0.0-rc</td>
                     <td class="version">2.0.0-r</td>
-                    <td>260002000120001</td>
+                    <td>80001000070001</td>
                     <td>
                         A MainPreRelease that prepares the next MajorRelease.
                     </td>
@@ -132,7 +132,7 @@
     </div>
     <p>
         <b>2</b> - CSemVer makes possible to really control the versions that are published. The valid successors (according to Semantic Versioning rules) of
-        any version can be computed (there can be up to 43 successors to a version) and, respectively, one can decide whether a version is a valid predecessor
+        any version can be computed (there can be up to 28 successors to a version) and, respectively, one can decide whether a version is a valid predecessor
         of any other version.
     </p>
     <div class="sample">
@@ -140,15 +140,15 @@
             <thead><tr><th>Version</th><th>Successors</th></tr></thead>
             <tbody>
                 <tr>
-                    <td class="version">v1.2.3<br /><em>42 successors</em></td>
+                    <td class="version">v1.2.3<br /><em>27 successors</em></td>
                     <td>
-                        v1.2.4-alpha, v1.2.4-beta, v1.2.4-chi, v1.2.4-delta, v1.2.4-epsilon, v1.2.4-gamma, v1.2.4-iota, v1.2.4-kappa, v1.2.4-lambda, v1.2.4-mu, v1.2.4-omicron, v1.2.4-prerelease, v1.2.4-rc, <b>v1.2.4</b>,
+                        v1.2.4-alpha, v1.2.4-beta, v1.2.4-delta, v1.2.4-epsilon, v1.2.4-gamma, v1.2.4-kappa, v1.2.4-prerelease, v1.2.4-rc, <b>v1.2.4</b>,
                         v1.3.0-alpha &#8658<sup>(2)</sup> v1.3.0-rc, <b>v1.3.0</b>,
                         v2.0.0-alpha &#8658 v2.0.0-rc, <b>v2.0.0</b>
                     </td>
                 </tr>
                 <tr>
-                    <td class="version">v1.2.3-alpha<br /><em>43 successors</em></td>
+                    <td class="version">v1.2.3-alpha<br /><em>28 successors</em></td>
                     <td>
                         <b>v1.2.3-alpha.0.1</b>,
                         <b>v1.2.3-alpha.1</b>, v1.2.3-beta &#8658 v1.2.3-rc, <b>v1.2.3</b>,
@@ -157,7 +157,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="version">v1.2.3-delta.5<br /><em>40 successors</em></td>
+                    <td class="version">v1.2.3-delta.5<br /><em>26 successors</em></td>
                     <td>
                         <b>v1.2.3-delta.5.1</b>,
                         <b>v1.2.3-delta.6</b>, v1.2.3-epsilon &#8658 v1.2.3-rc, <b>v1.2.3</b>,
@@ -166,7 +166,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="version">v1.2.3-prerelease.2.3<br /><em>32 successors</em></td>
+                    <td class="version">v1.2.3-prerelease.2.3<br /><em>22 successors</em></td>
                     <td>
                         <b>v1.2.3-prerelease.2.4</b>, <b>v1.2.3-prerelease.3</b>,
                         <b>v1.2.3-rc</b>, <b>v1.2.3</b>,
@@ -175,7 +175,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="version">v1.2.3-rc<br /><em>31 successors</em></td>
+                    <td class="version">v1.2.3-rc<br /><em>21 successors</em></td>
                     <td>
                         <b>v1.2.3-rc.0.1</b>,<b> v1.2.3-rc.1</b>, <b>v1.2.3</b>,
                         v1.3.0-alpha &#8658 v1.3.0-rc, <b>v1.3.0</b>,
@@ -185,7 +185,7 @@
             </tbody>
         </table>
         <p>
-            <sup>(2)</sup> The  &#8658 replaces the list of the prerelease names from <em>alpha</em>, <em>beta</em>, <em>chi</em>, <em>delta</em>, <em>epsilon</em>, <em>gamma</em>, <em>iota</em>, <em>kappa</em>, <em>lambda</em>, <em>mu</em>, <em>omicron</em>, <em>prerelease</em> up to <em>rc</em>.
+            <sup>(2)</sup> The  &#8658 replaces the list of the prerelease names from <em>alpha</em>, <em>beta</em>, <em>delta</em>, <em>epsilon</em>, <em>gamma</em>, <em>kappa</em>, <em>prerelease</em> up to <em>rc</em>.
     </p>
     </div>
     <p>
@@ -212,7 +212,7 @@
             Risk that a product issued from the CI pollutes any production is highly mitigated.
             <br/>
             <b>This implements a "post release" feature</b> (see <a href="https://github.com/mojombo/semver/issues/200">this issue on 
-            github </a>) in Semantic Versionning 2.0.0 that, apparently, supports only a "pre release" feature: there is 
+            github</a>) in Semantic Versionning 2.0.0 that, apparently, supports only a "pre release" feature: there is 
             no 'magic', only a careful use of the precedence order rules (with the help of the double dash trick).
         </dd>
     </dl>
@@ -283,7 +283,7 @@
                         1.2.4-alpha
                     </td>
                     <td>
-                        <p class="center no-space-after">OfficialRelease<br />(applies to Major, Minor, or PatchRelease)</p>
+                        <p class="center no-space-after">OfficialRelease<br />(applies to Major, Minor and PatchRelease)</p>
                         This uses the double dash trick of the <em>ZeroBased</em> kind, plus another one: the <span class="verpart">Patch</span> is incremented by one.
                     </td>
                 </tr>
@@ -307,15 +307,15 @@
         </li>
         <li><p>CSemVer versions MAY be prefixed with a 'v' or 'V' (GitHub convention). This is the only extension that is not supported by SemVer.</p></li>
         <li><p>The <span class="verpart">Major</span> part MUST be defined between 0 and 99999.</p></li>
-        <li><p>The <span class="verpart">Minor</span> part MUST be defined between 0 and 99999.</p></li>
+        <li><p>The <span class="verpart">Minor</span> part MUST be defined between 0 and 49999.</p></li>
         <li><p>The <span class="verpart">Patch</span> part MUST be defined between 0 and 9999.</p></li>
         <li>
             <p>
-                The <span class="verpart">PrereleaseName</span> MAY be denoted by appending a hyphen and a name that MUST be one of the 13 values of the following list (ordered from 0 to 12):
-                alpha, beta, chi, delta, epsilon, gamma, iota, kappa, lambda, mu, omicron, prerelease, rc.
+                The <span class="verpart">PrereleaseName</span> MAY be denoted by appending a hyphen and a name that MUST be one of the 8 values of the following list (ordered from 0 to 7):
+                alpha, beta, delta, epsilon, gamma, kappa, prerelease, rc.
             </p>
             <p>
-                The <span class="verpart">PrereleaseName</span>'s intial MAY be used as a short form: a, b, c, d, e, g, i, k, l, m, o, p, r.
+                The <span class="verpart">PrereleaseName</span>'s intial MAY be used as a short form: a, b, d, e, g, k, p, r.
             </p>
             <p>Any other name not listed in this set MUST be either mapped to/considered as "prerelease" OR considered syntactically invalid.<p>
         </li>

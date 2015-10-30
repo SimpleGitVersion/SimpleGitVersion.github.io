@@ -22,27 +22,24 @@
         <li><a href="#">english</a> [en]</li>
         <li><a lang="fr" rel="alternate" hreflang="fr" href="#">fran&ccedil;ais</a> [fr]</li>
         <li>
-            previous version: <a href="index-v1-0-0-alpha.html">v1.0.0-alpha</a>
+            previous version:<a href="index-v1-0-0-beta.html">v1.0.0-beta</a>, <a href="index-v1-0-0-alpha.html">v1.0.0-alpha</a>
         </li>
     </ol>
 
-    <h1>Constrained Semantic Versioning v1.0.0-beta</h1>
+    <h1>Constrained Semantic Versioning v1.0.0-beta.1</h1>
 
     <h2>Summary</h2>
 
     <p class="note">
-        This version is deprecated. <a href="index.html">v1.0.0-beta.1</a> defines names for the different kind of versions
-    (Official Releases with Major/Minor/Patch Release, Pre Releases with Main/Numbered/Patch
-    PreRelease and Post Releases for CSemVer-CI).
+        This version is deprecated. <a href="index.html">v1.0.0-rc</a> removes <em>chi</em>, <em>iota</em>, <em>lambda</em>, <em>mu</em> and <em>omicron</em> 
+        PreRelease names and limits the Minor to be between 0 and 49999 (instead of 99999). This enables CSemVer version number to fit in a signed 64 bit integer
+        (instead of requiring an unsigned one).
     </p>
 
     <p>
         <b>CSemVer</b> is an operational subset of Semantic Versioning 2.0.0 (<a href="http://semver.org">http://semver.org</a>) that is defined around one strong idea:
         CSemVer versions are totally ordered, each version corresponds to a unique 64 bits unsigned integer ranging
         from 1 (v0.0.0-alpha) to 13000100000000000000 (v99999.99999.9999).
-        <br />
-        A version can be "normal" (1.2.3), pre release (1.2.3-beta), numbered pre release (1.2.3-rc.3) and
-        fix of a pre release (1.2.3-alpha.1.1).
     </p>
     <p class="no-space-after">
         <b>CSemVer-CI</b> is an extension that supports CI builds. Its versions follow SemVer 2.0.0, but are not CSemVer compliant. CSemVer-CI defines 2 kind of CI versions:
@@ -53,10 +50,15 @@
         <dt>LastReleasedBased</dt>
         <dd>Versions are based on a previous release. They are greater than their base version but always lower than any successor of their base.</dd>
     </dl>
+    
+    <img src="CSemVer.png" style="width:95%" />
+
     <h2>Rationales &amp; examples</h2>
     <p>
         <b>1</b> - CSemVer defines a <a href="https://en.wikipedia.org/wiki/Total_order">totally ordered</a> set of versions.
-        This is used to generate version names that guaranty a correct application of precedence rules.
+        This is used to generate and/or control versions that guaranty a correct application of precedence rules and
+        coherency of the emitted artifacts. Each CSemVer version is associated to a unique integer that fits
+        into <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa381058(v=vs.85).aspx">Windows binary version number</a>.
     </p>
     <div class="sample">
         <table>
@@ -67,7 +69,8 @@
                     <td class="version">0.0.0-a</td>
                     <td class="num">1</td>
                     <td>
-                        The very first possible version is the 0.0.0 alpha prerelease. There are 42 possible first versions (it can be 0.0.0, 0.1.0 and 1.0.0 with their 13 prereleases).
+                        The very first possible version is the 0.0.0 alpha (this is a MainPrerelease). 
+                        There are 42 possible first versions (it can be 0.0.0, 0.1.0 and 1.0.0 with their 13 prereleases).
                     </td>
                 </tr>
                 <tr>
@@ -75,7 +78,7 @@
                     <td class="version">0.0.0-a01</td>
                     <td class="num">101</td>
                     <td rowspan="2">
-                        These are numbered prerelease. There can be 99 numbered prereleases.
+                        These are NumberedPreReleases. There can be 99 NumberedPreReleases for each OfficialRelease.
                     </td>
                 </tr>
                 <tr>
@@ -89,6 +92,7 @@
                     <td class="num">2</td>
                     <td>
                         Oops! There was a bug in the very first alpha and someone, for any reason, needs a fix.
+                        This is a PatchPreRelease.
                     </td>
                 </tr>
                 <tr>
@@ -96,7 +100,7 @@
                     <td class="version">1.0.0</td>
                     <td class="num">130001000130001</td>
                     <td>
-                        The first official version.
+                        The first OfficialRelease is a MajorRelease.
                     </td>
                 </tr>
                 <tr>
@@ -104,7 +108,7 @@
                     <td class="version">1.0.1</td>
                     <td class="num">130001000260002</td>
                     <td>
-                        A fix to the first official version: it contains only bug fixes, no breaking changes.
+                        A fix to the first official version: as a PatchRelease, it should contain only bug fixes, no breaking changes.
                     </td>
                 </tr>
                 <tr>
@@ -112,7 +116,7 @@
                     <td class="version">1.1.0</td>
                     <td class="num">130002300140001</td>
                     <td>
-                        Introduction of new features but no breaking changes.
+                        Introduction of new features but no breaking changes: welcome to the MinorRelease (that is an OfficialRelease).
                     </td>
                 </tr>
                 <tr>
@@ -120,7 +124,7 @@
                     <td class="version">2.0.0-r</td>
                     <td>260002000120001</td>
                     <td>
-                        Preparing the next major version.
+                        A MainPreRelease that prepares the next MajorRelease.
                     </td>
                 </tr>
             </tbody>
@@ -129,7 +133,7 @@
             <sup>(1)</sup> The <a href="http://nuget.org">NuGet</a> packaging system in its V2 version (2015) do not
             follow Semantic Versioning (the 'special name' - the prerelease part - is simply ordered lexically in ASCII sort order).
             Moreover this 'special name' can not exceed 20 characters. The latter is the reason why the NuGet V2 package name
-            uses only the initial of the prerelease name (in order to support CSemVer-CI <em>LastReleasedBased</em> versionnig).
+            presented here uses only the initial of the prerelease name (in order to support CSemVer-CI <em>LastReleasedBased</em> versionnig).
         </p>
     </div>
     <p>
@@ -188,32 +192,34 @@
         </table>
         <p>
             <sup>(2)</sup> The  &#8658 replaces the list of the prerelease names from <em>alpha</em>, <em>beta</em>, <em>chi</em>, <em>delta</em>, <em>epsilon</em>, <em>gamma</em>, <em>iota</em>, <em>kappa</em>, <em>lambda</em>, <em>mu</em>, <em>omicron</em>, <em>prerelease</em> up to <em>rc</em>.
-        </p>
+    </p>
     </div>
     <p>
-        <b>3</b> - CI builds correspond to productions that are not actual releases: the version has to be automatically created since no real version exist for them.
+        <b>3</b> - CI builds correspond to productions that are not actual releases: the version has to be automatically created since no real version exist for them. 
         A CI build is defined by: a CIBuildName that identifies the source, the nature, or any other constant key of the build (this is usually the name of the 'branch' in a SCM) and a BuildIndex that is a number
         or an identifier that gets bigger for each new build (it is usually a simple integer that is provided by the CI process or a timestamp).
     </p>
     <p class="no-space-after">
-        CSemVer-CI enables the support of CI buils into CSemVer versions with the guaranty of a valid precedence order (in order to secure deployments).
+        CSemVer-CI enables the support of CI buils into CSemVer versions with the guaranty of a valid precedence order (in order to secure deployments). 
         The two kind of versions offers two different guaranties:
     </p>
     <dl>
         <dt>ZeroBased</dt>
         <dd>
-            A ZeroBased version has a lower than precedence than any released package, even the very first possible one (v0.0.0-alpha).
+            A ZeroBased version has a lower than precedence than any released package, even the very first possible one (v0.0.0-alpha). 
             Risk that a product issued from the CI pollutes any production is highly improbable.
             One example is enough to understand it: 0.0.0--ci-develop-15 (where CIBuildName is 'develop' and BuldIndex is 15).
-            The double dash (that is perfectly valid in Semantic Versionning 2.0.0) makes this version lower than any other CSemVer versions.
+            The double dash (that is perfectly valid in Semantic Versioning 2.0.0) makes this version lower than any other CSemVer versions.
         </dd>
         <dt>LastReleasedBased</dt>
         <dd>
-            As its name states, this versionning mode relies on the last released. Such semantic versions have higher precedence than their base but lowest precedence than any successor of this base.
+            As its name states, this versioning mode relies on the last release (be it Official or PreRelease). 
+            Such semantic versions have higher precedence than their base but lowest precedence than any successor of this base.
             Risk that a product issued from the CI pollutes any production is highly mitigated.
-            <br />
-            <b>This implements a "post release" feature</b> (see <a href="https://github.com/mojombo/semver/issues/200">this issue on github </a>) in Semantic Versionning 2.0.0 that, apparently, supports
-            only a "pre release" feature: there is no 'magic', only a careful use of the precedence order rules (with the help of the double dash trick).
+            <br/>
+            <b>This implements a "post release" feature</b> (see <a href="https://github.com/mojombo/semver/issues/200">this issue on 
+            github </a>) in Semantic Versionning 2.0.0 that, apparently, supports only a "pre release" feature: there is 
+            no 'magic', only a careful use of the precedence order rules (with the help of the double dash trick).
         </dd>
     </dl>
     <p></p>
@@ -223,7 +229,7 @@
         </p>
         <table>
             <caption>CSemVer-CI <em>LastReleasedBased</em> samples where CIBuildName is 'develop' and BuldIndex is 15</caption>
-            <thead><tr><th>Base Version</th><th>CI Version</th><th>Immediate successor</th><th>Description</th></tr></thead>
+            <thead><tr><th>Base Version</th><th>CI Version (PostRelease)</th><th>Immediate successor</th><th>Description</th></tr></thead>
             <tbody>
                 <tr>
                     <td class="version">
@@ -236,9 +242,10 @@
                         v0.4.1-rc.2.2
                     </td>
                     <td>
+                        <p class="center no-space-after">PatchPreRelease</p>
                         This is the simplest one: by appending a dotted part, the CI version has a greater precedence than its base.
                         <br />
-                        "Base Version" < "CI Version" < "Immediate successor" is guaranteed here and for the 3 other cases below.0
+                        "Base Version" < "CI Version" < "Immediate successor" is guaranteed here and for the 3 other cases below.
                     </td>
                 </tr>
                 <tr>
@@ -252,6 +259,7 @@
                         v3.2.1-rc.1.1
                     </td>
                     <td>
+                        <p class="center no-space-after">NumberedPreRelease</p>
                         It is the "padding" with the .0 here that does the job.
                     </td>
                 </tr>
@@ -266,7 +274,8 @@
                         v3.2.1-beta.0.1
                     </td>
                     <td>
-                        A double padding is required for pre release.
+                        <p class="center no-space-after">MainPreRelease</p>
+                        The double 0 padding is required for pre release.
                     </td>
                 </tr>
                 <tr>
@@ -280,6 +289,7 @@
                         1.2.4-alpha
                     </td>
                     <td>
+                        <p class="center no-space-after">OfficialRelease<br />(applies to Major, Minor, or PatchRelease)</p>
                         This uses the double dash trick of the <em>ZeroBased</em> kind, plus another one: the <span class="verpart">Patch</span> is incremented by one.
                     </td>
                 </tr>
