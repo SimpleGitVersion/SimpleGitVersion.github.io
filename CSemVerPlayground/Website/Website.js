@@ -9,7 +9,6 @@ var CSemVerPlayground;
             // Home
             $routeProvider.when('/', {
                 templateUrl: '/app/home/views/home.tpl.html',
-                //title: 'Home',
                 controller: 'HomeCtrl',
                 controllerAs: 'ctrl',
                 name: 'Home'
@@ -17,7 +16,6 @@ var CSemVerPlayground;
             // Browse
             $routeProvider.when('/browse', {
                 templateUrl: '/app/browse/views/browse.tpl.html',
-                //title: 'Browse',
                 controller: 'BrowseCtrl',
                 controllerAs: 'ctrl',
                 name: 'Browse'
@@ -25,7 +23,6 @@ var CSemVerPlayground;
             // VersionYourMind
             $routeProvider.when('/versionYourMind', {
                 templateUrl: '/app/versionYourMind/views/versionYourMind.tpl.html',
-                //title: 'Version your mind',
                 controller: 'VersionYourMindCtrl',
                 controllerAs: 'ctrl',
                 name: 'VersionYourMind'
@@ -33,7 +30,6 @@ var CSemVerPlayground;
             // SuccessorsGame
             $routeProvider.when('/versionYourMind/successorsGame', {
                 templateUrl: '/app/versionYourMind/views/successorsGame.tpl.html',
-                //title: 'Successors game',
                 controller: 'SuccessorsGameCtrl',
                 controllerAs: 'ctrl',
                 name: 'SuccessorsGame'
@@ -41,7 +37,6 @@ var CSemVerPlayground;
             // PredecessorsGame
             $routeProvider.when('/versionYourMind/predecessorsGame', {
                 templateUrl: '/app/versionYourMind/views/predecessorsGame.tpl.html',
-                //title: 'Predecessors game',
                 controller: 'PredecessorsGameCtrl',
                 controllerAs: 'ctrl',
                 name: 'PredecessorsGame'
@@ -49,8 +44,6 @@ var CSemVerPlayground;
             $routeProvider.otherwise({
                 redirectTo: '/'
             });
-            // Use the HTML5 History API
-            $locationProvider.html5Mode(true);
         });
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
