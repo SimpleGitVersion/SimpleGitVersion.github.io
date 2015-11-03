@@ -305,7 +305,7 @@ var CSemVerPlayground;
             });
             Object.defineProperty(CSemVersion, "standardNames", {
                 get: function () {
-                    return ["alpha", "beta", "delta", "epsilon", "gamma", "iota", "kappa", "lambda", "mu", "omicron", "pi", "prerelease", "rc"];
+                    return ["alpha", "beta", "chi", "delta", "epsilon", "gamma", "iota", "kappa", "lambda", "mu", "omicron", "prerelease", "rc"];
                 },
                 enumerable: true,
                 configurable: true
@@ -754,3 +754,4 @@ var CSemVerPlayground;
         CSemVersion.SOrderedVersion = SOrderedVersion;
     })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
+//# sourceMappingURL=CSemVersion.js.map

@@ -14,4 +14,4 @@ var CSemVerPlayground;
         })(Demo = CSemVersion.Demo || (CSemVersion.Demo = {}));
     })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
-//# sourceMappingURL=CSemVerPlayground.CSemVersion.Demo.js.map
+//# sourceMappingURL=CSemVersion.Demo.js.map

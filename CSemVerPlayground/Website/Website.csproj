@@ -18,6 +18,24 @@
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
+  
+  <!-- CSemVersion -->
+  <ItemGroup>
+    <TypeScriptCompile Include="..\CSemVersion\output\*.ts">
+      <Link>shared\CSemVersion\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </TypeScriptCompile>
+
+    <Content Include="..\CSemVersion\output\*">
+      <Link>shared\CSemVersion\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </Content>
+  </ItemGroup>
+
+  <!-- Sync linked libraries -->
+  <Target Name="SyncLinkedLibraries" BeforeTargets="Build">
+    <Copy SourceFiles="%(Content.Identity)" DestinationFiles="%(Content.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(Content.Link)' != ''" />
+    <Copy SourceFiles="%(TypeScriptCompile.Identity)" DestinationFiles="%(TypeScriptCompile.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(TypeScriptCompile.Link)' != ''" />
+  </Target>
+  
   <ItemGroup>
     <Content Include="app\browse\views\browse.tpl.html" />
     <Content Include="app\home\views\home.tpl.html" />
@@ -786,7 +804,6 @@
     <Content Include="libs\bootstrap\bootstrap.min.js" />
     <Content Include="libs\jquery\jquery-2.1.4.min.js" />
     <Content Include="libs\linqjs\linq.min.js" />
-    <Content Include="libs\CSemVersion\CSemVerPlayground.CSemVersion.js" />
     <Content Include="libs\toaster\toaster.min.js" />
     <Content Include="libs\ui-bootstrap\ui-bootstrap-tpls-0.13.0.min.js" />
     <Content Include="styles\app.css" />
@@ -820,7 +837,6 @@
     <TypeScriptCompile Include="libs\bigjs\big.js.d.ts" />
     <TypeScriptCompile Include="libs\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="libs\linqjs\linq.d.ts" />
-    <TypeScriptCompile Include="libs\CSemVersion\CSemVerPlayground.CSemVersion.d.ts" />
     <TypeScriptCompile Include="libs\toaster\angularjs-toaster.d.ts" />
     <TypeScriptCompile Include="libs\ui-bootstrap\angular-ui-bootstrap.d.ts" />
   </ItemGroup>
@@ -869,8 +885,8 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>True</TypeScriptSourceMap>
-    <TypeScriptOutFile>CSemVerPlayground.Website.js</TypeScriptOutFile>
-    <TypeScriptOutDir>CSemVerPlayground.Website.js</TypeScriptOutDir>
+    <TypeScriptOutFile>Website.js</TypeScriptOutFile>
+    <TypeScriptOutDir>Website.js</TypeScriptOutDir>
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
@@ -879,6 +895,7 @@
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>

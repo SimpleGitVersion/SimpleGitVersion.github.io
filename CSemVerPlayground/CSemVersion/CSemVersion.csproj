@@ -67,10 +67,10 @@
   </ProjectExtensions>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
-    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
     <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptOutDir>CSemVerPlayground.CSemVersion.js</TypeScriptOutDir>
-    <TypeScriptOutFile>CSemVerPlayground.CSemVersion.js</TypeScriptOutFile>
+    <TypeScriptOutDir>D:\Invenietis\Projects\CSemVer\SimpleGitVersion.github.io\CSemVerPlayground\CSemVersion\output</TypeScriptOutDir>
+    <TypeScriptOutFile>D:\Invenietis\Projects\CSemVer\SimpleGitVersion.github.io\CSemVerPlayground\CSemVersion\output\CSemVersion.js</TypeScriptOutFile>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
@@ -78,6 +78,7 @@
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
