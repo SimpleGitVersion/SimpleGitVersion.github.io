@@ -1,3 +1,67 @@
+var BigJsLibrary;
+(function (BigJsLibrary) {
+    var Extensions = (function () {
+        function Extensions() {
+        }
+        Extensions.leftShift = function (nbr, shift) {
+            return nbr.times(Math.pow(2, shift));
+        };
+        Extensions.rightShift = function (nbr, shift) {
+            return nbr.div(Math.pow(2, shift));
+        };
+        return Extensions;
+    })();
+    BigJsLibrary.Extensions = Extensions;
+})(BigJsLibrary || (BigJsLibrary = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var CSemVersion;
+    (function (CSemVersion) {
+        var CIBuildDescriptor = (function () {
+            function CIBuildDescriptor() {
+            }
+            Object.defineProperty(CIBuildDescriptor, "maxNuGetV2BuildIndex", {
+                get: function () { return 9999; },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(CIBuildDescriptor.prototype, "buildIndex", {
+                get: function () {
+                    return this._buildIndex;
+                },
+                set: function (idx) {
+                    if (idx < 0)
+                        throw new Error("ArgumentException");
+                    this._buildIndex = idx;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(CIBuildDescriptor.prototype, "isValid", {
+                get: function () {
+                    return this._buildIndex >= 0 && !CSemVersion.String.isNullOrWhiteSpace(this.branchName);
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(CIBuildDescriptor.prototype, "isValidForNuGetV2", {
+                get: function () {
+                    return this.isValid && this._buildIndex <= CIBuildDescriptor.maxNuGetV2BuildIndex && this.branchName.length <= 8;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            CIBuildDescriptor.prototype.toString = function () {
+                return this.isValid ? "ci-" + this.branchName + "." + this.buildIndex : "";
+            };
+            CIBuildDescriptor.prototype.toStringForNuGetV2 = function () {
+                return this.isValid ? this.branchName + "-" + CSemVersion.String.fillWith(this.buildIndex.toString(), "0", 4) : "";
+            };
+            return CIBuildDescriptor;
+        })();
+        CSemVersion.CIBuildDescriptor = CIBuildDescriptor;
+    })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
 var CSemVerPlayground;
 (function (CSemVerPlayground) {
     var CSemVersion;
@@ -29,8 +93,10 @@ var CSemVerPlayground;
             // Semantic version format.
             // The prerelease name is the standard one (ie. 'prerelease' for any unknown name) plus build meata data (+valid, +published or +invalid).
             Format[Format["SemVerWithMarker"] = 2] = "SemVerWithMarker";
-            // The ordered version in dotted notation (1542.6548.777.8787) where each parts are between 0 and 65535.
-            Format[Format["DottedOrderedVersion"] = 3] = "DottedOrderedVersion";
+            /// The file version (see https://msdn.microsoft.com/en-us/library/system.diagnostics.fileversioninfo.fileversion.aspx)
+            /// uses the whole 64 bits: it is the <see cref="ReleaseTagVersion.OrderedVersion"/> left shifted by 1 bit with 
+            /// the less significant bit set to 0 for release and 1 CI builds.
+            Format[Format["FileVersion"] = 3] = "FileVersion";
             // NuGet version 2. If the <see cref="CSemVersion.IsMarkedInvalid"/> the "+invalid" build meta data is added.
             Format[Format["NugetPackageV2"] = 4] = "NugetPackageV2";
             // NuGet format. Currently <see cref="NugetPackageV2"/>.
@@ -75,6 +141,7 @@ var CSemVerPlayground;
                 total = total.plus(m.times(mul.pow(2)));
                 total = total.plus(b.times(mul));
                 total = total.plus(r);
+                total = BigJsLibrary.Extensions.rightShift(total, 1);
                 return CSemVersion.fromDecimal(total);
             };
             CSemVersion.fromFailedParsing = function (input, isMalformed, errorMessage, isFileVersion) {
@@ -118,7 +185,7 @@ var CSemVerPlayground;
                         d = d.minus(this.mulPatch);
                         v.preReleaseNameIdx = -1;
                         v.preReleaseNameFromTag = "";
-                        v.kind = CSemVersion_1.ReleaseTagKind.Release;
+                        v.kind = CSemVersion_1.ReleaseTagKind.OfficialRelease;
                     }
                     v.major = parseInt(d.div(this.mulMajor).toFixed());
                     d = d.minus(this.mulMajor.times(v.major));
@@ -170,6 +237,13 @@ var CSemVerPlayground;
                 enumerable: true,
                 configurable: true
             });
+            Object.defineProperty(CSemVersion.prototype, "isMarkedInvalid", {
+                get: function () {
+                    return (this.kind & CSemVersion_1.ReleaseTagKind.MarkedInvalid) != 0;
+                },
+                enumerable: true,
+                configurable: true
+            });
             CSemVersion.prototype.getDirectSuccessors = function (closest) {
                 if (closest === void 0) { closest = false; }
                 var successors = new Array();
@@ -192,7 +266,7 @@ var CSemVerPlayground;
                                 }
                             }
                         }
-                        successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, this.patch, "", -1, 0, 0, null, CSemVersion_1.ReleaseTagKind.Release));
+                        successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, this.patch, "", -1, 0, 0, null, CSemVersion_1.ReleaseTagKind.OfficialRelease));
                     }
                     else {
                         var nextPatch = this.patch + 1;
@@ -203,7 +277,7 @@ var CSemVerPlayground;
                                     successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, nextPatch, CSemVersion.standardNames[i], i, 0, 0, null, CSemVersion_1.ReleaseTagKind.PreRelease));
                                 }
                             }
-                            successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, nextPatch, "", -1, 0, 0, null, CSemVersion_1.ReleaseTagKind.Release));
+                            successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, nextPatch, "", -1, 0, 0, null, CSemVersion_1.ReleaseTagKind.OfficialRelease));
                         }
                     }
                     var nextMinor = this.minor + 1;
@@ -214,7 +288,7 @@ var CSemVerPlayground;
                                 successors.push(CSemVersion.fromVersionParts(null, this.major, nextMinor, 0, CSemVersion.standardNames[i], i, 0, 0, null, CSemVersion_1.ReleaseTagKind.PreRelease));
                             }
                         }
-                        successors.push(CSemVersion.fromVersionParts(null, this.major, nextMinor, 0, "", -1, 0, 0, null, CSemVersion_1.ReleaseTagKind.Release));
+                        successors.push(CSemVersion.fromVersionParts(null, this.major, nextMinor, 0, "", -1, 0, 0, null, CSemVersion_1.ReleaseTagKind.OfficialRelease));
                     }
                     var nextMajor = this.major + 1;
                     if (nextMajor <= CSemVersion.maxMajor) {
@@ -224,7 +298,7 @@ var CSemVerPlayground;
                                 successors.push(CSemVersion.fromVersionParts(null, nextMajor, 0, 0, CSemVersion.standardNames[i], i, 0, 0, null, CSemVersion_1.ReleaseTagKind.PreRelease));
                             }
                         }
-                        successors.push(CSemVersion.fromVersionParts(null, nextMajor, 0, 0, "", -1, 0, 0, null, CSemVersion_1.ReleaseTagKind.Release));
+                        successors.push(CSemVersion.fromVersionParts(null, nextMajor, 0, 0, "", -1, 0, 0, null, CSemVersion_1.ReleaseTagKind.OfficialRelease));
                     }
                 }
                 return successors;
@@ -274,7 +348,7 @@ var CSemVerPlayground;
                 configurable: true
             });
             Object.defineProperty(CSemVersion, "maxMinor", {
-                get: function () { return 99999; },
+                get: function () { return 49999; },
                 enumerable: true,
                 configurable: true
             });
@@ -284,7 +358,7 @@ var CSemVerPlayground;
                 configurable: true
             });
             Object.defineProperty(CSemVersion, "maxPreReleaseNameIdx", {
-                get: function () { return 12; },
+                get: function () { return 7; },
                 enumerable: true,
                 configurable: true
             });
@@ -305,7 +379,7 @@ var CSemVerPlayground;
             });
             Object.defineProperty(CSemVersion, "standardNames", {
                 get: function () {
-                    return ["alpha", "beta", "chi", "delta", "epsilon", "gamma", "iota", "kappa", "lambda", "mu", "omicron", "prerelease", "rc"];
+                    return ["alpha", "beta", "delta", "epsilon", "gamma", "kappa", "prerelease", "rc"];
                 },
                 enumerable: true,
                 configurable: true
@@ -561,7 +635,7 @@ var CSemVerPlayground;
                     if (prFix == 0 && prNum == 0 && (sPRNum != null && sPRNum.length > 0))
                         return CSemVersion.fromFailedParsing(s, true, "Incorrect '.0' Release Number version. 0 can appear only to fix the first pre release (ie. '.0.F' where F is between 1 and " + this.maxPreReleaseFix + ").");
                 }
-                var kind = prNameIdx >= 0 ? CSemVersion_1.ReleaseTagKind.PreRelease : CSemVersion_1.ReleaseTagKind.Release;
+                var kind = prNameIdx >= 0 ? CSemVersion_1.ReleaseTagKind.PreRelease : CSemVersion_1.ReleaseTagKind.OfficialRelease;
                 var marker = sBuildMetaData;
                 return CSemVersion.fromVersionParts(s, major, minor, patch, sPRName, prNameIdx, prNum, prFix, sBuildMetaData, kind);
             };
@@ -619,56 +693,63 @@ var CSemVerPlayground;
                 return prNameIdx;
             };
             // ========== ReleaseTagVersion.ToString.cs ==========
+            CSemVersion.prototype.toStringFileVersion = function () {
+                var v = new CSemVersion_1.SOrderedVersion(BigJsLibrary.Extensions.leftShift(this.sOrderedVersion.Number, 1));
+                return v.Major + "." + v.Minor + "." + v.Build + "." + v.Revision;
+            };
             CSemVersion.prototype.toString = function (f, usePreReleaseNameFromTag) {
                 if (f === void 0) { f = CSemVersion_1.Format.Normalized; }
                 if (usePreReleaseNameFromTag === void 0) { usePreReleaseNameFromTag = false; }
                 if (this.parseErrorMessage != null)
                     return this.parseErrorMessage;
-                if (f == CSemVersion_1.Format.DottedOrderedVersion) {
-                    return this.orderedVersionMajor + "." + this.orderedVersionMinor + "." + this.orderedVersionBuild + "." + this.orderedVersionRevision;
+                if (f == CSemVersion_1.Format.FileVersion) {
+                    return this.toStringFileVersion();
                 }
                 var prName = usePreReleaseNameFromTag ? this.preReleaseNameFromTag : this.preReleaseName;
                 switch (f) {
+                    // For NuGetV2, we are obliged to use the initial otherwise the special part for a pre release fix is too long for CI-Build LastReleasedBased.
                     case CSemVersion_1.Format.NugetPackageV2: {
-                        var marker = this.marker != "" ? "+" + this.marker : "";
+                        if (usePreReleaseNameFromTag)
+                            throw new Error("ReleaseTagFormat.NugetPackageV2 can not use PreReleaseNameFromTag.");
+                        prName = this.preReleaseNameIdx >= 0 ? CSemVersion.standardNames[this.preReleaseNameIdx][0] : "";
+                        var suffix = this.isMarkedInvalid ? this.marker : "";
                         if (this.isPreRelease) {
                             if (this.isPreReleaseFix) {
-                                return this.major + "." + this.minor + "." + this.patch + "-" + prName + "-" + this.preReleaseNumber + "-" + this.preReleaseFix + marker;
+                                return this.major + "." + this.minor + "." + this.patch + "-" + prName + "-" + CSemVersion_1.String.fillWith(this.preReleaseNumber.toString(), "0", 2) + "-" + CSemVersion_1.String.fillWith(this.preReleaseFix.toString(), "0", 2) + suffix;
                             }
                             if (this.preReleaseNumber > 0) {
-                                return this.major + "." + this.minor + "." + this.patch + "-" + prName + "-" + this.preReleaseNumber + marker;
+                                return this.major + "." + this.minor + "." + this.patch + "-" + prName + "-" + CSemVersion_1.String.fillWith(this.preReleaseNumber.toString(), "0", 2) + suffix;
                             }
-                            return this.major + "." + this.minor + "." + this.patch + "-" + prName + marker;
+                            return this.major + "." + this.minor + "." + this.patch + "-" + prName + suffix;
                         }
-                        return this.major + "." + this.minor + "." + this.patch + marker;
+                        return this.major + "." + this.minor + "." + this.patch + suffix;
                     }
                     case CSemVersion_1.Format.SemVer:
                     case CSemVersion_1.Format.SemVerWithMarker: {
-                        var marker = f == CSemVersion_1.Format.SemVerWithMarker && this.marker != "" ? "+" + this.marker : "";
+                        var suffix = f == CSemVersion_1.Format.SemVerWithMarker ? this.marker : "";
                         if (this.isPreRelease) {
                             if (this.isPreReleaseFix) {
-                                return this.major + "." + this.minor + "." + this.patch + "-" + prName + "." + this.preReleaseNumber + "." + this.preReleaseFix + marker;
+                                return this.major + "." + this.minor + "." + this.patch + "-" + prName + "." + this.preReleaseNumber + "." + this.preReleaseFix + suffix;
                             }
                             if (this.preReleaseNumber > 0) {
-                                return this.major + "." + this.minor + "." + this.patch + "-" + prName + "." + this.preReleaseNumber + marker;
+                                return this.major + "." + this.minor + "." + this.patch + "-" + prName + "." + this.preReleaseNumber + suffix;
                             }
-                            return this.major + "." + this.minor + "." + this.patch + "-" + prName + marker;
+                            return this.major + "." + this.minor + "." + this.patch + "-" + prName + suffix;
                         }
-                        return this.major + "." + this.minor + "." + this.patch + marker;
+                        return this.major + "." + this.minor + "." + this.patch + suffix;
                     }
                     default: {
                         CSemVersion_1.Debug.assert(f == CSemVersion_1.Format.Normalized);
-                        var marker = this.marker != "" ? "+" + this.marker : "";
                         if (this.isPreRelease) {
                             if (this.isPreReleaseFix) {
-                                return "v" + this.major + "." + this.minor + "." + this.patch + "-" + prName + "." + this.preReleaseNumber + "." + this.preReleaseFix + marker;
+                                return "v" + this.major + "." + this.minor + "." + this.patch + "-" + prName + "." + this.preReleaseNumber + "." + this.preReleaseFix + this.marker;
                             }
                             if (this.preReleaseNumber > 0) {
-                                return "v" + this.major + "." + this.minor + "." + this.patch + "-" + prName + "." + this.preReleaseNumber + marker;
+                                return "v" + this.major + "." + this.minor + "." + this.patch + "-" + prName + "." + this.preReleaseNumber + this.marker;
                             }
-                            return "v" + this.major + "." + this.minor + "." + this.patch + "-" + prName + marker;
+                            return "v" + this.major + "." + this.minor + "." + this.patch + "-" + prName + this.marker;
                         }
-                        return "v" + this.major + "." + this.minor + "." + this.patch + marker;
+                        return "v" + this.major + "." + this.minor + "." + this.patch + this.marker;
                     }
                 }
             };
@@ -687,9 +768,11 @@ var CSemVerPlayground;
             // The tag looks like a release tag but is syntaxically incorrect.
             ReleaseTagKind[ReleaseTagKind["Malformed"] = 1] = "Malformed";
             // This release tag is 'Major.Minor.Patch' only.
-            ReleaseTagKind[ReleaseTagKind["Release"] = 2] = "Release";
+            ReleaseTagKind[ReleaseTagKind["OfficialRelease"] = 2] = "OfficialRelease";
             // This release tag is 'Major.Minor.Patch-prerelease[.Number[.Fix]]'.
             ReleaseTagKind[ReleaseTagKind["PreRelease"] = 4] = "PreRelease";
+            /// This release tag is +Invalid.
+            ReleaseTagKind[ReleaseTagKind["MarkedInvalid"] = 8] = "MarkedInvalid";
         })(CSemVersion.ReleaseTagKind || (CSemVersion.ReleaseTagKind = {}));
         var ReleaseTagKind = CSemVersion.ReleaseTagKind;
     })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
@@ -752,6 +835,33 @@ var CSemVerPlayground;
             return SOrderedVersion;
         })();
         CSemVersion.SOrderedVersion = SOrderedVersion;
+    })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var CSemVersion;
+    (function (CSemVersion) {
+        var String = (function () {
+            function String() {
+            }
+            String.isNullOrWhiteSpace = function (str) {
+                if (str == null)
+                    return true;
+                str = str.trim();
+                return str.length == 0;
+            };
+            String.fillWith = function (str, fillChar, lengthNeeded) {
+                var nbrOfCharToAdd = lengthNeeded - str.length;
+                if (nbrOfCharToAdd <= 0)
+                    return str;
+                for (var i = 0; i < nbrOfCharToAdd; i++) {
+                    str = fillChar.concat(str);
+                }
+                return str;
+            };
+            return String;
+        })();
+        CSemVersion.String = String;
     })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
 //# sourceMappingURL=CSemVersion.js.map

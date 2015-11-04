@@ -1,3 +1,21 @@
+declare module BigJsLibrary {
+    class Extensions {
+        static leftShift(nbr: BigJsLibrary.BigJS, shift: number): BigJS;
+        static rightShift(nbr: BigJsLibrary.BigJS, shift: number): BigJS;
+    }
+}
+declare module CSemVerPlayground.CSemVersion {
+    class CIBuildDescriptor {
+        static maxNuGetV2BuildIndex: number;
+        private _buildIndex;
+        buildIndex: number;
+        branchName: string;
+        isValid: boolean;
+        isValidForNuGetV2: boolean;
+        toString(): string;
+        toStringForNuGetV2(): string;
+    }
+}
 declare module CSemVerPlayground.CSemVersion {
     class Debug {
         static assert(condition: boolean, error?: string): void;
@@ -8,7 +26,7 @@ declare module CSemVerPlayground.CSemVersion {
         Normalized = 0,
         SemVer = 1,
         SemVerWithMarker = 2,
-        DottedOrderedVersion = 3,
+        FileVersion = 3,
         NugetPackageV2 = 4,
         NuGetPackage = 4,
         Default = 0,
@@ -45,6 +63,7 @@ declare module CSemVerPlayground.CSemVersion {
         isValid: boolean;
         kind: ReleaseTagKind;
         isMalformed: boolean;
+        isMarkedInvalid: boolean;
         parseErrorMessage: string;
         originalTagText: string;
         getDirectSuccessors(closest?: boolean): Array<CSemVersion>;
@@ -88,6 +107,7 @@ declare module CSemVerPlayground.CSemVersion {
         private static regexApproxSuffix;
         private static syntaxErrorHelper(s, mApproximate);
         static getPreReleaseNameIdx(preReleaseName: string): number;
+        toStringFileVersion(): string;
         toString(f?: Format, usePreReleaseNameFromTag?: boolean): string;
     }
 }
@@ -95,8 +115,9 @@ declare module CSemVerPlayground.CSemVersion {
     enum ReleaseTagKind {
         None = 0,
         Malformed = 1,
-        Release = 2,
+        OfficialRelease = 2,
         PreRelease = 4,
+        MarkedInvalid = 8,
     }
 }
 declare module CSemVerPlayground.CSemVersion {
@@ -112,5 +133,11 @@ declare module CSemVerPlayground.CSemVersion {
         Minor: number;
         Build: number;
         Revision: number;
+    }
+}
+declare module CSemVerPlayground.CSemVersion {
+    class String {
+        static isNullOrWhiteSpace(str: string): boolean;
+        static fillWith(str: string, fillChar: string, lengthNeeded: number): string;
     }
 }

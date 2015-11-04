@@ -31,6 +31,8 @@
             total = total.plus(b.times(mul));
             total = total.plus(r);
 
+            total = BigJsLibrary.Extensions.rightShift(total, 1);
+
             return CSemVersion.fromDecimal(total);
         }
 
@@ -84,7 +86,7 @@
                     d = d.minus(this.mulPatch);
                     v.preReleaseNameIdx = -1;
                     v.preReleaseNameFromTag = "";
-                    v.kind = ReleaseTagKind.Release;
+                    v.kind = ReleaseTagKind.OfficialRelease;
                 }
 
                 v.major = parseInt(d.div(this.mulMajor).toFixed());
@@ -142,6 +144,10 @@
             return (this.kind & ReleaseTagKind.Malformed) != 0;
         }
 
+        public get isMarkedInvalid(): boolean {
+            return (this.kind & ReleaseTagKind.MarkedInvalid) != 0;
+        }
+
         public parseErrorMessage: string;
 
         public originalTagText: string;
@@ -172,7 +178,7 @@
                         }
                     }
 
-                    successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, this.patch, "", -1, 0, 0, null, ReleaseTagKind.Release));
+                    successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, this.patch, "", -1, 0, 0, null, ReleaseTagKind.OfficialRelease));
                 }
                 else {
                     var nextPatch = this.patch + 1;
@@ -185,7 +191,7 @@
                             }
                         }
 
-                        successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, nextPatch, "", -1, 0, 0, null, ReleaseTagKind.Release));
+                        successors.push(CSemVersion.fromVersionParts(null, this.major, this.minor, nextPatch, "", -1, 0, 0, null, ReleaseTagKind.OfficialRelease));
                     }
                 }
 
@@ -199,7 +205,7 @@
                         }
                     }
 
-                    successors.push(CSemVersion.fromVersionParts(null, this.major, nextMinor, 0, "", -1, 0, 0, null, ReleaseTagKind.Release));
+                    successors.push(CSemVersion.fromVersionParts(null, this.major, nextMinor, 0, "", -1, 0, 0, null, ReleaseTagKind.OfficialRelease));
                 }
 
                 var nextMajor = this.major + 1;
@@ -212,7 +218,7 @@
                         }
                     }
 
-                    successors.push(CSemVersion.fromVersionParts(null, nextMajor, 0, 0, "", -1, 0, 0, null, ReleaseTagKind.Release));
+                    successors.push(CSemVersion.fromVersionParts(null, nextMajor, 0, 0, "", -1, 0, 0, null, ReleaseTagKind.OfficialRelease));
                 }
             }
 
@@ -266,11 +272,11 @@
 
         public static get maxMajor(): number { return 99999; }
 
-        public static get maxMinor(): number { return 99999; }
+        public static get maxMinor(): number { return 49999; }
 
         public static get maxPatch(): number { return 9999; }
 
-        public static get maxPreReleaseNameIdx(): number { return 12; }
+        public static get maxPreReleaseNameIdx(): number { return 7; }
 
         public static get maxPreReleaseNumber(): number { return 99; }
 
@@ -279,7 +285,7 @@
         public static get maxFileVersionPart(): number { return 65535; }
 
         private static get standardNames(): string[] {
-            return ["alpha", "beta", "chi", "delta", "epsilon", "gamma", "iota", "kappa", "lambda", "mu", "omicron", "prerelease", "rc"];
+            return ["alpha", "beta", "delta", "epsilon", "gamma", "kappa", "prerelease", "rc"];
         }
 
         public static get mulNum(): BigJsLibrary.BigJS {
@@ -476,7 +482,7 @@
                 if (prFix == 0 && prNum == 0 && (sPRNum != null && sPRNum.length > 0)) return CSemVersion.fromFailedParsing(s, true, `Incorrect '.0' Release Number version. 0 can appear only to fix the first pre release (ie. '.0.F' where F is between 1 and ${this.maxPreReleaseFix}).`);
             }
 
-            var kind = prNameIdx >= 0 ? ReleaseTagKind.PreRelease : ReleaseTagKind.Release;
+            var kind = prNameIdx >= 0 ? ReleaseTagKind.PreRelease : ReleaseTagKind.OfficialRelease;
             var marker = sBuildMetaData;
 
             return CSemVersion.fromVersionParts(s, major, minor, patch, sPRName, prNameIdx, prNum, prFix, sBuildMetaData, kind);
@@ -540,70 +546,78 @@
         }
 
         // ========== ReleaseTagVersion.ToString.cs ==========
+        public toStringFileVersion() {
+            var v = new SOrderedVersion(BigJsLibrary.Extensions.leftShift(this.sOrderedVersion.Number, 1));
+
+            return `${v.Major}.${v.Minor}.${v.Build}.${v.Revision}`;
+        }
+
         public toString(f: Format = Format.Normalized, usePreReleaseNameFromTag: boolean = false): string {
             if (this.parseErrorMessage != null) return this.parseErrorMessage;
 
-            if (f == Format.DottedOrderedVersion) {
-                return `${this.orderedVersionMajor}.${this.orderedVersionMinor}.${this.orderedVersionBuild}.${this.orderedVersionRevision}`;
+            if (f == Format.FileVersion) {
+                return this.toStringFileVersion();
             }
 
             var prName = usePreReleaseNameFromTag ? this.preReleaseNameFromTag : this.preReleaseName;
 
             switch (f) {
+                // For NuGetV2, we are obliged to use the initial otherwise the special part for a pre release fix is too long for CI-Build LastReleasedBased.
                 case Format.NugetPackageV2: {
-                    var marker = this.marker != "" ? "+" + this.marker : "";
+                    if (usePreReleaseNameFromTag) throw new Error("ReleaseTagFormat.NugetPackageV2 can not use PreReleaseNameFromTag.");
+                    prName = this.preReleaseNameIdx >= 0 ? CSemVersion.standardNames[this.preReleaseNameIdx][0] : "";
+                    var suffix = this.isMarkedInvalid ? this.marker : "";
 
                     if (this.isPreRelease) {
                         if (this.isPreReleaseFix) {
-                            return `${this.major}.${this.minor}.${this.patch}-${prName}-${this.preReleaseNumber}-${this.preReleaseFix}${marker}`;
+                            return `${this.major}.${this.minor}.${this.patch}-${prName}-${String.fillWith(this.preReleaseNumber.toString(), "0", 2)}-${String.fillWith(this.preReleaseFix.toString(), "0", 2)}${suffix}`;
                         }
 
                         if (this.preReleaseNumber > 0) {
-                            return `${this.major}.${this.minor}.${this.patch}-${prName}-${this.preReleaseNumber}${marker}`;
+                            return `${this.major}.${this.minor}.${this.patch}-${prName}-${String.fillWith(this.preReleaseNumber.toString(), "0", 2) }${suffix}`;
                         }
 
-                        return `${this.major}.${this.minor}.${this.patch}-${prName}${marker}`;
+                        return `${this.major}.${this.minor}.${this.patch}-${prName}${suffix}`;
                     }
 
-                    return `${this.major}.${this.minor}.${this.patch}${marker}`;
+                    return `${this.major}.${this.minor}.${this.patch}${suffix}`;
                 }
 
                 case Format.SemVer:
                 case Format.SemVerWithMarker: {
-                    var marker = f == Format.SemVerWithMarker && this.marker != "" ? "+" + this.marker : "";
+                    var suffix = f == Format.SemVerWithMarker ? this.marker : "";
 
                     if (this.isPreRelease) {
                         if (this.isPreReleaseFix) {
-                            return `${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}.${this.preReleaseFix}${marker}`;
+                            return `${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}.${this.preReleaseFix}${suffix}`;
                         }
 
                         if (this.preReleaseNumber > 0) {
-                            return `${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}${marker}`;
+                            return `${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}${suffix}`;
                         }
 
-                        return `${this.major}.${this.minor}.${this.patch}-${prName}${marker}`;
+                        return `${this.major}.${this.minor}.${this.patch}-${prName}${suffix}`;
                     }
 
-                    return `${this.major}.${this.minor}.${this.patch}${marker}`;
+                    return `${this.major}.${this.minor}.${this.patch}${suffix}`;
                 }
 
                 default: {
                     Debug.assert(f == Format.Normalized);
-                    var marker = this.marker != "" ? "+" + this.marker : "";
 
                     if (this.isPreRelease) {
                         if (this.isPreReleaseFix) {
-                            return `v${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}.${this.preReleaseFix}${marker}`;
+                            return `v${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}.${this.preReleaseFix}${this.marker}`;
                         }
 
                         if (this.preReleaseNumber > 0) {
-                            return `v${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}${marker}`;
+                            return `v${this.major}.${this.minor}.${this.patch}-${prName}.${this.preReleaseNumber}${this.marker}`;
                         }
 
-                        return `v${this.major}.${this.minor}.${this.patch}-${prName}${marker}`;
+                        return `v${this.major}.${this.minor}.${this.patch}-${prName}${this.marker}`;
                     }
 
-                    return `v${this.major}.${this.minor}.${this.patch}${marker}`;
+                    return `v${this.major}.${this.minor}.${this.patch}${this.marker}`;
                 }
             }
         }

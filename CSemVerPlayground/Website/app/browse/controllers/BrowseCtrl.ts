@@ -4,9 +4,13 @@
     }
 
     export class BrowseCtrl {
-        public totalItems = new Big("13000100000000000000");
+        public totalItems = new Big("4000050000000000000");
         public currentPage = new Big(1);
-        public maxPage = new Big("1300010000000000000");
+
+        public get maxPage() {
+            return this.totalItems.div(this.itemsPerPage.value);
+        }
+
         public maxSize = 10;
         public itemsPerPage: Models.SelectOption<number>;
         public itemsPerPageOptions = new Array<Models.SelectOption<number>>();
@@ -101,7 +105,7 @@
 
                 var v = CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                 this.goToVersionTagInput = v.toString();
-                this.goToFileVersionInput = this.getDottedOrderedVersion(v);
+                this.goToFileVersionInput = this.getFileVersion(v);
                 
                 this.generateItems();
             }
@@ -123,7 +127,14 @@
             var v = CSemVersion.CSemVersion.tryParseFileVersion(this.goToFileVersionInput);
 
             if (!v.parseErrorMessage) {
-                this.goToVersionNumberInput = v.orderedVersion.toFixed();
+                var orderedVersion = v.orderedVersion;
+
+                if (orderedVersion.round().toFixed() != orderedVersion.toFixed()) {
+                    orderedVersion = orderedVersion.eq(0.5) ? orderedVersion.plus(0.5) : orderedVersion.minus(0.5);
+                    this.error("CSemVer-CI", "Odd file versions are reserved for CI builds.");
+                }
+
+                this.goToVersionNumberInput = orderedVersion.toFixed();
                 this.goToVersionNumber();
             }
             else {
@@ -169,8 +180,8 @@
             return v.toString(CSemVersion.Format.NugetPackageV2);
         }
 
-        public getDottedOrderedVersion(v: CSemVersion.CSemVersion): string {
-            return v.toString(CSemVersion.Format.DottedOrderedVersion);
+        public getFileVersion(v: CSemVersion.CSemVersion): string {
+            return v.toString(CSemVersion.Format.FileVersion);
         }
     }
 }  

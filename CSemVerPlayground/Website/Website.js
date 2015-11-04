@@ -81,9 +81,8 @@ var CSemVerPlayground;
                 function BrowseCtrl($scope, $modal) {
                     this.$scope = $scope;
                     this.$modal = $modal;
-                    this.totalItems = new Big("13000100000000000000");
+                    this.totalItems = new Big("4000050000000000000");
                     this.currentPage = new Big(1);
-                    this.maxPage = new Big("1300010000000000000");
                     this.maxSize = 10;
                     this.itemsPerPageOptions = new Array();
                     this.generateItemsPerPageOptions();
@@ -91,6 +90,13 @@ var CSemVerPlayground;
                     this.goToVersionNumber();
                     this.onScroll();
                 }
+                Object.defineProperty(BrowseCtrl.prototype, "maxPage", {
+                    get: function () {
+                        return this.totalItems.div(this.itemsPerPage.value);
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 BrowseCtrl.prototype.onScroll = function () {
                     var _me = this;
                     $('html').bind('mousewheel DOMMouseScroll', function (e) {
@@ -160,7 +166,7 @@ var CSemVerPlayground;
                         this.currentPage = pageNumber.round(0, 3);
                         var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                         this.goToVersionTagInput = v.toString();
-                        this.goToFileVersionInput = this.getDottedOrderedVersion(v);
+                        this.goToFileVersionInput = this.getFileVersion(v);
                         this.generateItems();
                     }
                 };
@@ -177,7 +183,12 @@ var CSemVerPlayground;
                 BrowseCtrl.prototype.goToFileVersion = function () {
                     var v = CSemVerPlayground.CSemVersion.CSemVersion.tryParseFileVersion(this.goToFileVersionInput);
                     if (!v.parseErrorMessage) {
-                        this.goToVersionNumberInput = v.orderedVersion.toFixed();
+                        var orderedVersion = v.orderedVersion;
+                        if (orderedVersion.round().toFixed() != orderedVersion.toFixed()) {
+                            orderedVersion = orderedVersion.eq(0.5) ? orderedVersion.plus(0.5) : orderedVersion.minus(0.5);
+                            this.error("CSemVer-CI", "Odd file versions are reserved for CI builds.");
+                        }
+                        this.goToVersionNumberInput = orderedVersion.toFixed();
                         this.goToVersionNumber();
                     }
                     else {
@@ -218,8 +229,8 @@ var CSemVerPlayground;
                 BrowseCtrl.prototype.getNugetVersion = function (v) {
                     return v.toString(CSemVerPlayground.CSemVersion.Format.NugetPackageV2);
                 };
-                BrowseCtrl.prototype.getDottedOrderedVersion = function (v) {
-                    return v.toString(CSemVerPlayground.CSemVersion.Format.DottedOrderedVersion);
+                BrowseCtrl.prototype.getFileVersion = function (v) {
+                    return v.toString(CSemVerPlayground.CSemVersion.Format.FileVersion);
                 };
                 return BrowseCtrl;
             })();
@@ -316,22 +327,6 @@ var CSemVerPlayground;
                 PredecessorsGameAnswer[PredecessorsGameAnswer["Neither"] = 2] = "Neither";
             })(VersionYourMind.PredecessorsGameAnswer || (VersionYourMind.PredecessorsGameAnswer = {}));
             var PredecessorsGameAnswer = VersionYourMind.PredecessorsGameAnswer;
-        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var VersionYourMind;
-        (function (VersionYourMind) {
-            var VersionYourMindCtrl = (function () {
-                function VersionYourMindCtrl($scope) {
-                    this.$scope = $scope;
-                }
-                return VersionYourMindCtrl;
-            })();
-            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
@@ -587,6 +582,22 @@ var CSemVerPlayground;
                 return SuccessorsGameCtrl;
             })();
             VersionYourMind.SuccessorsGameCtrl = SuccessorsGameCtrl;
+        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var VersionYourMind;
+        (function (VersionYourMind) {
+            var VersionYourMindCtrl = (function () {
+                function VersionYourMindCtrl($scope) {
+                    this.$scope = $scope;
+                }
+                return VersionYourMindCtrl;
+            })();
+            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));

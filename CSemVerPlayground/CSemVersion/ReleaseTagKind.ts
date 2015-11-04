@@ -7,9 +7,12 @@
         Malformed = 1,
 
         // This release tag is 'Major.Minor.Patch' only.
-        Release = 2,
+        OfficialRelease = 2,
 
         // This release tag is 'Major.Minor.Patch-prerelease[.Number[.Fix]]'.
-        PreRelease = 4
+        PreRelease = 4,
+
+        /// This release tag is +Invalid.
+        MarkedInvalid = 8
     }
 } 

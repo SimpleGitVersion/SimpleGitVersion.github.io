@@ -12,8 +12,10 @@
         // The prerelease name is the standard one (ie. 'prerelease' for any unknown name) plus build meata data (+valid, +published or +invalid).
         SemVerWithMarker,
 
-        // The ordered version in dotted notation (1542.6548.777.8787) where each parts are between 0 and 65535.
-        DottedOrderedVersion,
+        /// The file version (see https://msdn.microsoft.com/en-us/library/system.diagnostics.fileversioninfo.fileversion.aspx)
+        /// uses the whole 64 bits: it is the <see cref="ReleaseTagVersion.OrderedVersion"/> left shifted by 1 bit with 
+        /// the less significant bit set to 0 for release and 1 CI builds.
+        FileVersion,
 
         // NuGet version 2. If the <see cref="CSemVersion.IsMarkedInvalid"/> the "+invalid" build meta data is added.
         NugetPackageV2,
