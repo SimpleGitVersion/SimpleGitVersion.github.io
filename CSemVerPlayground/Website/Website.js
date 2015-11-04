@@ -223,6 +223,42 @@ var CSemVerPlayground;
                     this.currentPage = this.currentPage.plus(1);
                     this.generateItems();
                 };
+                BrowseCtrl.prototype.getReleaseKind = function (v) {
+                    return v.kind == CSemVerPlayground.CSemVersion.ReleaseTagKind.OfficialRelease ? "Official Release" : "PreRelease";
+                };
+                BrowseCtrl.prototype.getReleaseKindColor = function (v) {
+                    if (v.kind == CSemVerPlayground.CSemVersion.ReleaseTagKind.OfficialRelease)
+                        return "label-success";
+                    else
+                        return "label-primary";
+                };
+                BrowseCtrl.prototype.getReleaseSubKind = function (v) {
+                    if (v.kind == CSemVerPlayground.CSemVersion.ReleaseTagKind.OfficialRelease) {
+                        if (v.minor == 0 && v.patch == 0)
+                            return "Major";
+                        else if (v.patch == 0)
+                            return "Minor";
+                        else
+                            return "Patch";
+                    }
+                    else {
+                        if (v.preReleaseNumber == 0 && v.preReleaseFix == 0)
+                            return "Main";
+                        else if (v.preReleaseFix == 0)
+                            return "Numbered";
+                        else
+                            return "Patch";
+                    }
+                };
+                BrowseCtrl.prototype.getReleaseSubKindColor = function (v) {
+                    var kind = this.getReleaseSubKind(v);
+                    if (kind == "Major" || kind == "Main")
+                        return "label-info";
+                    else if (kind == "Minor" || kind == "Numbered")
+                        return "label-info";
+                    else
+                        return "label-default";
+                };
                 BrowseCtrl.prototype.getNormalizedVersion = function (v) {
                     return v.toString(CSemVerPlayground.CSemVersion.Format.Normalized);
                 };
@@ -327,6 +363,22 @@ var CSemVerPlayground;
                 PredecessorsGameAnswer[PredecessorsGameAnswer["Neither"] = 2] = "Neither";
             })(VersionYourMind.PredecessorsGameAnswer || (VersionYourMind.PredecessorsGameAnswer = {}));
             var PredecessorsGameAnswer = VersionYourMind.PredecessorsGameAnswer;
+        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var VersionYourMind;
+        (function (VersionYourMind) {
+            var VersionYourMindCtrl = (function () {
+                function VersionYourMindCtrl($scope) {
+                    this.$scope = $scope;
+                }
+                return VersionYourMindCtrl;
+            })();
+            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
@@ -582,22 +634,6 @@ var CSemVerPlayground;
                 return SuccessorsGameCtrl;
             })();
             VersionYourMind.SuccessorsGameCtrl = SuccessorsGameCtrl;
-        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var VersionYourMind;
-        (function (VersionYourMind) {
-            var VersionYourMindCtrl = (function () {
-                function VersionYourMindCtrl($scope) {
-                    this.$scope = $scope;
-                }
-                return VersionYourMindCtrl;
-            })();
-            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));

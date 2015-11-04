@@ -1,8 +1,8 @@
 ﻿<div class="container-fluid">
     <div class="page-header">
-        <h1>Browse 130 001.10<sup>14</sup> versions</h1>
+        <h1>Browse 400 005.10<sup>13</sup> versions</h1>
     </div>
-
+    
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -52,6 +52,7 @@
             <tr>
                 <th>Version number</th>
                 <th>Version</th>
+                <th>Release kind</th>
                 <th>Nuget V2</th>
                 <th>File version</th>
             </tr>
@@ -59,6 +60,12 @@
             <tr ng-repeat="i in ctrl.items" ng-class="{ 'success' : i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }" ng-click="ctrl.goToVersionNumberInput = i.orderedVersion.toFixed(); ctrl.goToVersionNumber()">
                 <td>{{ i.orderedVersion.toFixed() }}</td>
                 <td>{{ ctrl.getNormalizedVersion(i) }}</td>
+                <td>
+                    <div class="row">
+                        <span class="label col-md-4 m-r-5" ng-class="ctrl.getReleaseKindColor(i)">{{ctrl.getReleaseKind(i)}}</span>
+                        <span class="label col-md-2" ng-class="ctrl.getReleaseSubKindColor(i)">{{ctrl.getReleaseSubKind(i)}}</span>
+                    </div>
+                </td>
                 <td>{{ ctrl.getNugetVersion(i) }}</td>
                 <td>{{ ctrl.getFileVersion(i) }}</td>
             </tr>

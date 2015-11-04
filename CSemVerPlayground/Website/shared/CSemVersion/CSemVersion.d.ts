@@ -17,32 +17,6 @@ declare module CSemVerPlayground.CSemVersion {
     }
 }
 declare module CSemVerPlayground.CSemVersion {
-    class Debug {
-        static assert(condition: boolean, error?: string): void;
-    }
-}
-declare module CSemVerPlayground.CSemVersion {
-    enum Format {
-        Normalized = 0,
-        SemVer = 1,
-        SemVerWithMarker = 2,
-        FileVersion = 3,
-        NugetPackageV2 = 4,
-        NuGetPackage = 4,
-        Default = 0,
-    }
-}
-declare module CSemVerPlayground.CSemVersion {
-    interface IComparable<T> {
-        compareTo(other: T): number;
-    }
-}
-declare module CSemVerPlayground.CSemVersion {
-    interface IEquatable<T> {
-        equals(other: T): boolean;
-    }
-}
-declare module CSemVerPlayground.CSemVersion {
     class CSemVersion implements IEquatable<CSemVersion>, IComparable<CSemVersion> {
         private static fromVersionParts(tag, major, minor, patch, preReleaseName, preReleaseNameIdx, preReleaseNumber, preReleaseFix, marker, kind);
         private static fromFileVersionParts(major, minor, build, revision);
@@ -112,12 +86,42 @@ declare module CSemVerPlayground.CSemVersion {
     }
 }
 declare module CSemVerPlayground.CSemVersion {
+    class Debug {
+        static assert(condition: boolean, error?: string): void;
+    }
+}
+declare module CSemVerPlayground.CSemVersion {
+    enum Format {
+        Normalized = 0,
+        SemVer = 1,
+        SemVerWithMarker = 2,
+        FileVersion = 3,
+        NugetPackageV2 = 4,
+        NuGetPackage = 4,
+        Default = 0,
+    }
+}
+declare module CSemVerPlayground.CSemVersion {
+    interface IComparable<T> {
+        compareTo(other: T): number;
+    }
+}
+declare module CSemVerPlayground.CSemVersion {
+    interface IEquatable<T> {
+        equals(other: T): boolean;
+    }
+}
+declare module CSemVerPlayground.CSemVersion {
     enum ReleaseTagKind {
         None = 0,
         Malformed = 1,
         OfficialRelease = 2,
         PreRelease = 4,
         MarkedInvalid = 8,
+    }
+}
+declare module CSemVerPlayground.CSemVersion {
+    enum ReleaseType {
     }
 }
 declare module CSemVerPlayground.CSemVersion {

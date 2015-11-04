@@ -65,51 +65,6 @@ var CSemVerPlayground;
 var CSemVerPlayground;
 (function (CSemVerPlayground) {
     var CSemVersion;
-    (function (CSemVersion) {
-        var Debug = (function () {
-            function Debug() {
-            }
-            Debug.assert = function (condition, error) {
-                if (!condition) {
-                    throw new Error(error);
-                }
-            };
-            return Debug;
-        })();
-        CSemVersion.Debug = Debug;
-    })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var CSemVersion;
-    (function (CSemVersion) {
-        (function (Format) {
-            // Normalized format is 'v' + <see cref="SemVerWithMarker"/>.
-            // This is the default.
-            Format[Format["Normalized"] = 0] = "Normalized";
-            // Semantic version format.
-            // The prerelease name is the standard one (ie. 'prerelease' for any unknown name) and there is no build meata data.
-            Format[Format["SemVer"] = 1] = "SemVer";
-            // Semantic version format.
-            // The prerelease name is the standard one (ie. 'prerelease' for any unknown name) plus build meata data (+valid, +published or +invalid).
-            Format[Format["SemVerWithMarker"] = 2] = "SemVerWithMarker";
-            /// The file version (see https://msdn.microsoft.com/en-us/library/system.diagnostics.fileversioninfo.fileversion.aspx)
-            /// uses the whole 64 bits: it is the <see cref="ReleaseTagVersion.OrderedVersion"/> left shifted by 1 bit with 
-            /// the less significant bit set to 0 for release and 1 CI builds.
-            Format[Format["FileVersion"] = 3] = "FileVersion";
-            // NuGet version 2. If the <see cref="CSemVersion.IsMarkedInvalid"/> the "+invalid" build meta data is added.
-            Format[Format["NugetPackageV2"] = 4] = "NugetPackageV2";
-            // NuGet format. Currently <see cref="NugetPackageV2"/>.
-            Format[Format["NuGetPackage"] = 4] = "NuGetPackage";
-            // Default is <see cref="SemVerWithMarker"/>.
-            Format[Format["Default"] = 0] = "Default";
-        })(CSemVersion.Format || (CSemVersion.Format = {}));
-        var Format = CSemVersion.Format;
-    })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var CSemVersion;
     (function (CSemVersion_1) {
         var CSemVersion = (function () {
             function CSemVersion() {
@@ -762,6 +717,51 @@ var CSemVerPlayground;
 (function (CSemVerPlayground) {
     var CSemVersion;
     (function (CSemVersion) {
+        var Debug = (function () {
+            function Debug() {
+            }
+            Debug.assert = function (condition, error) {
+                if (!condition) {
+                    throw new Error(error);
+                }
+            };
+            return Debug;
+        })();
+        CSemVersion.Debug = Debug;
+    })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var CSemVersion;
+    (function (CSemVersion) {
+        (function (Format) {
+            // Normalized format is 'v' + <see cref="SemVerWithMarker"/>.
+            // This is the default.
+            Format[Format["Normalized"] = 0] = "Normalized";
+            // Semantic version format.
+            // The prerelease name is the standard one (ie. 'prerelease' for any unknown name) and there is no build meata data.
+            Format[Format["SemVer"] = 1] = "SemVer";
+            // Semantic version format.
+            // The prerelease name is the standard one (ie. 'prerelease' for any unknown name) plus build meata data (+valid, +published or +invalid).
+            Format[Format["SemVerWithMarker"] = 2] = "SemVerWithMarker";
+            /// The file version (see https://msdn.microsoft.com/en-us/library/system.diagnostics.fileversioninfo.fileversion.aspx)
+            /// uses the whole 64 bits: it is the <see cref="ReleaseTagVersion.OrderedVersion"/> left shifted by 1 bit with 
+            /// the less significant bit set to 0 for release and 1 CI builds.
+            Format[Format["FileVersion"] = 3] = "FileVersion";
+            // NuGet version 2. If the <see cref="CSemVersion.IsMarkedInvalid"/> the "+invalid" build meta data is added.
+            Format[Format["NugetPackageV2"] = 4] = "NugetPackageV2";
+            // NuGet format. Currently <see cref="NugetPackageV2"/>.
+            Format[Format["NuGetPackage"] = 4] = "NuGetPackage";
+            // Default is <see cref="SemVerWithMarker"/>.
+            Format[Format["Default"] = 0] = "Default";
+        })(CSemVersion.Format || (CSemVersion.Format = {}));
+        var Format = CSemVersion.Format;
+    })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var CSemVersion;
+    (function (CSemVersion) {
         (function (ReleaseTagKind) {
             // Not a release tag.
             ReleaseTagKind[ReleaseTagKind["None"] = 0] = "None";
@@ -775,6 +775,15 @@ var CSemVerPlayground;
             ReleaseTagKind[ReleaseTagKind["MarkedInvalid"] = 8] = "MarkedInvalid";
         })(CSemVersion.ReleaseTagKind || (CSemVersion.ReleaseTagKind = {}));
         var ReleaseTagKind = CSemVersion.ReleaseTagKind;
+    })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var CSemVersion;
+    (function (CSemVersion) {
+        (function (ReleaseType) {
+        })(CSemVersion.ReleaseType || (CSemVersion.ReleaseType = {}));
+        var ReleaseType = CSemVersion.ReleaseType;
     })(CSemVersion = CSemVerPlayground.CSemVersion || (CSemVerPlayground.CSemVersion = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
 var CSemVerPlayground;

@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSemVersion", "CSemVersion\CSemVersion.csproj", "{8783B219-D3E4-408D-9728-C657ECF3EE7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSemVersion.Demo", "CSemVersion.Demo\CSemVersion.Demo.csproj", "{392E44BD-3AE9-4E7C-B282-ED2AAE7668A6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Website\Website.csproj", "{E8E95155-48AC-40AF-97D6-9F365D7F8388}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSemver.org", "CSemver.org", "{9CD8F852-6BB3-4643-B13A-D84EF6696A63}"
@@ -39,10 +37,6 @@ Global
 		{8783B219-D3E4-408D-9728-C657ECF3EE7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8783B219-D3E4-408D-9728-C657ECF3EE7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8783B219-D3E4-408D-9728-C657ECF3EE7B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{392E44BD-3AE9-4E7C-B282-ED2AAE7668A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{392E44BD-3AE9-4E7C-B282-ED2AAE7668A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{392E44BD-3AE9-4E7C-B282-ED2AAE7668A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{392E44BD-3AE9-4E7C-B282-ED2AAE7668A6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E8E95155-48AC-40AF-97D6-9F365D7F8388}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E8E95155-48AC-40AF-97D6-9F365D7F8388}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8E95155-48AC-40AF-97D6-9F365D7F8388}.Release|Any CPU.ActiveCfg = Release|Any CPU
