@@ -2,14 +2,13 @@
     <div class="page-header">
         <h1>Browse 400 005.10<sup>13</sup> versions</h1>
     </div>
-    
+
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <form ng-submit="ctrl.goToVersionNumber()">
                         <div class="input-group">
-                            <span class="input-group-addon">Version number</span>
                             <input type="text" ng-model="ctrl.goToVersionNumberInput" class="form-control" placeholder="e.g. 130001000000001">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="submit">Go</button>
@@ -17,10 +16,9 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <form ng-submit="ctrl.goToVersionTag()">
                         <div class="input-group">
-                            <span class="input-group-addon">Version tag</span>
                             <input type="text" class="form-control" ng-model="ctrl.goToVersionTagInput" placeholder="e.g. v1.0.0-alpha">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="submit">Go</button>
@@ -29,10 +27,9 @@
                     </form>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <form ng-submit="ctrl.goToFileVersion()">
                         <div class="input-group">
-                            <span class="input-group-addon">File version</span>
                             <input type="text" class="form-control" ng-model="ctrl.goToFileVersionInput" placeholder="e.g. 0.30268.14188.59905">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="submit">Go</button>
@@ -41,33 +38,31 @@
                     </form>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-2 col-md-offset-3">
                     <select class="form-control" ng-model="ctrl.itemsPerPage" ng-options="i.description for i in ctrl.itemsPerPageOptions" ng-change="ctrl.generateItems()"></select>
                 </div>
             </div>
-
         </div>
 
         <table class="table table-striped">
-            <tr>
-                <th>Version number</th>
-                <th>Version</th>
-                <th>Release kind</th>
-                <th>Nuget V2</th>
-                <th>File version</th>
+            <tr class="row browser-row">
+                <td class="col-md-2"><b>Version number</b></td>
+                <td class="col-md-3"><b>Version</b></td>
+                <td class="col-md-2"><b>File version</b></td>
+                <td class="col-md-3"><b>NuGet V2</b></td>
+                <td class="col-md-2"><b>Release kind</b></td>
             </tr>
-
-            <tr ng-repeat="i in ctrl.items" ng-class="{ 'success' : i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }" ng-click="ctrl.goToVersionNumberInput = i.orderedVersion.toFixed(); ctrl.goToVersionNumber()">
-                <td>{{ i.orderedVersion.toFixed() }}</td>
-                <td>{{ ctrl.getNormalizedVersion(i) }}</td>
-                <td>
+            <tr class="row browser-row" ng-repeat="i in ctrl.items" ng-class="{ 'success' : i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }" ng-click="ctrl.goToVersionNumberInput = i.orderedVersion.toFixed(); ctrl.goToVersionNumber()">
+                <td class="col-md-2">{{ i.orderedVersion.toFixed() }}</td>
+                <td class="col-md-3">{{ ctrl.getNormalizedVersion(i) }}</td>
+                <td class="col-md-2">{{ ctrl.getFileVersion(i) }}</td>
+                <td class="col-md-3">{{ ctrl.getNugetVersion(i) }}</td>
+                <td class="col-md-2">
                     <div class="row">
                         <span class="label col-md-4 m-r-5" ng-class="ctrl.getReleaseKindColor(i)">{{ctrl.getReleaseKind(i)}}</span>
                         <span class="label col-md-2" ng-class="ctrl.getReleaseSubKindColor(i)">{{ctrl.getReleaseSubKind(i)}}</span>
                     </div>
                 </td>
-                <td>{{ ctrl.getNugetVersion(i) }}</td>
-                <td>{{ ctrl.getFileVersion(i) }}</td>
             </tr>
         </table>
     </div>
