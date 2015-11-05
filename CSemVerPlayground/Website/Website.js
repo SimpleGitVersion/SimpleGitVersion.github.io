@@ -8,35 +8,35 @@ var CSemVerPlayground;
         app.config(function ($routeProvider, $locationProvider) {
             // Home
             $routeProvider.when('/', {
-                templateUrl: '/app/home/views/home.tpl.html',
+                templateUrl: 'app/home/views/home.tpl.html',
                 controller: 'HomeCtrl',
                 controllerAs: 'ctrl',
                 name: 'Home'
             });
             // Browse
             $routeProvider.when('/browse', {
-                templateUrl: '/app/browse/views/browse.tpl.html',
+                templateUrl: 'app/browse/views/browse.tpl.html',
                 controller: 'BrowseCtrl',
                 controllerAs: 'ctrl',
                 name: 'Browse'
             });
             // VersionYourMind
             $routeProvider.when('/versionYourMind', {
-                templateUrl: '/app/versionYourMind/views/versionYourMind.tpl.html',
+                templateUrl: 'app/versionYourMind/views/versionYourMind.tpl.html',
                 controller: 'VersionYourMindCtrl',
                 controllerAs: 'ctrl',
                 name: 'VersionYourMind'
             });
             // SuccessorsGame
             $routeProvider.when('/versionYourMind/successorsGame', {
-                templateUrl: '/app/versionYourMind/views/successorsGame.tpl.html',
+                templateUrl: 'app/versionYourMind/views/successorsGame.tpl.html',
                 controller: 'SuccessorsGameCtrl',
                 controllerAs: 'ctrl',
                 name: 'SuccessorsGame'
             });
             // PredecessorsGame
             $routeProvider.when('/versionYourMind/predecessorsGame', {
-                templateUrl: '/app/versionYourMind/views/predecessorsGame.tpl.html',
+                templateUrl: 'app/versionYourMind/views/predecessorsGame.tpl.html',
                 controller: 'PredecessorsGameCtrl',
                 controllerAs: 'ctrl',
                 name: 'PredecessorsGame'
@@ -136,7 +136,7 @@ var CSemVerPlayground;
                 };
                 BrowseCtrl.prototype.error = function (title, content) {
                     var modalInstance = this.$modal.open({
-                        templateUrl: '/app/modals/views/alertModal.tpl.html',
+                        templateUrl: 'app/modals/views/alertModal.tpl.html',
                         controller: 'AlertModalCtrl',
                         controllerAs: 'ctrl',
                         resolve: {
@@ -519,11 +519,6 @@ var CSemVerPlayground;
                     this.wonQuestions = 0;
                     this.gameStarted = false;
                     this.submitted = false;
-                    var _me = this;
-                    $scope.$watch('allCheated', function (newVal, oldVal) {
-                        if (newVal === true && !_me.submitted)
-                            _me.submit();
-                    });
                 }
                 SuccessorsGameCtrl.prototype.start = function () {
                     this.totalQuestions++;

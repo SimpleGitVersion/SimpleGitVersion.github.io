@@ -73,7 +73,7 @@
 
         public error(title: string, content: string) {
             var modalInstance = this.$modal.open({
-                templateUrl: '/app/modals/views/alertModal.tpl.html',
+                templateUrl: 'app/modals/views/alertModal.tpl.html',
                 controller: 'AlertModalCtrl',
                 controllerAs: 'ctrl',
                 resolve: {

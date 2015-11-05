@@ -15,11 +15,7 @@
         public possibleVersions: Array<CSemVersion.CSemVersion>;
 
         constructor(private $scope: ISuccessorsGameScope, private toaster: ngtoaster.IToasterService, private $modal: ng.ui.bootstrap.IModalService) {
-            var _me = this;
 
-            $scope.$watch('allCheated', function (newVal, oldVal) {
-                if (newVal === true && !_me.submitted) _me.submit();
-            });
         }
 
         public start() {
