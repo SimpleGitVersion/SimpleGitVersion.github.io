@@ -32,9 +32,24 @@
     <script src="Website.js"></script>
 </head>
 <body ng-controller="AppCtrl as ctrl">
+    <!--[if IE 9]>
+        <div class="alert alert-warning alert-ie" role="alert">
+            <b>Your browser is outdated.</b> Internet Explorer 9 is partially supported: some features may not work or appear correctly. Please use an up-to-date browser.
+        </div>
+    <![endif]-->
+
+    <!--[if lt IE 9]>
+        <div class="alert alert-warning alert-ie cover" role="alert">
+            <div class="text-center">
+                <h1>Your browser is outdated.</h1> 
+                Versions of Internet Explorer under 9 are not supported. Please use an up-to-date browser.
+            </div>
+        </div>
+    <![endif]-->
+
     <toaster-container toaster-options="{'time-out': 0, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>
 
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default top-menu">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">

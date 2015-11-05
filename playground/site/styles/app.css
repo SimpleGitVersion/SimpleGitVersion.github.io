@@ -1,4 +1,22 @@
-﻿.text-right {
+﻿.alert-ie {
+	border-radius: 0 !important;
+	margin: 0;
+}
+
+.cover {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+}
+
+.top-menu {
+	border-radius: 0 !important;
+}
+
+.text-right {
 	text-align: right;
 }
 
