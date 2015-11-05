@@ -18,24 +18,20 @@
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
-  
   <!-- CSemVersion -->
   <ItemGroup>
     <TypeScriptCompile Include="..\CSemVersion\output\*.ts">
       <Link>shared\CSemVersion\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </TypeScriptCompile>
-
     <Content Include="..\CSemVersion\output\*">
       <Link>shared\CSemVersion\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Content>
   </ItemGroup>
-
   <!-- Sync linked libraries -->
   <Target Name="SyncLinkedLibraries" BeforeTargets="Build">
     <Copy SourceFiles="%(Content.Identity)" DestinationFiles="%(Content.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(Content.Link)' != ''" />
     <Copy SourceFiles="%(TypeScriptCompile.Identity)" DestinationFiles="%(TypeScriptCompile.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(TypeScriptCompile.Link)' != ''" />
   </Target>
-  
   <ItemGroup>
     <Content Include="app\browse\views\browse.tpl.html" />
     <Content Include="app\home\views\home.tpl.html" />
@@ -43,6 +39,8 @@
     <Content Include="app\versionYourMind\views\versionYourMind.tpl.html" />
     <Content Include="app\versionYourMind\views\predecessorsGame.tpl.html" />
     <Content Include="app\versionYourMind\views\successorsGame.tpl.html" />
+    <Content Include="img\left-arrow.svg" />
+    <Content Include="img\right-arrow.svg" />
     <Content Include="index.html" />
     <Content Include="libs\angularjs\angular-animate.min.js" />
     <Content Include="libs\angularjs\angular-aria.min.js" />
@@ -853,7 +851,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="img\" />
     <Folder Include="libs\angularjs\i18n\ngLocale\" />
   </ItemGroup>
   <PropertyGroup>

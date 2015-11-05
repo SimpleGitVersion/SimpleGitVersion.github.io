@@ -48,6 +48,7 @@
         }
 
         public nextQuestion() {
+            this.toaster.clear();
             this.totalQuestions++;
             this.answered = false;
             this.pickRandomVersions();

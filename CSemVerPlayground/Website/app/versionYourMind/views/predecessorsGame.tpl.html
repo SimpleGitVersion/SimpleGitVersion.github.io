@@ -21,22 +21,43 @@
                 <div style="clear: both;"></div>
             </div>
             <div class="panel-body">
-                <h1 class="pull-left"><span class="label label-default">A</span> <span class="label label-primary">{{ ctrl.versionA.toString() }}</span></h1>
-                <h1 class="pull-right"><span class="label label-default">B</span> <span class="label label-primary">{{ ctrl.versionB.toString() }}</span></h1>
+                <div class="row pre-game-arrow pre-game-right-arrow">
+                    <div class="col-md-4 col-md-offset-4">
+                        <button type="button" class="btn btn-lg btn-block pre-game-btn-choice" ng-class="ctrl.getButtonClass(0)" ng-click="ctrl.chooseAB()" ng-disabled="ctrl.answered">A is a direct predecessor of B</button>
+                    </div>
+                </div>
 
-                <div style="clear: both;"></div>
+                <div class="row text-center pre-game-row">
+                    <div class="col-md-4 pre-game-version">
+                        <h2>
+                            <span class="label label-default">A</span>
+                            <br />
+                            <span class="label label-primary">{{ ctrl.versionA.toString() }}</span>
+                        </h2>
+                    </div>
 
-                <br />
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-lg btn-block pre-game-btn-choice" ng-class="ctrl.getButtonClass(2)" ng-click="ctrl.chooseNeither()" ng-disabled="ctrl.answered">Neither</button>
+                    </div>
 
-                <div class="row">
-                    <div class="col-md-4"><button type="button" class="btn btn-lg btn-block" ng-class="ctrl.getButtonClass(0)" ng-click="ctrl.chooseAB()" ng-disabled="ctrl.answered">A is a direct predecessor of B</button></div>
-                    <div class="col-md-4"><button type="button" class="btn btn-lg btn-block" ng-class="ctrl.getButtonClass(1)" ng-click="ctrl.chooseBA()" ng-disabled="ctrl.answered">B is a direct predecessor of A</button></div>
-                    <div class="col-md-4"><button type="button" class="btn btn-lg btn-block" ng-class="ctrl.getButtonClass(2)" ng-click="ctrl.chooseNeither()" ng-disabled="ctrl.answered">Neither</button></div>
-                </div> 
+                    <div class="col-md-4 pre-game-version">
+                        <h2>
+                            <span class="label label-default">B</span>
+                            <br />
+                            <span class="label label-primary">{{ ctrl.versionB.toString() }}</span>
+                        </h2>
+                    </div>
+                </div>
 
-                <br />
+                <div class="row pre-game-arrow pre-game-left-arrow pre-game-row">
+                    <div class="col-md-4 col-md-offset-4">
+                        <button type="button" class="btn btn-lg btn-block pre-game-btn-choice" ng-class="ctrl.getButtonClass(1)" ng-click="ctrl.chooseBA()" ng-disabled="ctrl.answered">B is a direct predecessor of A</button>
+                    </div>
+                </div>
 
-                <button type="button" class="btn btn-primary btn-lg btn-block" ng-show="ctrl.answered" ng-click="ctrl.nextQuestion()">Next question <span class="glyphicon glyphicon-chevron-right"></span></button>
+                <div ng-show="ctrl.answered" class="pre-game-row">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="ctrl.nextQuestion()">Next question <span class="glyphicon glyphicon-chevron-right"></span></button>
+                </div>
             </div>
         </div>
     </div>

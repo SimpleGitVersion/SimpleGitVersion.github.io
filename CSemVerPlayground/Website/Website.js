@@ -429,6 +429,7 @@ var CSemVerPlayground;
                     this.nextQuestion();
                 };
                 PredecessorsGameCtrl.prototype.nextQuestion = function () {
+                    this.toaster.clear();
                     this.totalQuestions++;
                     this.answered = false;
                     this.pickRandomVersions();

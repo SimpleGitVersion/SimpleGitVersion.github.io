@@ -30,3 +30,32 @@
 .browser-row > td {
 	padding-left: 20px !important;
 }
+
+/* Games */
+.pre-game-arrow {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.pre-game-right-arrow {
+	background-image: url('../img/right-arrow.svg');
+}
+
+.pre-game-left-arrow {
+	background-image: url('../img/left-arrow.svg');
+}
+
+.pre-game-btn-choice {
+	width: 80%;
+	margin-left: 10%;
+	opacity: 1 !important;
+}
+
+.pre-game-row {
+	margin-top: 15px;
+}
+
+.pre-game-version {
+	margin-top: -50px;
+}
