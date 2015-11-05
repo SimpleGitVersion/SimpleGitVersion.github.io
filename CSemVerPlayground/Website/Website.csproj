@@ -827,6 +827,7 @@
     <TypeScriptCompile Include="app\versionYourMind\controllers\VersionYourMindCtrl.ts" />
     <TypeScriptCompile Include="app\versionYourMind\controllers\PredecessorsGameCtrl.ts" />
     <TypeScriptCompile Include="app\versionYourMind\controllers\SuccessorsGameCtrl.ts" />
+    <TypeScriptCompile Include="app\versionYourMind\models\SuccessorInput.ts" />
     <TypeScriptCompile Include="app\versionYourMind\VersionYourMind.ts" />
     <TypeScriptCompile Include="libs\angularjs\angular-animate.d.ts" />
     <TypeScriptCompile Include="libs\angularjs\angular-route.d.ts" />

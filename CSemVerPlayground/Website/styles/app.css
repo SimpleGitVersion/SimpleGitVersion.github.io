@@ -18,12 +18,24 @@
 	margin-left: 10px;
 }
 
+.m-t-20 {
+	margin-top: 20px;
+}
+
 .m-t-25 {
 	margin-top: 25px;
 }
 
 .m-t-30 {
 	margin-top: 30px;
+}
+
+.w-100 {
+	width: 100%;
+}
+
+.h-100 {
+	height: 100%;
 }
 
 /* Browser */

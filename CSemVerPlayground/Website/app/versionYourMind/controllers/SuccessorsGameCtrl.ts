@@ -4,42 +4,69 @@
     }
 
     export class SuccessorsGameCtrl {
-        private millisecondsElapsed = 0;
-        private timer: ng.IPromise<any>;
-
+        public totalQuestions = 0;
+        public wonQuestions = 0;
         public gameStarted = false;
+        public submitted = false;
         public selectedVersion: CSemVersion.CSemVersion;
-        public versionInput: string;
-        public foundVersions: Array<CSemVersion.CSemVersion>;
+        public firstInput: SuccessorInput<string>;
+        public lastInput: SuccessorInput<string>;
+        public howManyInput: SuccessorInput<number>;
         public possibleVersions: Array<CSemVersion.CSemVersion>;
 
-        constructor(private $scope: ISuccessorsGameScope, private $interval: ng.IIntervalService, private toaster: ngtoaster.IToasterService, private $modal: ng.ui.bootstrap.IModalService) {
+        constructor(private $scope: ISuccessorsGameScope, private toaster: ngtoaster.IToasterService, private $modal: ng.ui.bootstrap.IModalService) {
+            var _me = this;
 
+            $scope.$watch('allCheated', function (newVal, oldVal) {
+                if (newVal === true && !_me.submitted) _me.submit();
+            });
         }
 
         public start() {
-            if (this.timer != null) this.stopTimer();
+            this.totalQuestions++;
+            this.firstInput = new SuccessorInput<string>();
+            this.lastInput = new SuccessorInput<string>();
+            this.howManyInput = new SuccessorInput<number>();
 
-            this.foundVersions = new Array();
-            this.versionInput = null;
-            this.millisecondsElapsed = 0;
             this.selectedVersion = CSemVersion.CSemVersion.fromDecimal(new Big(this.getRandomNumber()));
             this.possibleVersions = this.selectedVersion.getDirectSuccessors();
 
-            this.startTimer();
+            this.firstInput.expectedValue = this.possibleVersions[0].toString();
+            this.lastInput.expectedValue = this.possibleVersions[this.possibleVersions.length - 1].toString();
+            this.howManyInput.expectedValue = this.possibleVersions.length;
+
+            this.submitted = false;
             this.gameStarted = true;
         }
 
-        private startTimer() {
-            var that = this;
+        public submit() {
+            this.submitted = true;
 
-            this.timer = this.$interval(function () {
-                that.millisecondsElapsed += 100;
-            }, 100);
+            this.firstInput.solve();
+            this.lastInput.solve();
+            this.howManyInput.solve();
+
+            if (this.isFormValid) this.wonQuestions++;
         }
 
-        private stopTimer() {
-            this.$interval.cancel(this.timer);
+        private get allCheated() {
+            return this.firstInput.cheated && this.lastInput.cheated && this.howManyInput.cheated;
+        }
+
+        private get isFormValid() {
+            return this.firstInput.isValid && this.lastInput.isValid && this.howManyInput.isValid;
+        }
+
+        public getGroupClass<T>(input: SuccessorInput<T>) {
+            if (this.submitted) {
+                return input.isValid ? 'has-success' : 'has-error';
+            }
+        }
+
+        public get panelClass() {
+            if (!this.submitted) return "panel-primary";
+            if (this.isFormValid) return "panel-success";
+            return "panel-danger";
         }
 
         private getRandomNumber(): number {
@@ -49,99 +76,6 @@
             var randomValue = max.times(Math.random()).plus(min);
 
             return Math.floor(+randomValue.toFixed());
-        }
-
-        public get millisecondsCount(): string {
-            var s = Math.floor(this.millisecondsElapsed / 1000);
-            var ms = this.millisecondsElapsed - (s * 1000);
-
-            var digit1 = ms < 10 ? "0" : "";
-            var digit2 = ms < 100 ? "0" : "";
-
-            return digit1 + digit2 + ms;
-        }
-
-        public get secondsCount(): string {
-            var s = Math.floor(this.millisecondsElapsed / 1000);
-            var m = Math.floor(s / 60);
-            s -= m * 60;
-
-            var digit1 = s < 10 ? "0" : "";
-
-            return digit1 + s;
-        }
-
-        public get minutesCount(): string {
-            var s = Math.floor(this.millisecondsElapsed / 1000);
-            var m = Math.floor(s / 60);
-
-            var digit1 = m < 10 ? "0" : "";
-
-            return digit1 + m;
-        }
-
-        public win() {
-            this.stopTimer();
-
-            this.alert("You won!", "You found the " + this.possibleVersions.length + " possible versions in " + this.minutesCount + ":" + this.secondsCount + ":" + this.millisecondsCount + "!");
-        }
-
-        public alert(title: string, content: string) {
-            var modalInstance = this.$modal.open({
-                templateUrl: '/app/modals/views/alertModal.tpl.html',
-                controller: 'AlertModalCtrl',
-                controllerAs: 'ctrl',
-                resolve: {
-                    title: function () {
-                        return title;
-                    },
-                    content: function () {
-                        return content;
-                    }
-                }
-            });
-        }
-
-        public submitVersion() {
-            if (this.versionInput != null) {
-                var v = CSemVersion.CSemVersion.tryParse(this.versionInput, true);
-
-                if (!v.parseErrorMessage) {
-                    // Note : isDirectPredecessor() is buggy. We use the array of successors instead
-                    var successor = this.possibleVersions.filter(function (value, index, array): boolean {
-                        return value.toString() == v.toString();
-                    });
-
-                    if (successor.length == 1) {
-                        var existing = this.foundVersions.filter(function (value, index, array) : boolean {
-                            return value.toString() == v.toString();
-                        });
-
-                        if (existing.length == 0) {
-                            this.versionInput = null;
-                            this.foundVersions.push(v);
-
-                            this.toaster.success("Success!", "New successor found");
-
-                            if (this.possibleVersions.length == this.foundVersions.length) {
-                                this.win();
-                            }
-                        }
-                        else {
-                            this.toaster.warning("Alert!", v.toString() + " was already found");
-                        }
-                    }
-                    else {
-                        this.toaster.error("Error!", v.toString() + " is not a direct successor of " + this.selectedVersion.toString());
-                    }
-                }
-                else {
-                    this.toaster.error("Error!", v.parseErrorMessage);
-                }
-            }
-            else {
-                this.toaster.error("Error!", "Please enter a valid successor version");
-            }
         }
     }
 }  
