@@ -150,10 +150,15 @@ var CSemVerPlayground;
                     });
                 };
                 BrowseCtrl.prototype.isVersionNumberValid = function (input) {
-                    var n = new Big(this.goToVersionNumberInput);
-                    if (input)
-                        n = input;
-                    return n.gte(1) && n.lte(this.totalItems);
+                    var valid = true;
+                    try {
+                        var n = input || new Big(this.goToVersionNumberInput);
+                        valid = n.gte(1) && n.lte(this.totalItems);
+                    }
+                    catch (err) {
+                        valid = false;
+                    }
+                    return valid;
                 };
                 BrowseCtrl.prototype.goToVersionNumber = function () {
                     if (!this.isVersionNumberValid()) {

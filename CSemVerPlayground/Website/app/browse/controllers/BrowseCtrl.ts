@@ -88,10 +88,17 @@
         }
 
         public isVersionNumberValid(input?: BigJsLibrary.BigJS): boolean {
-            var n = new Big(this.goToVersionNumberInput);
-            if (input) n = input;
+            var valid = true;
 
-            return n.gte(1) && n.lte(this.totalItems);
+            try {
+                var n = input || new Big(this.goToVersionNumberInput);
+                valid = n.gte(1) && n.lte(this.totalItems);
+            }
+            catch (err) {
+                valid = false;
+            }
+
+            return valid;
         }
 
         public goToVersionNumber() {
