@@ -24,6 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fr", "fr", "{44F8AAE8-75E3-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "css", "css", "{7F5A2600-75FE-429F-994E-6AC2E1A76D24}"
 	ProjectSection(SolutionItems) = preProject
+		..\css\bootstrap-light.css = ..\css\bootstrap-light.css
 		..\css\main.css = ..\css\main.css
 	EndProjectSection
 EndProject
