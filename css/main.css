@@ -116,3 +116,21 @@ border-left: 1px solid #ccc;
 margin: 0 0 0 3em;
 padding: 0 0 .2em .5em;
 }
+
+/* Playground advert */
+@media (max-width: 1260px) {
+	#playground-advert {
+		width: 230px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+@media (min-width: 1260px) {
+	#playground-advert {
+		position: fixed;
+		margin-top: 20px;
+		margin-left: -250px;
+		width: 230px;
+	}
+}
