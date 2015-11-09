@@ -3,29 +3,15 @@ var CSemVerPlayground;
 (function (CSemVerPlayground) {
     var Website;
     (function (Website) {
-        var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Home', 'CSemVerPlayground.Website.Browse', 'CSemVerPlayground.Website.VersionYourMind', 'CSemVerPlayground.Website.Modals']);
+        var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Browse', 'CSemVerPlayground.Website.VersionYourMind', 'CSemVerPlayground.Website.Modals']);
         app.controller(CSemVerPlayground.Website);
         app.config(function ($routeProvider, $locationProvider) {
-            // Home
-            $routeProvider.when('/', {
-                templateUrl: 'app/home/views/home.tpl.html',
-                controller: 'HomeCtrl',
-                controllerAs: 'ctrl',
-                name: 'Home'
-            });
             // Browse
-            $routeProvider.when('/browse', {
+            $routeProvider.when('/', {
                 templateUrl: 'app/browse/views/browse.tpl.html',
                 controller: 'BrowseCtrl',
                 controllerAs: 'ctrl',
                 name: 'Browse'
-            });
-            // VersionYourMind
-            $routeProvider.when('/versionYourMind', {
-                templateUrl: 'app/versionYourMind/views/versionYourMind.tpl.html',
-                controller: 'VersionYourMindCtrl',
-                controllerAs: 'ctrl',
-                name: 'VersionYourMind'
             });
             // SuccessorsGame
             $routeProvider.when('/versionYourMind/successorsGame', {
@@ -283,33 +269,6 @@ var CSemVerPlayground;
 (function (CSemVerPlayground) {
     var Website;
     (function (Website) {
-        var Home;
-        (function (Home) {
-            var HomeCtrl = (function () {
-                function HomeCtrl($scope) {
-                    this.$scope = $scope;
-                }
-                return HomeCtrl;
-            })();
-            Home.HomeCtrl = HomeCtrl;
-        })(Home = Website.Home || (Website.Home = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var Home;
-        (function (Home) {
-            var app = angular.module('CSemVerPlayground.Website.Home', ['ui.bootstrap', 'ngRoute', 'CSemVerPlayground.Website.Modals']);
-            app.controller(CSemVerPlayground.Website.Home);
-        })(Home = Website.Home || (Website.Home = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
         var Modals;
         (function (Modals) {
             var AlertModalCtrl = (function () {
@@ -368,22 +327,6 @@ var CSemVerPlayground;
                 PredecessorsGameAnswer[PredecessorsGameAnswer["Neither"] = 2] = "Neither";
             })(VersionYourMind.PredecessorsGameAnswer || (VersionYourMind.PredecessorsGameAnswer = {}));
             var PredecessorsGameAnswer = VersionYourMind.PredecessorsGameAnswer;
-        })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var VersionYourMind;
-        (function (VersionYourMind) {
-            var VersionYourMindCtrl = (function () {
-                function VersionYourMindCtrl($scope) {
-                    this.$scope = $scope;
-                }
-                return VersionYourMindCtrl;
-            })();
-            VersionYourMind.VersionYourMindCtrl = VersionYourMindCtrl;
         })(VersionYourMind = Website.VersionYourMind || (Website.VersionYourMind = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
