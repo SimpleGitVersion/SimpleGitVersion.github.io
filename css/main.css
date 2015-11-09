@@ -123,6 +123,8 @@ padding: 0 0 .2em .5em;
 		width: 230px;
 		margin-left: auto;
 		margin-right: auto;
+    margin-top: -5px;
+    margin-bottom: -25px;
 	}
 }
 
