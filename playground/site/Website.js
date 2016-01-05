@@ -3,7 +3,7 @@ var CSemVerPlayground;
 (function (CSemVerPlayground) {
     var Website;
     (function (Website) {
-        var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Browse', 'CSemVerPlayground.Website.VersionYourMind', 'CSemVerPlayground.Website.Modals']);
+        var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Browse', 'CSemVerPlayground.Website.DirectSuccessors', 'CSemVerPlayground.Website.VersionYourMind']);
         app.controller(CSemVerPlayground.Website);
         app.config(function ($routeProvider, $locationProvider) {
             // Browse
@@ -12,6 +12,13 @@ var CSemVerPlayground;
                 controller: 'BrowseCtrl',
                 controllerAs: 'ctrl',
                 name: 'Browse'
+            });
+            // DirectSuccessors
+            $routeProvider.when('/directSuccessors', {
+                templateUrl: 'app/directSuccessors/views/directSuccessors.tpl.html',
+                controller: 'DirectSuccessorsCtrl',
+                controllerAs: 'ctrl',
+                name: 'DirectSuccessors'
             });
             // SuccessorsGame
             $routeProvider.when('/versionYourMind/successorsGame', {
@@ -269,6 +276,71 @@ var CSemVerPlayground;
 (function (CSemVerPlayground) {
     var Website;
     (function (Website) {
+        var DirectSuccessors;
+        (function (DirectSuccessors) {
+            var DirectSuccessorsCtrl = (function () {
+                function DirectSuccessorsCtrl($scope, $modal, VersionSuggestionsProvider) {
+                    this.$scope = $scope;
+                    this.$modal = $modal;
+                    this.VersionSuggestionsProvider = VersionSuggestionsProvider;
+                    this.test = CSemVerPlayground.CSemVersion.CSemVersion.standardPreReleaseNames;
+                    this.successors = new Array();
+                }
+                DirectSuccessorsCtrl.prototype.getDirectSuccessors = function () {
+                    if (this.givenVersionTagInput) {
+                        var v = CSemVerPlayground.CSemVersion.CSemVersion.tryParse(this.givenVersionTagInput, true);
+                        if (!v.parseErrorMessage) {
+                            this.errorMessage = null;
+                            this.submittedVersion = this.givenVersionTagInput;
+                            this.currentVersion = v;
+                            this.givenVersionTagInput = v.toString();
+                            this.successors = this.currentVersion.getDirectSuccessors();
+                        }
+                        else {
+                            this.errorMessage = v.parseErrorMessage;
+                        }
+                    }
+                };
+                DirectSuccessorsCtrl.prototype.getCorrectVersion = function () {
+                    return this.currentVersion.toString();
+                };
+                DirectSuccessorsCtrl.prototype.getSuggestions = function (input) {
+                    return this.VersionSuggestionsProvider.getSuggestions(input);
+                };
+                DirectSuccessorsCtrl.prototype.viewDetails = function (v) {
+                    var modalInstance = this.$modal.open({
+                        templateUrl: 'app/modals/views/versionDetailsModal.tpl.html',
+                        controller: 'VersionDetailsModalCtrl',
+                        controllerAs: 'ctrl',
+                        resolve: {
+                            version: function () {
+                                return v;
+                            }
+                        }
+                    });
+                };
+                return DirectSuccessorsCtrl;
+            })();
+            DirectSuccessors.DirectSuccessorsCtrl = DirectSuccessorsCtrl;
+        })(DirectSuccessors = Website.DirectSuccessors || (Website.DirectSuccessors = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var DirectSuccessors;
+        (function (DirectSuccessors) {
+            var app = angular.module('CSemVerPlayground.Website.DirectSuccessors', ['ui.bootstrap', 'ngRoute', 'CSemVerPlayground.Website.Modals', 'CSemVerPlayground.Website.Services']);
+            app.controller(CSemVerPlayground.Website.DirectSuccessors);
+            CSemVerPlayground.Website.Services;
+        })(DirectSuccessors = Website.DirectSuccessors || (Website.DirectSuccessors = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
         var Modals;
         (function (Modals) {
             var AlertModalCtrl = (function () {
@@ -284,6 +356,33 @@ var CSemVerPlayground;
                 return AlertModalCtrl;
             })();
             Modals.AlertModalCtrl = AlertModalCtrl;
+        })(Modals = Website.Modals || (Website.Modals = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var Modals;
+        (function (Modals) {
+            var VersionDetailsModalCtrl = (function () {
+                function VersionDetailsModalCtrl($scope, version, $modalInstance) {
+                    this.$scope = $scope;
+                    this.version = version;
+                    this.$modalInstance = $modalInstance;
+                }
+                VersionDetailsModalCtrl.prototype.getNugetVersion = function () {
+                    return this.version.toString(CSemVerPlayground.CSemVersion.Format.NugetPackageV2);
+                };
+                VersionDetailsModalCtrl.prototype.getFileVersion = function () {
+                    return this.version.toString(CSemVerPlayground.CSemVersion.Format.FileVersion);
+                };
+                VersionDetailsModalCtrl.prototype.close = function () {
+                    this.$modalInstance.close();
+                };
+                return VersionDetailsModalCtrl;
+            })();
+            Modals.VersionDetailsModalCtrl = VersionDetailsModalCtrl;
         })(Modals = Website.Modals || (Website.Modals = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
@@ -313,6 +412,41 @@ var CSemVerPlayground;
             })();
             Models.SelectOption = SelectOption;
         })(Models = Website.Models || (Website.Models = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var Services;
+        (function (Services) {
+            var app = angular.module('CSemVerPlayground.Website.Services', []);
+            app.service(CSemVerPlayground.Website.Services);
+        })(Services = Website.Services || (Website.Services = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var Services;
+        (function (Services) {
+            var VersionSuggestionsProvider = (function () {
+                function VersionSuggestionsProvider() {
+                }
+                VersionSuggestionsProvider.prototype.getSuggestions = function (input) {
+                    if (input && input.indexOf("-") > -1) {
+                        var leftPart = input.split("-")[0];
+                        return CSemVerPlayground.CSemVersion.CSemVersion.standardPreReleaseNames.map(function (val) {
+                            return leftPart + "-" + val;
+                        });
+                    }
+                    return [];
+                };
+                return VersionSuggestionsProvider;
+            })();
+            Services.VersionSuggestionsProvider = VersionSuggestionsProvider;
+        })(Services = Website.Services || (Website.Services = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
 var CSemVerPlayground;

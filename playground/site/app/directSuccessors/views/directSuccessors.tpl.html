@@ -1,10 +1,40 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-	<meta charset="utf-8" />
-</head>
-<body>
+﻿<div class="container">
+    <div class="page-header">
+        <h1>Find direct successors</h1>
+    </div>
 
-</body>
-</html>
+    <div class="alert alert-info" role="alert">
+        <p>
+            This tool lets you find the direct successors of a given version.
+        </p>
+    </div>
+
+    <form class="input-group input-group-lg" ng-submit="ctrl.getDirectSuccessors()">
+        <input type="text" class="form-control" ng-model="ctrl.givenVersionTagInput" typeahead="s for s in ctrl.getSuggestions($viewValue) | filter:$viewValue" placeholder="Type the initial version here...">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Go!</button>
+        </span>
+    </form>
+
+    <br />
+
+    <div class="alert alert-danger" ng-if="ctrl.errorMessage">
+        <b>Error:</b> {{ ctrl.errorMessage }}
+    </div>
+
+    <div ng-if="ctrl.currentVersion">
+        <h3>Direct successors of: {{ ctrl.currentVersion.toString() }}</h3>
+
+        <div class="alert alert-warning" ng-if="ctrl.getCorrectVersion() != ctrl.submittedVersion">
+            You were redirected to: <b>{{ ctrl.currentVersion.toString() }}</b> because the given PreRelease name doesn't match the standard ones (see <a href="http://csemver.org/">the documentation</a> for more details on CSemVer specifications).
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Direct successors</div>
+            <ul class="list-group">
+                <li ng-repeat="s in ctrl.successors" class="list-group-item"><span class="clickable" popover="View version details" popover-trigger="mouseenter"><i ng-click="ctrl.viewDetails(s)" class="glyphicon glyphicon-new-window"></i> </span> {{ s.toString() }}</li>
+                <li ng-show="ctrl.successors.length == 0" class="list-group-item">No direct successor found.</li>
+            </ul>
+        </div>
+    </div>
+</div>

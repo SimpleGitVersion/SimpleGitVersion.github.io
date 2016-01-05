@@ -1,0 +1,29 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Version details</h3>
+</div>
+<div class="modal-body">
+    <table class="table table-bordered">
+        <tr>
+            <td><b>Version Number</b></td>
+            <td>{{ ctrl.version.orderedVersion.toFixed() }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Version</b></td>
+            <td>{{ ctrl.version.toString() }}</td>
+        </tr>
+
+        <tr>
+            <td><b>File version</b></td>
+            <td> {{ ctrl.getFileVersion() }} </td>
+        </tr>
+
+        <tr>
+            <td><b>NuGet V2</b></td>
+            <td>{{ ctrl.getNugetVersion() }}</td>
+        </tr>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ctrl.close()">Close</button>
+</div>
