@@ -59,7 +59,7 @@ var CSemVerPlayground;
     (function (Website) {
         var Browse;
         (function (Browse) {
-            var app = angular.module('CSemVerPlayground.Website.Browse', ['ui.bootstrap', 'ngRoute']);
+            var app = angular.module('CSemVerPlayground.Website.Browse', ['ui.bootstrap', 'ngRoute', 'CSemVerPlayground.Website.Modals', 'CSemVerPlayground.Website.Services']);
             app.controller(CSemVerPlayground.Website.Browse);
         })(Browse = Website.Browse || (Website.Browse = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
@@ -71,9 +71,10 @@ var CSemVerPlayground;
         var Browse;
         (function (Browse) {
             var BrowseCtrl = (function () {
-                function BrowseCtrl($scope, $modal) {
+                function BrowseCtrl($scope, $modal, VersionSuggestionsProvider) {
                     this.$scope = $scope;
                     this.$modal = $modal;
+                    this.VersionSuggestionsProvider = VersionSuggestionsProvider;
                     this.totalItems = new Big("4000050000000000000");
                     this.currentPage = new Big(1);
                     this.maxSize = 10;
@@ -90,6 +91,9 @@ var CSemVerPlayground;
                     enumerable: true,
                     configurable: true
                 });
+                BrowseCtrl.prototype.getSuggestions = function (input) {
+                    return this.VersionSuggestionsProvider.getSuggestions(input);
+                };
                 BrowseCtrl.prototype.onScroll = function () {
                     var _me = this;
                     $('html').bind('mousewheel DOMMouseScroll', function (e) {
@@ -333,7 +337,6 @@ var CSemVerPlayground;
         (function (DirectSuccessors) {
             var app = angular.module('CSemVerPlayground.Website.DirectSuccessors', ['ui.bootstrap', 'ngRoute', 'CSemVerPlayground.Website.Modals', 'CSemVerPlayground.Website.Services']);
             app.controller(CSemVerPlayground.Website.DirectSuccessors);
-            CSemVerPlayground.Website.Services;
         })(DirectSuccessors = Website.DirectSuccessors || (Website.DirectSuccessors = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
@@ -392,7 +395,7 @@ var CSemVerPlayground;
     (function (Website) {
         var Modals;
         (function (Modals) {
-            var app = angular.module('CSemVerPlayground.Website.Modals', ['ui.bootstrap']);
+            var app = angular.module('CSemVerPlayground.Website.Modals', ['ui.bootstrap', 'CSemVerPlayground.Website.Services']);
             app.controller(CSemVerPlayground.Website.Modals);
         })(Modals = Website.Modals || (Website.Modals = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
