@@ -333,6 +333,33 @@ var CSemVerPlayground;
 (function (CSemVerPlayground) {
     var Website;
     (function (Website) {
+        var Modals;
+        (function (Modals) {
+            var VersionDetailsModalCtrl = (function () {
+                function VersionDetailsModalCtrl($scope, version, $modalInstance) {
+                    this.$scope = $scope;
+                    this.version = version;
+                    this.$modalInstance = $modalInstance;
+                }
+                VersionDetailsModalCtrl.prototype.getNugetVersion = function () {
+                    return this.version.toString(CSemVerPlayground.CSemVersion.Format.NugetPackageV2);
+                };
+                VersionDetailsModalCtrl.prototype.getFileVersion = function () {
+                    return this.version.toString(CSemVerPlayground.CSemVersion.Format.FileVersion);
+                };
+                VersionDetailsModalCtrl.prototype.close = function () {
+                    this.$modalInstance.close();
+                };
+                return VersionDetailsModalCtrl;
+            })();
+            Modals.VersionDetailsModalCtrl = VersionDetailsModalCtrl;
+        })(Modals = Website.Modals || (Website.Modals = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
         var DirectSuccessors;
         (function (DirectSuccessors) {
             var app = angular.module('CSemVerPlayground.Website.DirectSuccessors', ['ui.bootstrap', 'ngRoute', 'CSemVerPlayground.Website.Modals', 'CSemVerPlayground.Website.Services']);
@@ -359,33 +386,6 @@ var CSemVerPlayground;
                 return AlertModalCtrl;
             })();
             Modals.AlertModalCtrl = AlertModalCtrl;
-        })(Modals = Website.Modals || (Website.Modals = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var Modals;
-        (function (Modals) {
-            var VersionDetailsModalCtrl = (function () {
-                function VersionDetailsModalCtrl($scope, version, $modalInstance) {
-                    this.$scope = $scope;
-                    this.version = version;
-                    this.$modalInstance = $modalInstance;
-                }
-                VersionDetailsModalCtrl.prototype.getNugetVersion = function () {
-                    return this.version.toString(CSemVerPlayground.CSemVersion.Format.NugetPackageV2);
-                };
-                VersionDetailsModalCtrl.prototype.getFileVersion = function () {
-                    return this.version.toString(CSemVerPlayground.CSemVersion.Format.FileVersion);
-                };
-                VersionDetailsModalCtrl.prototype.close = function () {
-                    this.$modalInstance.close();
-                };
-                return VersionDetailsModalCtrl;
-            })();
-            Modals.VersionDetailsModalCtrl = VersionDetailsModalCtrl;
         })(Modals = Website.Modals || (Website.Modals = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
