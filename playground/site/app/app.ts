@@ -14,6 +14,14 @@ module CSemVerPlayground.Website {
             name: 'Browse'
         });
 
+        // DirectSuccessors
+        $routeProvider.when('/directSuccessors', {
+            templateUrl: 'app/directSuccessors/views/directSuccessors.tpl.html',
+            controller: 'DirectSuccessorsCtrl',
+            controllerAs: 'ctrl',
+            name: 'DirectSuccessors'
+        });
+
         // SuccessorsGame
         $routeProvider.when('/versionYourMind/successorsGame', {
             templateUrl: 'app/versionYourMind/views/successorsGame.tpl.html',
