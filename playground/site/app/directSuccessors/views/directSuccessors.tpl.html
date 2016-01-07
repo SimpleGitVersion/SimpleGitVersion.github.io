@@ -25,7 +25,7 @@
     <div ng-if="ctrl.currentVersion">
         <h3>Direct successors of: {{ ctrl.currentVersion.toString() }}</h3>
 
-        <div class="alert alert-warning" ng-if="ctrl.getCorrectVersion() != ctrl.submittedVersion">
+        <div class="alert alert-warning" ng-if="ctrl.getCorrectVersion() != ctrl.getNormalizedSubmittedVersion()">
             You were redirected to: <b>{{ ctrl.currentVersion.toString() }}</b> because the given PreRelease name doesn't match the standard ones (see <a href="http://csemver.org/">the documentation</a> for more details on CSemVer specifications).
         </div>
 

@@ -33,6 +33,10 @@
             }
         }
 
+        public getNormalizedSubmittedVersion(): string {
+            return this.submittedVersion[0] == 'v' ? this.submittedVersion : 'v' + this.submittedVersion;
+        }
+
         public getCorrectVersion(): string {
             return this.currentVersion.toString();
         }

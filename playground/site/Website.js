@@ -305,6 +305,9 @@ var CSemVerPlayground;
                         }
                     }
                 };
+                DirectSuccessorsCtrl.prototype.getNormalizedSubmittedVersion = function () {
+                    return this.submittedVersion[0] == 'v' ? this.submittedVersion : 'v' + this.submittedVersion;
+                };
                 DirectSuccessorsCtrl.prototype.getCorrectVersion = function () {
                     return this.currentVersion.toString();
                 };
