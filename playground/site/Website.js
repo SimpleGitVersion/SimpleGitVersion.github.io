@@ -80,10 +80,10 @@ var CSemVerPlayground;
         var Browse;
         (function (Browse) {
             var BrowseCtrl = (function () {
-                function BrowseCtrl($scope, $modal, VersionSuggestionsProvider) {
+                function BrowseCtrl($scope, $modal, VersionHelper) {
                     this.$scope = $scope;
                     this.$modal = $modal;
-                    this.VersionSuggestionsProvider = VersionSuggestionsProvider;
+                    this.VersionHelper = VersionHelper;
                     this.totalItems = new Big("4000050000000000000");
                     this.currentPage = new Big(1);
                     this.maxSize = 10;
@@ -100,9 +100,6 @@ var CSemVerPlayground;
                     enumerable: true,
                     configurable: true
                 });
-                BrowseCtrl.prototype.getSuggestions = function (input) {
-                    return this.VersionSuggestionsProvider.getSuggestions(input);
-                };
                 BrowseCtrl.prototype.onScroll = function () {
                     var _me = this;
                     $('html').bind('mousewheel DOMMouseScroll', function (e) {
@@ -177,7 +174,7 @@ var CSemVerPlayground;
                         this.currentPage = pageNumber.round(0, 3);
                         var v = CSemVerPlayground.CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                         this.goToVersionTagInput = v.toString();
-                        this.goToFileVersionInput = this.getFileVersion(v);
+                        this.goToFileVersionInput = this.VersionHelper.getFileVersion(v);
                         this.generateItems();
                     }
                 };
@@ -234,51 +231,6 @@ var CSemVerPlayground;
                     this.currentPage = this.currentPage.plus(1);
                     this.generateItems();
                 };
-                BrowseCtrl.prototype.getReleaseKind = function (v) {
-                    return v.kind == CSemVerPlayground.CSemVersion.ReleaseTagKind.OfficialRelease ? "Official Release" : "PreRelease";
-                };
-                BrowseCtrl.prototype.getReleaseKindColor = function (v) {
-                    if (v.kind == CSemVerPlayground.CSemVersion.ReleaseTagKind.OfficialRelease)
-                        return "label-success";
-                    else
-                        return "label-primary";
-                };
-                BrowseCtrl.prototype.getReleaseSubKind = function (v) {
-                    if (v.kind == CSemVerPlayground.CSemVersion.ReleaseTagKind.OfficialRelease) {
-                        if (v.minor == 0 && v.patch == 0)
-                            return "Major";
-                        else if (v.patch == 0)
-                            return "Minor";
-                        else
-                            return "Patch";
-                    }
-                    else {
-                        if (v.preReleaseNumber == 0 && v.preReleaseFix == 0)
-                            return "Main";
-                        else if (v.preReleaseFix == 0)
-                            return "Numbered";
-                        else
-                            return "Patch";
-                    }
-                };
-                BrowseCtrl.prototype.getReleaseSubKindColor = function (v) {
-                    var kind = this.getReleaseSubKind(v);
-                    if (kind == "Major" || kind == "Main")
-                        return "label-info";
-                    else if (kind == "Minor" || kind == "Numbered")
-                        return "label-info";
-                    else
-                        return "label-default";
-                };
-                BrowseCtrl.prototype.getNormalizedVersion = function (v) {
-                    return v.toString(CSemVerPlayground.CSemVersion.Format.Normalized);
-                };
-                BrowseCtrl.prototype.getNugetVersion = function (v) {
-                    return v.toString(CSemVerPlayground.CSemVersion.Format.NugetPackageV2);
-                };
-                BrowseCtrl.prototype.getFileVersion = function (v) {
-                    return v.toString(CSemVerPlayground.CSemVersion.Format.FileVersion);
-                };
                 return BrowseCtrl;
             })();
             Browse.BrowseCtrl = BrowseCtrl;
@@ -292,10 +244,9 @@ var CSemVerPlayground;
         var DirectSuccessors;
         (function (DirectSuccessors) {
             var DirectSuccessorsCtrl = (function () {
-                function DirectSuccessorsCtrl($scope, $modal, VersionSuggestionsProvider) {
+                function DirectSuccessorsCtrl($scope, VersionHelper) {
                     this.$scope = $scope;
-                    this.$modal = $modal;
-                    this.VersionSuggestionsProvider = VersionSuggestionsProvider;
+                    this.VersionHelper = VersionHelper;
                     this.successors = new Array();
                 }
                 DirectSuccessorsCtrl.prototype.getDirectSuccessors = function () {
@@ -319,58 +270,10 @@ var CSemVerPlayground;
                 DirectSuccessorsCtrl.prototype.getCorrectVersion = function () {
                     return this.currentVersion.toString();
                 };
-                DirectSuccessorsCtrl.prototype.getSuggestions = function (input) {
-                    return this.VersionSuggestionsProvider.getSuggestions(input);
-                };
-                DirectSuccessorsCtrl.prototype.viewDetails = function (v) {
-                    var modalInstance = this.$modal.open({
-                        templateUrl: 'app/modals/views/versionDetailsModal.tpl.html',
-                        controller: 'VersionDetailsModalCtrl',
-                        controllerAs: 'ctrl',
-                        resolve: {
-                            version: function () {
-                                return v;
-                            }
-                        }
-                    });
-                };
                 return DirectSuccessorsCtrl;
             })();
             DirectSuccessors.DirectSuccessorsCtrl = DirectSuccessorsCtrl;
         })(DirectSuccessors = Website.DirectSuccessors || (Website.DirectSuccessors = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var DirectSuccessors;
-        (function (DirectSuccessors) {
-            var app = angular.module('CSemVerPlayground.Website.DirectSuccessors', ['ui.bootstrap', 'ngRoute', 'CSemVerPlayground.Website.Modals', 'CSemVerPlayground.Website.Services']);
-            app.controller(CSemVerPlayground.Website.DirectSuccessors);
-        })(DirectSuccessors = Website.DirectSuccessors || (Website.DirectSuccessors = {}));
-    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
-})(CSemVerPlayground || (CSemVerPlayground = {}));
-var CSemVerPlayground;
-(function (CSemVerPlayground) {
-    var Website;
-    (function (Website) {
-        var Modals;
-        (function (Modals) {
-            var AlertModalCtrl = (function () {
-                function AlertModalCtrl($scope, title, content, $modalInstance) {
-                    this.$scope = $scope;
-                    this.title = title;
-                    this.content = content;
-                    this.$modalInstance = $modalInstance;
-                }
-                AlertModalCtrl.prototype.close = function () {
-                    this.$modalInstance.close();
-                };
-                return AlertModalCtrl;
-            })();
-            Modals.AlertModalCtrl = AlertModalCtrl;
-        })(Modals = Website.Modals || (Website.Modals = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
 var CSemVerPlayground;
@@ -397,6 +300,39 @@ var CSemVerPlayground;
                 return VersionDetailsModalCtrl;
             })();
             Modals.VersionDetailsModalCtrl = VersionDetailsModalCtrl;
+        })(Modals = Website.Modals || (Website.Modals = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var DirectSuccessors;
+        (function (DirectSuccessors) {
+            var app = angular.module('CSemVerPlayground.Website.DirectSuccessors', ['ui.bootstrap', 'ngRoute', 'CSemVerPlayground.Website.Services']);
+            app.controller(CSemVerPlayground.Website.DirectSuccessors);
+        })(DirectSuccessors = Website.DirectSuccessors || (Website.DirectSuccessors = {}));
+    })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
+})(CSemVerPlayground || (CSemVerPlayground = {}));
+var CSemVerPlayground;
+(function (CSemVerPlayground) {
+    var Website;
+    (function (Website) {
+        var Modals;
+        (function (Modals) {
+            var AlertModalCtrl = (function () {
+                function AlertModalCtrl($scope, title, content, $modalInstance) {
+                    this.$scope = $scope;
+                    this.title = title;
+                    this.content = content;
+                    this.$modalInstance = $modalInstance;
+                }
+                AlertModalCtrl.prototype.close = function () {
+                    this.$modalInstance.close();
+                };
+                return AlertModalCtrl;
+            })();
+            Modals.AlertModalCtrl = AlertModalCtrl;
         })(Modals = Website.Modals || (Website.Modals = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));
@@ -445,10 +381,10 @@ var CSemVerPlayground;
     (function (Website) {
         var Services;
         (function (Services) {
-            var VersionSuggestionsProvider = (function () {
-                function VersionSuggestionsProvider() {
+            var VersionHelper = (function () {
+                function VersionHelper() {
                 }
-                VersionSuggestionsProvider.prototype.getSuggestions = function (input) {
+                VersionHelper.prototype.getSuggestions = function (input) {
                     if (input && input.indexOf("-") > -1) {
                         var leftPart = input.split("-")[0];
                         return CSemVerPlayground.CSemVersion.CSemVersion.standardPreReleaseNames.map(function (val) {
@@ -457,9 +393,54 @@ var CSemVerPlayground;
                     }
                     return [];
                 };
-                return VersionSuggestionsProvider;
+                VersionHelper.prototype.getReleaseKind = function (v) {
+                    return v.kind == CSemVerPlayground.CSemVersion.ReleaseTagKind.OfficialRelease ? "Official Release" : "PreRelease";
+                };
+                VersionHelper.prototype.getReleaseKindColor = function (v) {
+                    if (v.kind == CSemVerPlayground.CSemVersion.ReleaseTagKind.OfficialRelease)
+                        return "label-success";
+                    else
+                        return "label-primary";
+                };
+                VersionHelper.prototype.getReleaseSubKind = function (v) {
+                    if (v.kind == CSemVerPlayground.CSemVersion.ReleaseTagKind.OfficialRelease) {
+                        if (v.minor == 0 && v.patch == 0)
+                            return "Major";
+                        else if (v.patch == 0)
+                            return "Minor";
+                        else
+                            return "Patch";
+                    }
+                    else {
+                        if (v.preReleaseNumber == 0 && v.preReleaseFix == 0)
+                            return "Main";
+                        else if (v.preReleaseFix == 0)
+                            return "Numbered";
+                        else
+                            return "Patch";
+                    }
+                };
+                VersionHelper.prototype.getReleaseSubKindColor = function (v) {
+                    var kind = this.getReleaseSubKind(v);
+                    if (kind == "Major" || kind == "Main")
+                        return "label-info";
+                    else if (kind == "Minor" || kind == "Numbered")
+                        return "label-info";
+                    else
+                        return "label-default";
+                };
+                VersionHelper.prototype.getNormalizedVersion = function (v) {
+                    return v.toString(CSemVerPlayground.CSemVersion.Format.Normalized);
+                };
+                VersionHelper.prototype.getNugetVersion = function (v) {
+                    return v.toString(CSemVerPlayground.CSemVersion.Format.NugetPackageV2);
+                };
+                VersionHelper.prototype.getFileVersion = function (v) {
+                    return v.toString(CSemVerPlayground.CSemVersion.Format.FileVersion);
+                };
+                return VersionHelper;
             })();
-            Services.VersionSuggestionsProvider = VersionSuggestionsProvider;
+            Services.VersionHelper = VersionHelper;
         })(Services = Website.Services || (Website.Services = {}));
     })(Website = CSemVerPlayground.Website || (CSemVerPlayground.Website = {}));
 })(CSemVerPlayground || (CSemVerPlayground = {}));

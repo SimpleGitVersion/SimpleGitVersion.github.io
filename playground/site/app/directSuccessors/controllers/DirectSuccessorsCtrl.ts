@@ -10,7 +10,7 @@
         public successors: Array<CSemVersion.CSemVersion>;
         public currentVersion: CSemVersion.CSemVersion;
 
-        constructor(private $scope: IDirectSuccessorsScope, private $modal: ng.ui.bootstrap.IModalService, private VersionSuggestionsProvider: Services.IVersionSuggestionsProvider) {
+        constructor(private $scope: IDirectSuccessorsScope, public VersionHelper: Services.IVersionHelper) {
             this.successors = new Array<CSemVersion.CSemVersion>();
         }
 
@@ -38,23 +38,6 @@
 
         public getCorrectVersion(): string {
             return this.currentVersion.toString();
-        }
-
-        public getSuggestions(input: string): Array<string> {
-            return this.VersionSuggestionsProvider.getSuggestions(input);
-        }
-
-        public viewDetails(v: CSemVersion.CSemVersion) {
-            var modalInstance = this.$modal.open({
-                templateUrl: 'app/modals/views/versionDetailsModal.tpl.html',
-                controller: 'VersionDetailsModalCtrl',
-                controllerAs: 'ctrl',
-                resolve: {
-                    version: function () {
-                        return v;
-                    }
-                }
-            });
         }
     }
 } 
