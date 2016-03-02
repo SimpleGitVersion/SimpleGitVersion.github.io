@@ -9,7 +9,6 @@
         public submittedVersion: string;
         public successors: Array<CSemVersion.CSemVersion>;
         public currentVersion: CSemVersion.CSemVersion;
-        public test = CSemVersion.CSemVersion.standardPreReleaseNames;
 
         constructor(private $scope: IDirectSuccessorsScope, private $modal: ng.ui.bootstrap.IModalService, private VersionSuggestionsProvider: Services.IVersionSuggestionsProvider) {
             this.successors = new Array<CSemVersion.CSemVersion>();
