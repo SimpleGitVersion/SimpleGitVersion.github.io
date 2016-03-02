@@ -1,0 +1,57 @@
+﻿<div class="container">
+    <div class="page-header">
+        <h1>Find direct successors</h1>
+    </div>
+
+    <div class="alert alert-info" role="alert">
+        <p>
+            This tool lets you find the direct successors of a given version.
+        </p>
+    </div>
+
+    <form class="input-group input-group-lg" ng-submit="ctrl.getDirectSuccessors()">
+        <input type="text" class="form-control" ng-model="ctrl.givenVersionTagInput" typeahead="s for s in ctrl.VersionHelper.getSuggestions($viewValue) | filter:$viewValue" placeholder="Type the initial version here...">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Go!</button>
+        </span>
+    </form>
+
+    <br />
+
+    <div class="alert alert-danger" ng-if="ctrl.errorMessage">
+        <b>Error:</b> {{ ctrl.errorMessage }}
+    </div>
+
+    <div ng-if="ctrl.currentVersion">
+        <h3>{{ ctrl.successors.length }} direct successors of: {{ ctrl.currentVersion.toString() }}</h3>
+
+        <div class="alert alert-warning" ng-if="ctrl.getCorrectVersion() != ctrl.getNormalizedSubmittedVersion()">
+            You were redirected to: <b>{{ ctrl.currentVersion.toString() }}</b> because the given PreRelease name doesn't match the standard ones (see <a href="http://csemver.org/">the documentation</a> for more details on CSemVer specifications).
+        </div>
+
+        <div class="panel panel-default" ng-show="ctrl.successors.length > 0">
+            <table class="table table-striped">
+                <tr class="row browser-row panel-heading">
+                    <td><b>Version number</b></td>
+                    <td><b>Version</b></td>
+                    <td><b>File version</b></td>
+                    <td><b>NuGet V2</b></td>
+                    <td><b>Release kind</b></td>
+                </tr>
+
+                <tr ng-if="ctrl.successors.length > 0" class="row browser-row" ng-repeat="i in ctrl.successors">
+                    <td>{{ i.orderedVersion.toFixed() }}</td>
+                    <td>{{ ctrl.VersionHelper.getNormalizedVersion(i) }}</td>
+                    <td>{{ ctrl.VersionHelper.getFileVersion(i) }}</td>
+                    <td>{{ ctrl.VersionHelper.getNugetVersion(i) }}</td>
+                    <td>
+                        <div class="row">
+                            <span class="label" ng-class="ctrl.VersionHelper.getReleaseKindColor(i)">{{ctrl.VersionHelper.getReleaseKind(i)}}</span>
+                            <span class="label" ng-class="ctrl.VersionHelper.getReleaseSubKindColor(i)">{{ctrl.VersionHelper.getReleaseSubKind(i)}}</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

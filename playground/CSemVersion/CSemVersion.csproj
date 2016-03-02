@@ -72,8 +72,8 @@
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>True</TypeScriptSourceMap>
     <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptOutDir>D:\Invenietis\Projects\CSemVer\SimpleGitVersion.github.io\CSemVerPlayground\CSemVersion\output</TypeScriptOutDir>
-    <TypeScriptOutFile>D:\Invenietis\Projects\CSemVer\SimpleGitVersion.github.io\CSemVerPlayground\CSemVersion\output\CSemVersion.js</TypeScriptOutFile>
+    <TypeScriptOutDir>D:\Invenietis\Projects\CSemVer\SimpleGitVersion.github.io\playground\CSemVersion\output</TypeScriptOutDir>
+    <TypeScriptOutFile>D:\Invenietis\Projects\CSemVer\SimpleGitVersion.github.io\playground\CSemVersion\output\CSemVersion.js</TypeScriptOutFile>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>

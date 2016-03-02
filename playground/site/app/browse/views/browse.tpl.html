@@ -19,7 +19,7 @@
                 <div class="col-md-3">
                     <form ng-submit="ctrl.goToVersionTag()">
                         <div class="input-group">
-                            <input type="text" class="form-control" ng-model="ctrl.goToVersionTagInput" placeholder="e.g. v1.0.0-alpha">
+                            <input type="text" class="form-control" typeahead="s for s in ctrl.VersionHelper.getSuggestions($viewValue) | filter:$viewValue" ng-model="ctrl.goToVersionTagInput" placeholder="e.g. v1.0.0-alpha">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="submit">Go</button>
                             </span>
@@ -54,13 +54,13 @@
             </tr>
             <tr class="row browser-row" ng-repeat="i in ctrl.items" ng-class="{ 'success' : i.orderedVersion.toFixed() == ctrl.goToVersionNumberInput }" ng-click="ctrl.goToVersionNumberInput = i.orderedVersion.toFixed(); ctrl.goToVersionNumber()">
                 <td class="col-md-2">{{ i.orderedVersion.toFixed() }}</td>
-                <td class="col-md-3">{{ ctrl.getNormalizedVersion(i) }}</td>
-                <td class="col-md-2">{{ ctrl.getFileVersion(i) }}</td>
-                <td class="col-md-3">{{ ctrl.getNugetVersion(i) }}</td>
+                <td class="col-md-3">{{ ctrl.VersionHelper.getNormalizedVersion(i) }}</td>
+                <td class="col-md-2">{{ ctrl.VersionHelper.getFileVersion(i) }}</td>
+                <td class="col-md-3">{{ ctrl.VersionHelper.getNugetVersion(i) }}</td>
                 <td class="col-md-2">
                     <div class="row">
-                        <span class="label col-md-4 m-r-5" ng-class="ctrl.getReleaseKindColor(i)">{{ctrl.getReleaseKind(i)}}</span>
-                        <span class="label col-md-2" ng-class="ctrl.getReleaseSubKindColor(i)">{{ctrl.getReleaseSubKind(i)}}</span>
+                        <span class="label col-md-4 m-r-5" ng-class="ctrl.VersionHelper.getReleaseKindColor(i)">{{ctrl.VersionHelper.getReleaseKind(i)}}</span>
+                        <span class="label col-md-2" ng-class="ctrl.VersionHelper.getReleaseSubKindColor(i)">{{ctrl.VersionHelper.getReleaseSubKind(i)}}</span>
                     </div>
                 </td>
             </tr>
