@@ -19,11 +19,15 @@
         public goToVersionTagInput: string;
         public goToFileVersionInput: string;
 
-        constructor(private $scope: IBrowseScope, private $modal: ng.ui.bootstrap.IModalService) {
+        constructor(private $scope: IBrowseScope, private $modal: ng.ui.bootstrap.IModalService, private VersionSuggestionsProvider: Services.IVersionSuggestionsProvider) {
             this.generateItemsPerPageOptions();
             this.goToVersionNumberInput = "1";
             this.goToVersionNumber();
             this.onScroll();
+        }
+
+        public getSuggestions(input: string): Array<string> {
+            return this.VersionSuggestionsProvider.getSuggestions(input);
         }
 
         private onScroll() {

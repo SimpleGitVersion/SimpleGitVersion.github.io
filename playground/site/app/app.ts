@@ -1,33 +1,25 @@
 ﻿/// <reference path="../libs/angularjs/angular.d.ts" />
 
 module CSemVerPlayground.Website {
-    var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Home', 'CSemVerPlayground.Website.Browse', 'CSemVerPlayground.Website.VersionYourMind', 'CSemVerPlayground.Website.Modals']);
+    var app = angular.module('CSemVerPlayground.Website', ['ngRoute', 'CSemVerPlayground.Website.Browse', 'CSemVerPlayground.Website.DirectSuccessors', 'CSemVerPlayground.Website.VersionYourMind']);
 
     app.controller(CSemVerPlayground.Website);
 
     app.config(function ($routeProvider: ng.route.IRouteProvider, $locationProvider: ng.ILocationProvider) {
-        // Home
-        $routeProvider.when('/', {
-            templateUrl: 'app/home/views/home.tpl.html',
-            controller: 'HomeCtrl',
-            controllerAs: 'ctrl',
-            name: 'Home'
-        });
-
         // Browse
-        $routeProvider.when('/browse', {
+        $routeProvider.when('/', {
             templateUrl: 'app/browse/views/browse.tpl.html',
             controller: 'BrowseCtrl',
             controllerAs: 'ctrl', 
             name: 'Browse'
         });
 
-        // VersionYourMind
-        $routeProvider.when('/versionYourMind', {
-            templateUrl: 'app/versionYourMind/views/versionYourMind.tpl.html',
-            controller: 'VersionYourMindCtrl',
+        // DirectSuccessors
+        $routeProvider.when('/directSuccessors', {
+            templateUrl: 'app/directSuccessors/views/directSuccessors.tpl.html',
+            controller: 'DirectSuccessorsCtrl',
             controllerAs: 'ctrl',
-            name: 'VersionYourMind'
+            name: 'DirectSuccessors'
         });
 
         // SuccessorsGame
