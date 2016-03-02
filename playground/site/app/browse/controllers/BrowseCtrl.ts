@@ -19,15 +19,11 @@
         public goToVersionTagInput: string;
         public goToFileVersionInput: string;
 
-        constructor(private $scope: IBrowseScope, private $modal: ng.ui.bootstrap.IModalService, private VersionSuggestionsProvider: Services.IVersionSuggestionsProvider) {
+        constructor(private $scope: IBrowseScope, private $modal: ng.ui.bootstrap.IModalService, public VersionHelper: Services.IVersionHelper) {
             this.generateItemsPerPageOptions();
             this.goToVersionNumberInput = "1";
             this.goToVersionNumber();
             this.onScroll();
-        }
-
-        public getSuggestions(input: string): Array<string> {
-            return this.VersionSuggestionsProvider.getSuggestions(input);
         }
 
         private onScroll() {
@@ -116,7 +112,7 @@
 
                 var v = CSemVersion.CSemVersion.fromDecimal(new Big(this.goToVersionNumberInput));
                 this.goToVersionTagInput = v.toString();
-                this.goToFileVersionInput = this.getFileVersion(v);
+                this.goToFileVersionInput = this.VersionHelper.getFileVersion(v);
                 
                 this.generateItems();
             }
@@ -181,48 +177,6 @@
         public goNext() {
             this.currentPage = this.currentPage.plus(1);
             this.generateItems();
-        }
-
-        public getReleaseKind(v: CSemVersion.CSemVersion): string {
-            return v.kind == CSemVersion.ReleaseTagKind.OfficialRelease ? "Official Release" : "PreRelease";
-        }
-
-        public getReleaseKindColor(v: CSemVersion.CSemVersion) {          
-            if (v.kind == CSemVersion.ReleaseTagKind.OfficialRelease) return "label-success";
-            else return "label-primary";
-        }
-
-        public getReleaseSubKind(v: CSemVersion.CSemVersion): string {
-            if (v.kind == CSemVersion.ReleaseTagKind.OfficialRelease) {
-                if (v.minor == 0 && v.patch == 0) return "Major";
-                else if (v.patch == 0) return "Minor";
-                else return "Patch";
-            }
-            else {
-                if (v.preReleaseNumber == 0 && v.preReleaseFix == 0) return "Main";
-                else if (v.preReleaseFix == 0) return "Numbered";
-                else return "Patch";
-            }
-        }
-
-        public getReleaseSubKindColor(v: CSemVersion.CSemVersion) {
-            var kind = this.getReleaseSubKind(v);
-
-            if (kind == "Major" || kind == "Main") return "label-info";
-            else if (kind == "Minor" || kind == "Numbered") return "label-info";
-            else return "label-default";
-        }
-
-        public getNormalizedVersion(v: CSemVersion.CSemVersion) : string {
-            return v.toString(CSemVersion.Format.Normalized);
-        }
-
-        public getNugetVersion(v: CSemVersion.CSemVersion): string {
-            return v.toString(CSemVersion.Format.NugetPackageV2);
-        }
-
-        public getFileVersion(v: CSemVersion.CSemVersion): string {
-            return v.toString(CSemVersion.Format.FileVersion);
         }
     }
 }  

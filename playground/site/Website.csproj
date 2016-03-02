@@ -825,7 +825,7 @@
     <TypeScriptCompile Include="app\modals\Modals.ts" />
     <TypeScriptCompile Include="app\models\SelectOption.ts" />
     <TypeScriptCompile Include="app\services\Services.ts" />
-    <TypeScriptCompile Include="app\services\VersionSuggestionsProvider.ts" />
+    <TypeScriptCompile Include="app\services\VersionHelper.ts" />
     <TypeScriptCompile Include="app\versionYourMind\controllers\PredecessorsGameAnswer.ts" />
     <TypeScriptCompile Include="app\versionYourMind\controllers\PredecessorsGameCtrl.ts" />
     <TypeScriptCompile Include="app\versionYourMind\controllers\SuccessorsGameCtrl.ts" />
