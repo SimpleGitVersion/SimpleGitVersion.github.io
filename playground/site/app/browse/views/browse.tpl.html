@@ -19,7 +19,7 @@
                 <div class="col-md-3">
                     <form ng-submit="ctrl.goToVersionTag()">
                         <div class="input-group">
-                            <input type="text" class="form-control" ng-model="ctrl.goToVersionTagInput" placeholder="e.g. v1.0.0-alpha">
+                            <input type="text" class="form-control" typeahead="s for s in ctrl.getSuggestions($viewValue) | filter:$viewValue" ng-model="ctrl.goToVersionTagInput" placeholder="e.g. v1.0.0-alpha">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="submit">Go</button>
                             </span>

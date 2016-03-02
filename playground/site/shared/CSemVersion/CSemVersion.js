@@ -620,7 +620,7 @@ var CSemVerPlayground;
                     return CSemVersion.fromFailedParsing(s, true, "Incorrect Minor version. Must not be greater than " + this.maxMinor + ".");
                 if (patch == NaN || patch > this.maxPatch)
                     return CSemVersion.fromFailedParsing(s, true, "Incorrect Patch version. Must not be greater than " + this.maxPatch + ".");
-                var sPRName = m[4];
+                var sPRName = m[4] || "";
                 var sPRNum = m[5];
                 var sPRFix = m[6];
                 var sBuildMetaData = m[7];
