@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <title>CSemVer - Constrained Semantic Versioning 1.0.0-rc.1</title>
+    <title>CSemVer - Constrained Semantic Versioning 1.0.0-rc</title>
     <meta name="author" content="Invenietis">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/bootstrap-light.css">
@@ -22,31 +22,25 @@
         <li><a href="#">english</a> [en]</li>
         <li><a lang="fr" rel="alternate" hreflang="fr" href="lang/fr/index.html">fran&ccedil;ais</a> [fr]</li>
         <li>
-            previous versions: <a href="index-v1-0-0-rc.html">v1.0.0-rc</a>, <a href="index-v1-0-0-beta-1.html">v1.0.0-beta.1</a>, <a href="index-v1-0-0-beta.html">v1.0.0-beta</a>, <a href="index-v1-0-0-alpha.html">v1.0.0-alpha</a>
+            previous version: <a href="index-v1-0-0-beta-1.html">v1.0.0-beta.1</a>, <a href="index-v1-0-0-beta.html">v1.0.0-beta</a>, <a href="index-v1-0-0-alpha.html">v1.0.0-alpha</a>
         </li>
     </ol>
 
-    <h1>Constrained Semantic Versioning v1.0.0-rc.1</h1>
-
-    <div id="playground-advert">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">CSemVer Playground</h3>
-            </div>
-            <div class="panel-body">
-                <div>
-                    CSemVer in action: browse the versions, test your mind!
-                </div>
-
-                <br />
-
-                <a href="playground/site/" class="btn btn-primary btn-block">Explore</a>
-            </div>
-        </div>
-    </div>
+    <h1>Constrained Semantic Versioning v1.0.0-rc</h1>
 
     <h2>Summary</h2>
-
+    
+    <div class="note">
+        This version is deprecated. <a href="index.html">v1.0.0-rc.1</a> introduces:
+        <ul>
+            <li>Clarification about SemVer case sensitivity ambiguity: SemVer versions must be considered <b>case insensitive</b>. This is mainly for NuGet compatibility.</li>
+            <li>Because of case insensitivity, the "-C" that was previously used for CSemVer-CI short forms of Stable versions must be replaced by "--".</li>
+            <li>The fall back to prerelease doesn't exist anymore: to be a CSemVer "prerelease" version, the prerelease name must be exactly "pre" or "prerelease".</li>
+            <li>For CSemVer-CI, 2 years of experiments have shown that <span class="verpart">CIBuildName</span>.<span class="verpart">BuildIndex</span> ordering
+            should be inverted: the build index must have a higher precedence than the build name (that is typically the name of the branch).</li>
+        </ul>
+    </div>
+    <p></p>
     <p>
         <b>CSemVer</b> is an operational subset of Semantic Versioning 2.0.0 (<a href="http://semver.org">http://semver.org</a>) that is defined around one strong idea:
         CSemVer versions are totally ordered, each version corresponds to a unique 64 bits signed integer ranging
@@ -61,22 +55,8 @@
         <dt>LastReleasedBased</dt>
         <dd>Versions are based on a previous release. They are greater than their base version but always lower than any successor of their base.</dd>
     </dl>
-    <p>
-        <b>CSemVer</b> and <b>CSemVer-CI</b> both offer long and short version forms.
-        The short form is compatible with NuGet V2 version handling and are often considered more readable. 
-    </p>
-    <p class="no-space-after">
-        <input id="vlong" type="radio" checked name="f" title="Long form" /><label for="vlong">Long form</label>
-        <input id="vshort" type="radio" name="f" title="Short form" /><label for="vshort">Short form</label>
-        <img src="CSemVerLong.png" id="ilong" style="width:100%" />
-        <img src="CSemVerShort.png" id="ishort" style="width:100%" />
-    </p>
-
-    <h2>Clarification about SemVer 2.0.0 case sensitivity</h2>
-    SemVer does not clearly states whether versions should be considered case sensitive or case insensitive.
-    Current implementations differ: NuGet (Windows ecosystem) uses case insensitive versions and npm (Linux) uses case sensitivity.
-    Case sensitivity leads to surprising version precedence (1.0.0-RC &lt; 1.0.0-alpha) and since Windows must be supported, we, as NuGet does,
-    consider that SemVer versions MUST be considered case insensitive.
+    
+    <img src="CSemVer.png" style="width:100%" />
 
     <h2>Rationales &amp; examples</h2>
     <p>
@@ -87,7 +67,7 @@
     </p>
     <div class="sample">
         <table>
-            <thead><tr><th>CSemVer</th><th>Short form<sup>(1)</sup></th><th>Ordered Version</th><th>Description</th></tr></thead>
+            <thead><tr><th>CSemVer</th><th>NuGet V2<sup>(1)</sup></th><th>Ordered Version</th><th>Description</th></tr></thead>
             <tbody>
                 <tr>
                     <td class="version">v0.0.0-alpha</td>
@@ -103,7 +83,7 @@
                     <td class="version">0.0.0-a01</td>
                     <td class="num">101</td>
                     <td rowspan="2">
-                        These are NumberedPreReleases. There can be 99 NumberedPreReleases for each MainPreRelease.
+                        These are NumberedPreReleases. There can be 99 NumberedPreReleases for each OfficialRelease.
                     </td>
                 </tr>
                 <tr>
@@ -125,7 +105,7 @@
                     <td class="version">1.0.0</td>
                     <td class="num">40000500080001</td>
                     <td>
-                        The first Stable Release is a MajorRelease.
+                        The first OfficialRelease is a MajorRelease.
                     </td>
                 </tr>
                 <tr>
@@ -133,7 +113,7 @@
                     <td class="version">1.0.1</td>
                     <td class="num">40000500160002</td>
                     <td>
-                        A fix to the first Stable version: as a PatchRelease, it should contain only bug fixes, no breaking changes. (This is a Stable Release.)
+                        A fix to the first official version: as a PatchRelease, it should contain only bug fixes, no breaking changes.
                     </td>
                 </tr>
                 <tr>
@@ -141,7 +121,7 @@
                     <td class="version">1.1.0</td>
                     <td class="num">40001300090001</td>
                     <td>
-                        Introduction of new features but no breaking changes: welcome to the MinorRelease. (This is a Stable Release.)
+                        Introduction of new features but no breaking changes: welcome to the MinorRelease (that is an OfficialRelease).
                     </td>
                 </tr>
                 <tr>
@@ -155,10 +135,10 @@
             </tbody>
         </table>
         <p>
-            <sup>(1)</sup> The origin of this Short form is that <a href="http://nuget.org">NuGet</a> packaging system in
-            its V2 version (2015) did not follow Semantic Versioning (the 'special name' - the prerelease part - was simply ordered lexically in ASCII sort order).
-            Moreover this 'special name' could not exceed 20 characters. 
-            The latter is the reason why the Short form uses only the initial of the prerelease name (in order to support CSemVer-CI <em>LastReleasedBased</em> versionning).
+            <sup>(1)</sup> The <a href="http://nuget.org">NuGet</a> packaging system in its V2 version (2015) do not
+            follow Semantic Versioning (the 'special name' - the prerelease part - is simply ordered lexically in ASCII sort order).
+            Moreover this 'special name' can not exceed 20 characters. The latter is the reason why the NuGet V2 package name
+            presented here uses only the initial of the prerelease name (in order to support CSemVer-CI <em>LastReleasedBased</em> versionnig).
         </p>
     </div>
     <p>
@@ -221,8 +201,8 @@
     </div>
     <p>
         <b>3</b> - CI builds correspond to productions that are not actual releases: the version has to be automatically created since no real version exist for them. 
-        A CI build is defined by: a BuildIndex that is a number or an identifier that gets bigger for each new build (it is usually a simple integer that is provided by the CI process or a timestamp)
-        and a CIBuildName that identifies the source, the nature, or any other constant key of the build (this is usually the name of the 'branch' in a SCM) .
+        A CI build is defined by: a CIBuildName that identifies the source, the nature, or any other constant key of the build (this is usually the name of the 'branch' in a SCM) and a BuildIndex that is a number
+        or an identifier that gets bigger for each new build (it is usually a simple integer that is provided by the CI process or a timestamp).
     </p>
     <p class="no-space-after">
         CSemVer-CI enables the support of CI buils into CSemVer versions with the guaranty of a valid precedence order (in order to secure deployments). 
@@ -233,7 +213,7 @@
         <dd>
             A ZeroBased version has a lower than precedence than any released package, even the very first possible one (v0.0.0-alpha). 
             Risk that a product issued from the CI pollutes any production is highly improbable.
-            One example is enough to understand it: 0.0.0--ci.15-develop (where BuildIndex is 15 and CIBuildName is 'develop').
+            One example is enough to understand it: 0.0.0--ci-develop-15 (where CIBuildName is 'develop' and BuldIndex is 15).
             The double dash (that is perfectly valid in Semantic Versioning 2.0.0) makes this version lower than any other CSemVer versions.
         </dd>
         <dt>LastReleasedBased</dt>
@@ -261,7 +241,7 @@
                         v0.4.1-rc.2.1
                     </td>
                     <td class="version">
-                        0.4.1-rc.2.1.ci.15.develop
+                        0.4.1-rc.2.1.ci-develop.15
                     </td>
                     <td class="version">
                         v0.4.1-rc.2.2
@@ -278,7 +258,7 @@
                         v3.2.1-rc.1
                     </td>
                     <td class="version">
-                        3.2.1-rc.1.0.ci.15.develop
+                        3.2.1-rc.1.0.ci-develop.15
                     </td>
                     <td class="version">
                         v3.2.1-rc.1.1
@@ -293,7 +273,7 @@
                         v3.2.1-beta
                     </td>
                     <td class="version">
-                        3.2.1-beta.0.0.ci.15.develop
+                        3.2.1-beta.0.0.ci-develop.15
                     </td>
                     <td class="version">
                         v3.2.1-beta.0.1
@@ -308,13 +288,13 @@
                         v1.2.3
                     </td>
                     <td class="version">
-                        1.2.4--ci.15.develop
+                        1.2.4--ci-develop.15
                     </td>
                     <td class="version">
                         1.2.4-alpha
                     </td>
                     <td>
-                        <p class="center no-space-after">Stable Release<br />(applies to Major, Minor and PatchRelease)</p>
+                        <p class="center no-space-after">OfficialRelease<br />(applies to Major, Minor and PatchRelease)</p>
                         This uses the double dash trick of the <em>ZeroBased</em> kind, plus another one: the <span class="verpart">Patch</span> is incremented by one.
                     </td>
                 </tr>
@@ -343,12 +323,12 @@
         <li>
             <p>
                 The <span class="verpart">PrereleaseName</span> MAY be denoted by appending a hyphen and a name that MUST be one of the 8 values of the following list (ordered from 0 to 7):
-                alpha, beta, delta, epsilon, gamma, kappa, pre (or prerelease), rc.
+                alpha, beta, delta, epsilon, gamma, kappa, prerelease, rc.
             </p>
             <p>
                 The <span class="verpart">PrereleaseName</span>'s intial MAY be used as a short form: a, b, d, e, g, k, p, r.
             </p>
-            <p>Any other name not listed in this set MUST be considered syntactically invalid.<p>
+            <p>Any other name not listed in this set MUST be either mapped to/considered as "prerelease" OR considered syntactically invalid.<p>
         </li>
         <li><p>The <span class="verpart">PrereleaseNumber</span> MAY be denoted by appending a dot and a number that MUST be defined between 0 and 99.</p></li>
         <li><p>The <span class="verpart">PrereleaseFix</span> MAY be denoted by appending a dot and a number that MUST be defined between 1 and 99.</p></li>
@@ -361,21 +341,18 @@
         </li>
         <li>
             <p>Syntax of a CSemVer-CI ZeroTimed MUST be:</p>
-            <p><span class="verpart">0</span>.<span class="verpart">0</span>.<span class="verpart">0</span>--ci.<span class="verpart">BuildIndex</span>.<span class="verpart">CIBuildName</span>[+<span class="verpart">BuildMetaData</span>]
-            where the <span class="verpart">BuildMetaData</span> SHOULD be the base version.</p>
-        </li>
-        <li>
-            <p>The <span class="verpart">BuildIndex</span> MUST comprise only ASCII alphanumerics and hyphen [0-9A-Za-z-] and MUST NOT be empty. It can be purely numeric.</p>
+            <p><span class="verpart">0</span>.<span class="verpart">0</span>.<span class="verpart">0</span>--<span class="verpart">CIBuildName</span>-<span class="verpart">BuildIndex</span>[+<span class="verpart">BuildMetaData</span>]</p>
         </li>
         <li>
             <p>The <span class="verpart">CIBuildName</span> MUST comprise only ASCII alphanumerics and hyphen [0-9A-Za-z-] and MUST NOT be empty.</p>
         </li>
         <li>
+            <p>The <span class="verpart">BuildIndex</span> MUST comprise only ASCII alphanumerics and hyphen [0-9A-Za-z-] and MUST NOT be empty. It can be purely numeric.</p>
+        </li>
+        <li>
             <p>
-                <span class="verpart">BuildIndex</span> MUST increase between builds based on the same base version. It MAY be time based with a fixed format (ie. YYYYMMDD-HHMMSS), be an incremented number provided by
+                <span class="verpart">BuildIndex</span> MUST increase between builds. It MAY be time based with a fixed format (ie. YYYYMMDD-HHMMSS), be an incremented number provided by
                 the CI process or any other numeric or alphanumeric value as long as it is increasing (either numerically or lexically in ASCII sort order) for each build.
-            </p>
-            <p><i>In DSCM like Git or Mercurial this CAN be the maximum number of commits from the commit point up to the parent commit that defines the base version.</i>
             </p>
         </li>
         <li>
@@ -387,28 +364,28 @@
                     <p>
                         Applied to a v<span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch</span> version:
                         <br />
-                        <span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch+1</span>--ci.<span class="verpart">BuildIndex</span>.<span class="verpart">CIBuildName</span>
+                        <span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch+1</span>--ci-<span class="verpart">CIBuildName</span>.<span class="verpart">BuildIndex</span>
                     </p>
                 </li>
                 <li>
                     <p>
                         Applied to a v<span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch</span>-<span class="verpart">PreReleaseName</span> version:
                         <br />
-                        <span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch+1</span>-<span class="verpart">PreReleaseName</span>.0.0.ci.<span class="verpart">BuildIndex</span>.<span class="verpart">CIBuildName</span>
+                        <span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch+1</span>-<span class="verpart">PreReleaseName</span>.0.0.ci-<span class="verpart">CIBuildName</span>.<span class="verpart">BuildIndex</span>
                     </p>
                 </li>
                 <li>
                     <p>
                         Applied to a v<span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch</span>-<span class="verpart">PreReleaseName</span>.<span class="verpart">PreReleaseNumber</span> version:
                         <br />
-                        <span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch+1</span>-<span class="verpart">PreReleaseName</span>.<span class="verpart">PreReleaseNumber</span>.0.ci.<span class="verpart">BuildIndex</span>.<span class="verpart">CIBuildName</span>
+                        <span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch+1</span>-<span class="verpart">PreReleaseName</span>.<span class="verpart">PreReleaseNumber</span>.0.ci-<span class="verpart">CIBuildName</span>.<span class="verpart">BuildIndex</span>
                     </p>
                 </li>
                 <li>
                     <p>
                         Applied to a v<span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch</span>-<span class="verpart">PreReleaseName</span>.<span class="verpart">PreReleaseNumber</span>.<span class="verpart">PreReleaseFix</span> version:
                         <br />
-                        <span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch+1</span>-<span class="verpart">PreReleaseName</span>.<span class="verpart">PreReleaseNumber</span>.<span class="verpart">PreReleaseFix</span>.ci.<span class="verpart">BuildIndex</span>.<span class="verpart">CIBuildName</span>
+                        <span class="verpart">Major</span>.<span class="verpart">Minor</span>.<span class="verpart">Patch+1</span>-<span class="verpart">PreReleaseName</span>.<span class="verpart">PreReleaseNumber</span>.<span class="verpart">PreReleaseFix</span>.ci-<span class="verpart">CIBuildName</span>.<span class="verpart">BuildIndex</span>
                     </p>
                 </li>
             </ul>
@@ -417,7 +394,7 @@
 
     <h2>About</h2>
     <p>
-        The Constrained Semantic Versioning specification is authored by <a href="https://signature-code.com">Signature Code</a>.
+        The Constrained Semantic Versioning specification is authored by <a href="http://invenietis.com">Invenietis</a>.
     </p>
     <p>
         If you'd like to leave feedback, please <a href="https://github.com/SimpleGitVersion/SimpleGitVersion.github.io/issues">open an issue on GitHub</a>.

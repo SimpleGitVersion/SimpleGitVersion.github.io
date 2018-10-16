@@ -7,7 +7,7 @@ CSS for csemver.org
 h1, h2, h3, ol, dl { margin: 0; padding: 0; }
 
 html { font: 14.4px/1.5 Helvetica, Arial, sans-serif; }
-body { margin: 0 auto; padding: 0 10%; max-width: 710px; }
+body { margin: 0 auto; padding: 0 10%; max-width: 750px; }
 
 @-ms-viewport { width: device-width; }
 html { -webkit-text-size-adjust: 100%; }
@@ -30,7 +30,7 @@ p { margin: 0 0 1em; }
 
 .verpart { font-weight: bold }
 
-p.note { border: solid; border-color: gray; padding: 1em;}
+.note { border: solid; border-color: gray; padding: 1em;}
 p.no-space-after { margin-bottom: 0; }
 p.center { text-align:center; }
 
@@ -61,6 +61,11 @@ ol.lang {
 ol.lang li a {
   color: black;
 }
+
+/* Image toggle */
+
+input#vlong:checked ~ #ishort { display: none; }
+input#vshort:checked ~ #ilong { display: none; }           
 
 /* Table */
 
